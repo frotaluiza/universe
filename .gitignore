@@ -2,3 +2,6 @@
 Thumbs.db
 *.tmp
 *.log
+*.db
+*.db-shm
+*.db-wal
