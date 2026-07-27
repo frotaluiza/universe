@@ -127,3 +127,25 @@ git checkout -b feat/sistema-configs
 - Branch name: `{tipo}/{resumo}-{data}`
 - "Criações" como nome dos produtos finais
 - Commit + push automático no universo
+
+---
+
+## 🔄 Atualização — 2026-07-26 — Execução Guidelines
+
+### Branch Ariadne
+- Criada: `feat/guidelines-hierarquia` (de `master`)
+- Último commit: `2335cd7` — "feat: sistema de guidelines hierárquicas (global → projeto)"
+- Push: ✅ enviado para `origin/feat/guidelines-hierarquia`
+
+### O que foi implementado
+1. **Model** `backend/app/models/guideline.py` — tabela `guidelines` com escopo, projeto_id, categoria, chave, regra, ativa + 20 defaults
+2. **Router** `backend/app/routers/guidelines.py` — CRUD completo + `GET /resolved/{proj_id}/{chave}` (resolve hierarquia) + `POST /seed` (insere defaults) + função auxiliar `get_guideline_value()`
+3. **Orquestrador** `engine.py` — integrado com `get_guideline_value()`, loga guidelines resolvidas no processamento
+4. **Imports**: `models/__init__.py` + `main.py` atualizados
+
+### Pendente (próxima sessão)
+- Tabela `criacoes` + router + aba dashboard
+- Tabela `features` + router + agente de features
+- Tabela `notificacoes` + router + UI
+- Agente de Guidelines invocável via chat (interpretar intenção → criar guideline)
+- Export opencode.db → ariadne.db
