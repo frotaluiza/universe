@@ -5,4 +5,4 @@ Thumbs.db
 *.db
 *.db-shm
 *.db-wal
-criacoes/
+# criacoes/ versionadas por projeto — não ignorar globalmente
