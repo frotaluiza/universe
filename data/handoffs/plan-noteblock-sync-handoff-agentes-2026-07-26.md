@@ -143,9 +143,31 @@ git checkout -b feat/sistema-configs
 3. **Orquestrador** `engine.py` — integrado com `get_guideline_value()`, loga guidelines resolvidas no processamento
 4. **Imports**: `models/__init__.py` + `main.py` atualizados
 
-### Pendente (próxima sessão)
-- Tabela `criacoes` + router + aba dashboard
-- Tabela `features` + router + agente de features
-- Tabela `notificacoes` + router + UI
-- Agente de Guidelines invocável via chat (interpretar intenção → criar guideline)
-- Export opencode.db → ariadne.db
+---
+
+## 🔄 Atualização — 2026-07-27 — Feature #1: Feature Flow Guidelines
+
+### Ciclo de Vida Seguido
+1. **Branch**: `feat/feature-flow-guideline` (de `master` no Ariadne)
+2. **Tarefas**: guideline model + router + seed + AGENTS.md + testes
+3. **Implementar**: 8 arquivos alterados, 24 guidelines default
+4. **Testar**: Servidor na porta 8008, 6 testes executados — todos passaram
+5. **Aprovação**: Usuário visualizou resultados, aprovou via chat
+6. **Merge + Delete**: Pendente (aguardando finalização da sessão)
+
+### O que foi implementado
+1. Guideline `feature_flow` = `branch+tarefas+implementar+testar+merge+delete`
+2. Guideline `check_ports_before_feature` = `sim`
+3. Guideline `feature_approval_mode` = `manual_implementation`
+4. Guideline `feature_approval_tests` = `agent_executed`
+5. AGENTS.md atualizado com 4 novas regras (13-16)
+6. Teste automatizado em `backend/test_guidelines.py`
+
+### Próximos Passos (Feature #2+)
+- Feature #2: Tabela `features` (model + router + migration)
+- Feature #3: Tabela `criacoes` + router + aba dashboard
+- Feature #4: Feature Agent service (invocável via Orquestrador)
+- Feature #5: Port detection + session-registry check
+- Feature #6: Tabela `notificacoes` + router + UI
+- Feature #7: Visualização de nós (Cytoscape.js)
+- LOD Cloud na DB Fontes Projetos (Notion)
