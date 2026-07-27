@@ -1,7 +1,7 @@
 # Handoff: plan-noteblock-sync-handoff-agentes-2026-07-26
 
 ## Metadados
-- Sessão: Config Toggles + Agente Criações + Guidelines + Feature Tracking
+- Sessão: Config Toggles + Agente Criações + Guidelines + Feature Tracking + Notificações
 - Data: 2026-07-26
 - Projeto: Ariadne
 - Tipo: planejamento
@@ -37,7 +37,11 @@
 7. Dashboard de Criações arquitetado (19)
 8. Feature Tracking com ciclo de teste arquitetado (20)
 9. Decisões da sessão 3 registradas (21)
-10. Handoff atualizado (22)
+10. Handoff atualizado
+11. Agente de Features arquitetado (22) — invocável via chat, gerencia ciclo planejada→testada
+12. Sistema de Notificações arquitetado (23) — 20+ eventos, severidades, badge, toast
+13. AGENTS.md atualizado: deletar branch após merge, notificações
+14. Branch antiga `plan/sessao-planejamento-2026-07-25` deletada
 
 ## O que NÃO foi feito (pendente)
 
@@ -47,23 +51,26 @@
 3. [ ] Criar tabela `guidelines` (model + router + agente)
 4. [ ] Criar tabela `criacoes` (model + router)
 5. [ ] Criar tabela `features` (model + router)
-6. [ ] Implementar UI de Config Toggles no dashboard
-7. [ ] Implementar aba Criações no dashboard
-8. [ ] Implementar aba Features no dashboard
-9. [ ] Implementar Agente de Guidelines (invocável via chat)
-10. [ ] Implementar Agente de Criações (worker de commits)
-11. [ ] Implementar Export opencode.db → ariadne.db
-12. [ ] Implementar Feature Tracking (gatilhos automáticos)
-13. [ ] Integrar auto-aprovação por timer + score
-14. [ ] Implementar Sync Notion (modo mirror + custom)
+6. [ ] Criar tabela `notificacoes` (model + router + UI)
+7. [ ] Implementar UI de Config Toggles no dashboard
+8. [ ] Implementar aba Criações no dashboard
+9. [ ] Implementar aba Features no dashboard
+10. [ ] Implementar painel de Notificações (badge + slide-over + toast)
+11. [ ] Implementar Agente de Guidelines (invocável via chat)
+12. [ ] Implementar Agente de Criações (worker de commits)
+13. [ ] Implementar Agente de Features (invocável via chat + gatilhos)
+14. [ ] Implementar Sistema de Notificações (helpers nos agentes)
+15. [ ] Implementar Export opencode.db → ariadne.db
+16. [ ] Integrar auto-aprovação por timer + score + notificação
+17. [ ] Implementar Sync Notion (modo mirror + custom)
 
 ### Features Planejadas (fases anteriores)
-15. [ ] Transcrição de vídeo (yt-dlp + Whisper)
-16. [ ] Diário automático por projeto/dia
-17. [ ] VLM Pipeline (Qwen2-VL + Tesseract)
-18. [ ] Memória Mem0 (grafo)
-19. [ ] Test Loop SkillOpt
-20. [ ] MCP Tools (Jupyter, Git, GeoGebra)
+18. [ ] Transcrição de vídeo (yt-dlp + Whisper)
+19. [ ] Diário automático por projeto/dia
+20. [ ] VLM Pipeline (Qwen2-VL + Tesseract)
+21. [ ] Memória Mem0 (grafo)
+22. [ ] Test Loop SkillOpt
+23. [ ] MCP Tools (Jupyter, Git, GeoGebra)
 
 ## Caminhos e Arquivos Usados
 | Caminho | Descrição |
