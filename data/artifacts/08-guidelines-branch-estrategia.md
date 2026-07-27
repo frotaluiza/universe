@@ -9,6 +9,10 @@ O versionamento da sessão depende do seu **tipo**:
 | Planejamento | Universo do usuário | `.ariadne/universe/` |
 | Execução | Repositório do projeto | `Projetos/{projeto}/` |
 
+## Regra Fundamental
+
+**Novas sessões sempre partem da `master`.** Nunca criar uma nova branch a partir de uma branch de sessão ativa. Isso mantém as sessões isoladas e evita arrastar contexto de trabalhos não finalizados.
+
 ## Fluxo para Sessões de Planejamento
 
 ```
@@ -24,6 +28,14 @@ O versionamento da sessão depende do seu **tipo**:
 ```
 
 ## Nomenclatura de Branches
+
+### Inicialização de Projeto
+```
+init/{descricao-curta}-{data}
+Ex: init/clipe-vontades-2026-07-27
+```
+
+Branch que **gera/cria** um novo projeto no universo. Contém a entrevista inicial, definição de criações, guidelines do projeto e primeiros artefatos.
 
 ### Planejamento
 ```
