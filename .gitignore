@@ -5,4 +5,5 @@ Thumbs.db
 *.db
 *.db-shm
 *.db-wal
+!ariadne.db
 # criacoes/ versionadas por projeto — não ignorar globalmente
