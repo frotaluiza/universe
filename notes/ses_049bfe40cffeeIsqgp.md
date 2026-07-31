@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:05:43.429060+00:00
+atualizado: 2026-07-31T05:06:26.101918+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1037,3 +1037,14 @@ O init_db parece normal. Vou subir com log completo e esperar o suficiente para 
 
 ## Usuario
 Porque o proxy demora tanto? Porque os processos nao estao rodando
+
+## Assistente
+Boa pergunta — e na verdade o proxy **não** é o culpado: ele tem timeout máximo (~20s). O log mostra que o startup trava **antes** do proxy, e desta vez nem o watcher rodou — o bloqueio está no início do startup (migração do banco). Deixa eu confirmar quem está segurando o DB:
+
+- Ferramenta `bash`: {'command': 'Write-Output "=== processos python vivos ==="; Get-CimInstance Win32_Process -Filter "Name=\'python.exe\' OR Name=\'pythonw.exe\'" | Select-Object ProcessId, CreationDate, CommandLine | F
+- Ferramenta `bash`: {'command': '$script = @\'\nimport sqlite3, time\nt0 = time.time()\ntry:\n    c = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ariadne.db", timeout=5)\n    c.execute("BEGIN IMMEDIATE")\n   
+
+## Assistente
+O processo está vivo mas preso no startup, e o DB não está lockado. Vou reproduzir o startup fora do uvicorn com prints de progresso para achar o ponto exato do travamento:
+
+- Ferramenta `bash`: {'command': 'Stop-Process -Id 20532 -Force -ErrorAction SilentlyContinue; $script = @\'\nimport sys, time\nsys.path.insert(0, r"C:\\Users\\frota\\Projetos\\Ariadne\\backend")\nprint("1: importando app
