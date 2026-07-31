@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:20:01.486301+00:00
+atualizado: 2026-07-31T05:20:43.176390+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1216,3 +1216,16 @@ Engine compila ✅. Reinicio o servidor com o código novo e crio as tarefas da 
 
 ## Usuario
 Eu quero colocar como tarefa a implementação de um atalho do bloco de notas quando o modo puro de anotações estiver ativado e eu estiver dentro de um chat, eu quero que exista um atalho onde, ao selecionar uma parte do texto que for retornado e fazer tipo cntr shift x pra, mesmo aquele texto estando em um ponto avançado do texto em relação ao ultimo paragrafo de anotação escrita pelo usuário, consegue "ser passado pra cima" então ele tem o bloco de texto todo movido para antes do chat. Não sei o queao dificil isso seria de implementar. Porque que esse processo de iniciar o servidor está demorando tanto?
+
+## Assistente
+Ótima feature — e a resposta curta é: **é fácil** (uns 40-60 linhas de JS, seleção DOM + inserção no textarea). Vou implementar já, registrar a tarefa, e investigar a demora do boot (suspeito do `ensure_agent_in_opencode()` no startup — vou confirmar):
+
+- Ferramenta `bash`: {'command': '$lines = Get-Content \'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\main.py\'; $i = ($lines | Select-String \'ensure_agent_in_opencode\').LineNumber - 1; $lines[($i-6)..($i+8)]; Wri
+
+## Assistente
+- Ferramenta `bash`: {'command': '$lines = Get-Content \'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\main.py\'; $idx = ($lines | Select-String \'ensure_agent_in_opencode\').LineNumber; Write-Output "linhas: $idx"; 
+
+## Assistente
+`ensure_agent` só lê/escreve config local — não é ele. Vou medir onde exatamente ficam os ~20s (import vs startup):
+
+- Ferramenta `bash`: {'command': '$script = @\'\nimport sys, time\nsys.path.insert(0, r"C:\\Users\\frota\\Projetos\\Ariadne\\backend")\nt0 = time.time()\nimport app.main\nt1 = time.time()\nprint("import app.main: %.1fs" %
