@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T15:03:19.129201+00:00
+atualizado: 2026-07-31T15:03:27.384439+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1391,4 +1391,7 @@ Script OK. Executando o start com watchdog:
 tem alguma coisa travando o servidor?
 
 ## Assistente
-- Ferramenta `bash`: None
+Subiu rápido (4s). Deixa eu investigar se ainda há algo segurando — vou olhar os logs e testar o proxy do opencode serve, que era o principal vilão do boot de 39s:
+
+- Ferramenta `bash`: {'command': '"=== ERR LOG (últimas 20) ==="; if (Test-Path "C:\\Users\\frota\\.ariadne\\logs\\ariadne-server.err.log") { Get-Content "C:\\Users\\frota\\.ariadne\\logs\\ariadne-server.err.log" -Tail 20
+- Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/llm/status" -UseBasicParsing -TimeoutSec 10; "LLM STATUS: $($r.StatusCode) - $($r.Content.Substring(0, [Math]::Min(300, $r.Con
