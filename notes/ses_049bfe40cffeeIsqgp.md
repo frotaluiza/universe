@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:11:52.802976+00:00
+atualizado: 2026-07-31T05:14:35.350233+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1160,3 +1160,6 @@ Quero registrar as pendências reais desta sessão como tarefas no ariadne.db (v
 7. **Rotinas agendadas no Ariadne** (tabela + runner + migrar Agente Diário/Semanal/Rollover) — Média
 
 Crio essas tarefas vinculadas à sessão? E se quiser, ajusto a análise de gaps para incluir sessões **sem** artefatos (só precisam ter `conteudo_json`) — aí gaps de sessões novas como a nossa passam a ser detectados.
+
+## Usuario
+Tem como já deixar o orquestrador informado de todos esses fluxos relacionados com a sessão? Sobre a análise de gaps, tem que mudar o fluxo para simplesmente ler todo o json da sessão e buscar por assuntos ou tarefas que estão faltando de serem tratadas. Sobre os outros itens, pode transformar todos em tarefas na database de tarefas. Também tem que informar no código do orquestrador sobre o fato de que toda tarefa pendente ao final de uma sessão precisa virar item na database de tarefas automaticamente
