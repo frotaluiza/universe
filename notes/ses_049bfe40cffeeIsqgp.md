@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T15:33:56.730076+00:00
+atualizado: 2026-07-31T18:20:56.327117+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1490,3 +1490,14 @@ Vou confirmar tudo — servidor de pé, endpoint de tarefas funcionando e log li
 **O que isso ensina (para o futuro):** qualquer edição no backend só vale após restart. Se o dashboard quebrar de novo com 500, o primeiro reflexo deve ser `start_ariadne.ps1` — o erro de "código velho em memória" é o mais comum nesse setup.
 
 O servidor está saudável agora. Quer que eu siga com os próximos passos da sessão (criar as tarefas pendentes no banco e atualizar o live doc), ou você quer testar o dashboard primeiro?
+
+## Usuario
+Ok agora que isso está ok podemos voltar pras nossas tarefas plenjejadas nessa sessão. Acabei de pensar aqui em um bloco novo no dashboard para inserir ideias. Toda ideia nova que eu tiver sobre um projeto eu vou inserindo nesse bloco, acho que ele poderia oferecer algumas opções: Ou o usuário pode só cadastrar isso como tarefa futura, ou ele pode já começar um galho para implementar aquela ideia no contexto da criação como um todo. Então esse bloco, assim como o bloco de features, só deve aparecer quando o contexto da criação está selecionado no topo da página. Temos que fechar essa lógica de niveis, porque estou vendo que quando eu clico na criação do ariadne, por exemplo, não existem artefatos associados a ela, sendo que, por ser a unica criação que estou fazendo no projeto do ariadne, deveria conter todas as entradas de artefatos, porque todos eles deveriam estar associados com o id da criação. Isso tudo pode ficar como tarefa futura, depois que voce subir tudo isso pra bd de tarefas eu quero que voce me faça um recap de tudo que implementamos até agora nessa sessão
+
+## Assistente
+Perfeito, plano claro. Primeiro deixa eu checar rapidinho a estrutura de artefatos × criação (para descrever bem a tarefa da lógica de níveis), e depois subo tudo na BD de tarefas:
+
+- Ferramenta `bash`: {'command': 'python -c "\nimport sqlite3, json\ndb = sqlite3.connect(r\'C:\\Users\\frota\\.ariadne\\universe\\ariadne.db\')\ndb.row_factory = sqlite3.Row\nprint(\'=== SCHEMA artefatos ===\')\nprint([r
+
+## Assistente
+- Ferramenta `write`: None
