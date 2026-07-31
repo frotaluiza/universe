@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:20:43.176390+00:00
+atualizado: 2026-07-31T05:23:08.980232+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1229,3 +1229,32 @@ Eu quero colocar como tarefa a implementação de um atalho do bloco de notas qu
 `ensure_agent` só lê/escreve config local — não é ele. Vou medir onde exatamente ficam os ~20s (import vs startup):
 
 - Ferramenta `bash`: {'command': '$script = @\'\nimport sys, time\nsys.path.insert(0, r"C:\\Users\\frota\\Projetos\\Ariadne\\backend")\nt0 = time.time()\nimport app.main\nt1 = time.time()\nprint("import app.main: %.1fs" %
+
+## Assistente
+Revelação: **o app sobe em 1.9s** (import 1.8s + startup 0.0s). Os ~20s restantes são o cold start do próprio Python/uvicorn (imports de fastapi, pydantic, sqlalchemy, httpx...). Vou medir o boot real para confirmar, e já implementar o atalho + registrar a tarefa:
+
+- Ferramenta `bash`: {'command': '$script = @\'\nimport io\npath = r"C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html"\nsrc = io.open(path, encoding="utf-8").read()\n\nanchor = "});\\n</script>\\n</bo
+- Ferramenta `bash`: {'command': 'Set-Content -Path "$env:TEMP\\opencode\\tarefa_atalho.json" -Value \'{"titulo":"Atalho Ctrl+Shift+X: mover texto selecionado da conversa para as anotações (modo escrita)","descricao":"No 
+
+## Assistente
+Tarefa criada ✅. O patch do atalho precisa do fim atual do arquivo — verificando:
+
+- Ferramenta `bash`: {'command': '$lines = Get-Content \'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html\'; $total = $lines.Count; Write-Output "total: $total"; $lines[($total-12)..($total-1)]'}
+
+## Assistente
+- Ferramenta `bash`: {'command': '$script = @\'\nimport io\npath = r"C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html"\nsrc = io.open(path, encoding="utf-8").read()\n\nanchor = "  }catch(e){alert(\'Er
+
+## Assistente
+Atalho implementado. Agora o reboot cronometrado (para te dar o número exato da demora) e os testes dos novos comandos:
+
+- Ferramenta `bash`: {'command': 'Get-Process python,pythonw -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; $t0 = Get-Date; $p = Start-Process -FilePath "C:\\Use
+
+## Assistente
+O boot estourou o tempo. Verificando o que aconteceu:
+
+- Ferramenta `bash`: {'command': 'Write-Output "=== processos ==="; Get-CimInstance Win32_Process -Filter "Name=\'python.exe\' OR Name=\'pythonw.exe\'" | Select-Object ProcessId, CreationDate, CommandLine | Format-List; W
+
+## Assistente
+Nenhum processo — o pythonw morreu silenciosamente de novo. Subindo com python.exe + log (como no boot que funcionou):
+
+- Ferramenta `bash`: {'command': 'Remove-Item "$env:TEMP\\opencode\\up6_err.log" -ErrorAction SilentlyContinue; $p = Start-Process -FilePath "C:\\Users\\frota\\AppData\\Local\\r-miniconda\\python.exe" -ArgumentList "-m","
