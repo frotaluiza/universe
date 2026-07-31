@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T18:22:16.825606+00:00
+atualizado: 2026-07-31T18:22:27.566241+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1541,3 +1541,67 @@ Todas as 9 tarefas criadas com sucesso. Confirmando o estado final da BD:
 Problema de encoding do console. Vou forçar UTF-8:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\listar_tarefas.py"'}
+
+## Assistente
+Tudo na BD. Agora o recap completo da sessão:
+
+---
+
+# 📋 Recap da Sessão `clever-comet` — "Inspiração estética do Ariadne em smokincola"
+
+**Objetivo da sessão:** incorporar a estética do [smokincola.com](https://smokincola.com) (90s indie sleeve art / neo-brutalism) no Ariadne, corrigir bugs de infraestrutura e evoluir o fluxo de tarefas.
+
+## 🎨 1. Tema smokincola (Fases 0–4) — concluído
+
+| Fase | O que foi feito |
+|---|---|
+| **0 – Tokens** | `:root` com paleta papel/tinta (--paper `#F5F0E8`, --ink `#1C1612`, vermelho tijolo, mostarda, teal), tipografia **Archivo Black** (títulos) + **Libre Baskerville** (serifada) + **DM Mono** (UI), sombras duras, sem blur |
+| **1 – Layout** | Header brick red, sidebar DM Mono, cards editoriais com borda 2px + sombra, modais em "stamps" |
+| **2 – Chat** | Mensagens como quadrados editoriais (border-left colorido), papel pautado no fundo, hover troca a cor da borda |
+| **3 – Detalhes** | Textura de papel via `feTurbulence`, botões de ação com visual de carimbo |
+| **4 – Seletor de cores** | Botão `#btn-tema` no header, paleta `TEMAS_CORES` com **7 cores** (incl. Verde musgo `#2F5233`), persistência em `localStorage`, fundo derivado por mistura (bg 8%, surface 4%, paper-dark 14%, paper-deep 24%) |
+
+## 🛠️ 2. Frontend — correções e features
+
+- **Vídeo do bloco de notas**: botão "✕ Fechar video", `setLayout('escrita')` no fechar, layout salvo aplicado no abrir (bug de layout travado)
+- **Filtro de projeto no sistema** (`mudarProjetoSistema()`)
+- **`sys-tabs` com flex-wrap** (aba Importar saía do quadrado)
+- **`renderMarkdown()`** aplicado no Relatório do dashboard e no **verLiveDoc** (botão 📜 nas sessões + endpoint `GET /api/sistema/live-doc/{sessao_id}`)
+- **Atalho Ctrl+Shift+X**: seleciona texto da conversa e move para as anotações (blockquote no editor) — tarefa `4f3d3224` (Em andamento)
+
+## ⚙️ 3. Backend — infraestrutura
+
+- **`no_window.py`**: monkeypatch `subprocess.run/Popen` com `CREATE_NO_WINDOW` → **eliminou as janelas cmd piscando** (causa raiz identificada e corrigida)
+- **Boot otimizado**: proxy do opencode serve movido para thread em background (era ~39s de bloqueio → agora ~2–4s de boot), poll 10→60s
+- **`start_ariadne.ps1`**: script oficial de start com watchdog de health (usa `python.exe`, NUNCA `pythonw.exe` que morre mudo)
+- **Watcher**: `_import_opencode_session` agora atualiza sessões existentes incrementalmente (conteudo_json + status "Em andamento"), gera live doc em `universe/notes/{slug}.md`, corrigido `updated_at` (datetime, não string)
+- **Branch Finalizer**: `_scan_sessions_for_gaps` varre **todas** as sessões (não só com artefatos), dedupe contra tarefas/artefatos, padrões PT-BR estendidos
+- **Engine**: `@finalizar-sessao` converte gaps em **Tarefas automáticas**; novo comando **`@fluxos-sessao`** + `FLUXOS_SESSAO`
+
+## 🐛 4. Bug do servidor (recém-resolvido)
+
+- `GET /api/tarefas/` retornava **500** (`ResponseValidationError`) — o processo em memória rodava modelo antigo (`area: str` obrigatório) com dados `None` no banco
+- **Fix**: reinício com `start_ariadne.ps1` → modelo corrigido em memória, endpoint 200 OK, err.log limpo
+
+## 🗂️ 5. Tarefas criadas nesta sessão (9 novas + 1 anterior = 10)
+
+| Prioridade | Tarefa | ID |
+|---|---|---|
+| 🔴 Alta | **Bloco de Ideias no dashboard** (contexto da criação; opções: tarefa futura OU galho p/ implementar) | `a1f7bd46` |
+| 🔴 Alta | **Fechar lógica de níveis: artefatos vinculados à criação** (schema não tem `criacao_id` em artefatos → backfill + endpoint + frontend) | `20524da9` |
+| 🔴 Alta | Commit e push da branch `plan/estetica-smokincola-2026-07-31` | `0d42f24d` |
+| 🔴 Alta | Atalho Ctrl+Shift+X (Em andamento) | `4f3d3224` |
+| 🟡 Média | Validar visual do tema no navegador | `294c3dec` |
+| 🟡 Média | Registrar fonte smokincola no Notion | `8bbaadf7` |
+| 🟡 Média | Cadastro de rotinas do Ariadne | `74ac996a` |
+| 🟢 Baixa | Fase 5 do tema (texturas finais) | `febdb68b` |
+| 🟢 Baixa | Modo de pintura | `dcf56902` |
+| 🟢 Baixa | Personagem mascote (live2d-widget) | `e3af3642` |
+
+## 💡 Descoberta importante (lógica de níveis)
+
+A tabela **`artefatos` não tem coluna `criacao_id`** — só `projeto_id`/`sessao_id`. Por isso, ao clicar na criação "Plataforma Ariadne", o filtro `contexto=` retorna vazio. A tarefa `20524da9` cobre: migração, backfill dos artefatos existentes para `d8d1d000...`, endpoint por `criacao_id` e frontend.
+
+---
+
+**Próximos passos sugeridos:** validar o visual no navegador (tarefa `294c3dec`) e commitar a branch — quer que eu faça o commit agora ou prefere validar o tema antes?
