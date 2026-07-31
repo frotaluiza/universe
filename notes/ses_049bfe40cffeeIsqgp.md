@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T14:50:36.674955+00:00
+atualizado: 2026-07-31T15:03:19.129201+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1386,3 +1386,9 @@ Servidor está **fora do ar** (porta 8000 sem listener) — como suspeitávamos,
 Script OK. Executando o start com watchdog:
 
 - Ferramenta `bash`: {'command': 'powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_ariadne.ps1"', 'timeout': 90000}
+
+## Usuario
+tem alguma coisa travando o servidor?
+
+## Assistente
+- Ferramenta `bash`: None
