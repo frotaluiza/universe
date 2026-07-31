@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T15:06:00.771489+00:00
+atualizado: 2026-07-31T15:06:21.132786+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1435,3 +1435,9 @@ Servidor atual responde 200. Mas o log mostra um 500 que aconteceu **com o servi
 Agora entendi o quadro completo. O diff mostra que o `tarefas.py` **já está corrigido** (`area`/`sessao_links` → `Optional[str]`), mas o erro no log foi gerado pelo processo **3412** (o atual) logo no boot... Deixa eu verificar o timing — quando o arquivo foi editado vs quando o servidor subiu:
 
 - Ferramenta `bash`: {'command': '"mtime tarefas.py: $(Get-Item \'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\routers\\tarefas.py\').LastWriteTime"; "boot servidor: 07/31/2026 11:50:28"; "agora: $(Get-Date)"; pytho
+
+## Assistente
+O mtime não imprimiu direito. Deixa eu verificar o que importa: qual banco o servidor usa, e se o erro reproduz:
+
+- Ferramenta `bash`: {'command': '$f = Get-Item \'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\routers\\tarefas.py\'; "mtime: $($f.LastWriteTime)"; Get-Content \'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\co
+- Ferramenta `bash`: {'command': '"=== teste com filtros que o dashboard usa ==="; try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/tarefas/?status=A%20fazer" -UseBasicParsing -TimeoutSec 10; "OK: $($r.StatusC
