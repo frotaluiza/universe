@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T04:57:55.662134+00:00
+atualizado: 2026-07-31T05:05:43.429060+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1034,3 +1034,6 @@ Tudo em threads — o suspeito agora é o `_run_migration` do `scripts/init_db.p
 O init_db parece normal. Vou subir com log completo e esperar o suficiente para ver onde exatamente trava:
 
 - Ferramenta `bash`: {'command': 'Remove-Item "$env:TEMP\\opencode\\up3_err.log" -ErrorAction SilentlyContinue; $p = Start-Process -FilePath "C:\\Users\\frota\\AppData\\Local\\r-miniconda\\python.exe" -ArgumentList "-m","
+
+## Usuario
+Porque o proxy demora tanto? Porque os processos nao estao rodando
