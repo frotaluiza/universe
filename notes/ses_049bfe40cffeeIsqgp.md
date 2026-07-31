@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:06:26.101918+00:00
+atualizado: 2026-07-31T05:09:46.124308+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1048,3 +1048,32 @@ Boa pergunta — e na verdade o proxy **não** é o culpado: ele tem timeout má
 O processo está vivo mas preso no startup, e o DB não está lockado. Vou reproduzir o startup fora do uvicorn com prints de progresso para achar o ponto exato do travamento:
 
 - Ferramenta `bash`: {'command': 'Stop-Process -Id 20532 -Force -ErrorAction SilentlyContinue; $script = @\'\nimport sys, time\nsys.path.insert(0, r"C:\\Users\\frota\\Projetos\\Ariadne\\backend")\nprint("1: importando app
+
+## Assistente
+**Achei o culpado!** O `on_startup` **completa em 39.5s** — quase tudo é o proxy tentando subir o `opencode serve` (que não sobe em 10s porque o `opencode.db` tem 2.9 GB — o servidor demora mais que o tempo de espera do poll). E como o proxy é chamado **de forma síncrona** no startup, o uvicorn fica em "Waiting for application startup" até ele terminar. Vou ver o trecho exato e corrigir:
+
+- Ferramenta `bash`: {'command': "$lines = Get-Content 'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\main.py'; $i = ($lines | Select-String 'start_watcher\\(\\)').LineNumber - 1; $lines[($i-4)..($i+16)]"}
+
+## Assistente
+- Ferramenta `bash`: {'command': "$lines = Get-Content 'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\main.py'; $i = ($lines | Select-String 'start_watcher\\(\\)').LineNumber - 1; $lines[($i+17)..($i+24)]"}
+
+## Assistente
+Corrigindo: proxy vira **thread em background** (startup não espera mais) + poll de espera ampliado para 60s (o opencode serve com DB de 2.9 GB demora mais de 10s):
+
+- Ferramenta `bash`: {'command': '$script = @\'\nimport io\n# ---- main.py: proxy em thread ----\np1 = r"C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\main.py"\nsrc = io.open(p1, encoding="utf-8").read()\nold = """  
+
+## Assistente
+- Ferramenta `bash`: {'command': '$t0 = Get-Date; $p = Start-Process -FilePath "C:\\Users\\frota\\AppData\\Local\\r-miniconda\\pythonw.exe" -ArgumentList "-m","uvicorn","app.main:app","--host","0.0.0.0","--port","8000" -W
+
+## Usuario
+Porque ele está subindo um bd tão grande? Se ele ja tem o orquestrador ele teoricamente ja nao tem a possibilidade de acessar todas as conversas do ariadne?
+
+## Assistente
+Ótima pergunta — e o seu raciocínio está **correto**. Deixa eu verificar o estado do servidor e depois te explico a arquitetura com clareza:
+
+- Ferramenta `bash`: {'command': 'Write-Output "=== servidor ==="; curl.exe -s --max-time 6 http://localhost:8000/api/health; Write-Output ""; curl.exe -s --max-time 6 -o NUL -w "pagina: HTTP %{http_code} (%{size_download
+
+## Assistente
+O processo morreu de novo. Vou subir com log e ver o erro exato:
+
+- Ferramenta `bash`: {'command': 'Remove-Item "$env:TEMP\\opencode\\up4_err.log" -ErrorAction SilentlyContinue; $p = Start-Process -FilePath "C:\\Users\\frota\\AppData\\Local\\r-miniconda\\python.exe" -ArgumentList "-m","
