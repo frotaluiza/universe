@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T15:04:07.906373+00:00
+atualizado: 2026-07-31T15:04:40.618205+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1418,3 +1418,9 @@ O response model já tem `Optional[str]`, então o 500 não deveria acontecer...
 
 - Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/tarefas/" -UseBasicParsing -TimeoutSec 10; "TAREFAS: $($r.StatusCode) - $($r.Content.Substring(0, [Math]::Min(200, $r.Content.
 - Ferramenta `bash`: {'command': '$conn = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if ($conn) { $p = Get-Process -Id $conn.OwningProcess; "PID: $($p.Id) | 
+
+## Assistente
+Espera — agora deu **200 OK**! O endpoint funciona. Então aquele 500 no log é de um servidor **anterior**. Deixa eu confirmar se o `tarefas.py` foi modificado (o servidor antigo pode ter rodado com um modelo sem `Optional`):
+
+- Ferramenta `bash`: {'command': 'git log --oneline -5 -- app/routers/tarefas.py; git diff --stat HEAD -- app/routers/tarefas.py; git status --short | Select-Object -First 20', 'workdir': 'C:\\Users\\frota\\Projetos\\Aria
+- Ferramenta `bash`: {'command': '"=== OUT LOG atual (linhas novas, a partir da 11) ==="; Get-Content "C:\\Users\\frota\\.ariadne\\logs\\ariadne-server.out.log" -Tail 15; "=== ERR LOG tamanho ==="; (Get-Item "C:\\Users\\f
