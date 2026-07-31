@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T15:03:27.384439+00:00
+atualizado: 2026-07-31T15:03:59.799402+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1395,3 +1395,26 @@ Subiu rápido (4s). Deixa eu investigar se ainda há algo segurando — vou olha
 
 - Ferramenta `bash`: {'command': '"=== ERR LOG (últimas 20) ==="; if (Test-Path "C:\\Users\\frota\\.ariadne\\logs\\ariadne-server.err.log") { Get-Content "C:\\Users\\frota\\.ariadne\\logs\\ariadne-server.err.log" -Tail 20
 - Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/llm/status" -UseBasicParsing -TimeoutSec 10; "LLM STATUS: $($r.StatusCode) - $($r.Content.Substring(0, [Math]::Min(300, $r.Con
+
+## Assistente
+Achei o problema. O **servidor em si não está travando** (boot 4s, health OK, LLM OK). O que está quebrado é o endpoint `GET /api/tarefas/` → **500 Internal Server Error**:
+
+```
+ResponseValidationError: 8 validation errors:
+  {'type': 'string_type', 'loc': ('response', 1, 'area'), 'input': None}
+  {'type': 'string_type', 'loc': ('response', 1, 'sessao_links'), 'input': None}
+  ... (idem para itens 3-8)
+```
+
+Ou seja: o response model do FastAPI declara `area`/`sessao_links` como `str` obrigatório, mas existem **8 tarefas no banco com esses campos NULL**. Toda chamada ao dashboard que carrega tarefas estoura 500. Isso explica o "travamento" que você sente — o painel quebra.
+
+Vou ver o modelo e corrigir:
+
+- Ferramenta `bash`: {'command': 'Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\routers\\tarefas.py" -TotalCount 80'}
+- Ferramenta `bash`: {'command': 'python -c "\nimport sqlite3\ndb = sqlite3.connect(r\'C:\\Users\\frota\\.ariadne\\universe\\ariadne.db\')\ndb.row_factory = sqlite3.Row\ncols = [r[1] for r in db.execute(\'PRAGMA table_inf
+
+## Assistente
+O response model já tem `Optional[str]`, então o 500 não deveria acontecer... Deixa eu testar o endpoint ao vivo e verificar o processo que está na porta:
+
+- Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/tarefas/" -UseBasicParsing -TimeoutSec 10; "TAREFAS: $($r.StatusCode) - $($r.Content.Substring(0, [Math]::Min(200, $r.Content.
+- Ferramenta `bash`: {'command': '$conn = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if ($conn) { $p = Get-Process -Id $conn.OwningProcess; "PID: $($p.Id) | 
