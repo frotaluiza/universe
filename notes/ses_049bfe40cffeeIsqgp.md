@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T15:03:59.799402+00:00
+atualizado: 2026-07-31T15:04:07.906373+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
