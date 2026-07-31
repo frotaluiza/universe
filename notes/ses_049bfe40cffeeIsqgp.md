@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:15:18.338244+00:00
+atualizado: 2026-07-31T05:16:00.194960+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1177,3 +1177,13 @@ Tenho tudo. Agora implemento. Primeiro vejo o body do `POST /api/tarefas`:
 
 ## Assistente
 - Ferramenta `bash`: {'command': "$lines = Get-Content 'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\routers\\tarefas.py'; $i = ($lines | Select-String 'class TarefaCreate').LineNumber - 1; $lines[$i..($i+12)]"}
+
+## Assistente
+Agora o patch principal — nova análise de gaps (todas as sessões, dedupe contra tarefas/artefatos), finalizar-sessão com conversão automática em tarefas, e o orquestrador ciente dos fluxos:
+
+- Ferramenta `bash`: {'command': '$script = @\'\nimport io, re\n\n# ================= PATCH 1: branch_finalizer.py =================\np1 = r"C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\branch_finalizer.py
+
+## Assistente
+Agora o `engine.py` — finalizar-sessão com tarefas automáticas + fluxos da sessão:
+
+- Ferramenta `bash`: {'command': '$script = @\'\nimport io, re, subprocess\n\np2 = r"C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\orquestrador\\engine.py"\nsrc = io.open(p2, encoding="utf-8").read()\n\n# -
