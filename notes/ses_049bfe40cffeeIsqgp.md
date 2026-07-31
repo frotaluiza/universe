@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T18:20:56.327117+00:00
+atualizado: 2026-07-31T18:20:59.226919+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1500,4 +1500,6 @@ Perfeito, plano claro. Primeiro deixa eu checar rapidinho a estrutura de artefat
 - Ferramenta `bash`: {'command': 'python -c "\nimport sqlite3, json\ndb = sqlite3.connect(r\'C:\\Users\\frota\\.ariadne\\universe\\ariadne.db\')\ndb.row_factory = sqlite3.Row\nprint(\'=== SCHEMA artefatos ===\')\nprint([r
 
 ## Assistente
-- Ferramenta `write`: None
+Escaping do PowerShell atrapalhou. Vou usar um script temporário:
+
+- Ferramenta `write`: {'filePath': 'C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\check_artefatos.py', 'content': 'import sqlite3\n\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ariadne.db")\ndb.row_fac
