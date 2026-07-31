@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:23:08.980232+00:00
+atualizado: 2026-07-31T05:45:19.736904+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1258,3 +1258,6 @@ O boot estourou o tempo. Verificando o que aconteceu:
 Nenhum processo — o pythonw morreu silenciosamente de novo. Subindo com python.exe + log (como no boot que funcionou):
 
 - Ferramenta `bash`: {'command': 'Remove-Item "$env:TEMP\\opencode\\up6_err.log" -ErrorAction SilentlyContinue; $p = Start-Process -FilePath "C:\\Users\\frota\\AppData\\Local\\r-miniconda\\python.exe" -ArgumentList "-m","
+
+## Usuario
+porque esse processo também travouw
