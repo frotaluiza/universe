@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T18:20:59.226919+00:00
+atualizado: 2026-07-31T18:21:39.758321+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1503,3 +1503,25 @@ Perfeito, plano claro. Primeiro deixa eu checar rapidinho a estrutura de artefat
 Escaping do PowerShell atrapalhou. Vou usar um script temporário:
 
 - Ferramenta `write`: {'filePath': 'C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\check_artefatos.py', 'content': 'import sqlite3\n\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ariadne.db")\ndb.row_fac
+
+## Assistente
+- Ferramenta `bash`: {'command': 'python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\check_artefatos.py"'}
+
+## Assistente
+Achei a causa raiz! A tabela `artefatos` **nem tem a coluna `criacao_id`** — o vínculo artefato→criação não existe no schema. Vou confirmar como o frontend busca artefatos e o que as criações têm:
+
+- Ferramenta `bash`: {'command': 'python -c "import sqlite3; db = sqlite3.connect(r\'C:\\Users\\frota\\.ariadne\\universe\\ariadne.db\'); print(\'artefatos:\', [r[1] for r in db.execute(\'PRAGMA table_info(artefatos)\')])
+- Ferramenta `bash`: {'command': 'Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html" -Pattern "artefatos" -Context 2,2 | Select-Object -First 25 | ForEach-Object { $_.ToString() }'
+
+## Assistente
+Confirmado o diagnóstico da lógica de níveis:
+- **`artefatos` não tem coluna `criacao_id`** — o vínculo artefato→criação não existe no schema (tarefas têm, artefatos não)
+- O frontend filtra por `?projeto_id=X&contexto=Y`, então ao selecionar a criação, o contexto filtra e retorna vazio
+- As criações existentes: `Plataforma Ariadne` (f3a58dfa...) e 2 do roteiro (2266cbce...)
+
+Agora vou subir tudo na BD de tarefas — as novas (bloco de ideias, lógica de níveis) + as pendentes da sessão:
+
+- Ferramenta `write`: {'content': 'import json\nimport urllib.request\n\nAPI = "http://localhost:8000/api/tarefas/"\nSESSAO_LINKS = "ses_049bfe40cffeeIsqgp"\nPROJETO = "f3a58dfa-270a-4cf7-b50f-9731e812897a"\nCRIACAO_ARIA =
+
+## Assistente
+- Ferramenta `bash`: {'command': 'python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\criar_tarefas.py"', 'timeout': 60000}
