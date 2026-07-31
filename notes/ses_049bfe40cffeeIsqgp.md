@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:45:19.736904+00:00
+atualizado: 2026-07-31T06:31:42.579543+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1261,3 +1261,28 @@ Nenhum processo — o pythonw morreu silenciosamente de novo. Subindo com python
 
 ## Usuario
 porque esse processo também travouw
+
+## Assistente
+O processo voltou a subir **em 2s** com `python.exe` (PID 21668, de pé agora). Sobre o `pythonw` — a explicação técnica:
+
+## Por que o pythonw morre mudo (e o python.exe não)
+
+| | `pythonw.exe` | `python.exe` |
+|---|---|---|
+| Console | **Não tem** | Tem (mesmo com `-WindowStyle Hidden`) |
+| `stdout`/`stderr` | **`None`** — não existem | Existem (podem ser redirecionados) |
+| Se algo falha no boot | **Morre silenciosamente** — zero diagnóstico | Loga o erro, ou sobe e serve |
+
+O uvicorn **depende do stderr para logging**. No `pythonw`, `sys.stderr` é `None` — em certos caminhos de inicialização (ex: o tratamento de erro quando o proxy tenta subir o opencode serve e falha, ou qualquer exceção no startup), o uvicorn tenta escrever no stderr → falha → **o processo morre sem deixar rastro**. Foi exatamente o que vimos: os boots com `python.exe` + log sempre funcionaram (mostravam o erro e subiam); os com `pythonw` eram loteria — o original (PID 3688) funcionou porque subiu num estado limpo, mas a partir do momento em que o startup ganhou mais passos (proxy com erro de saúde), o pythonw passou a morrer.
+
+**Conclusão prática:** o processo oficial do Ariadne deve ser `python.exe -WindowStyle Hidden` com logs redirecionados — como está agora (PID 21668, boot em 2s). Para deixar isso à prova de bala, vou criar um script de start com **watchdog** (sobe + verifica health + reinicia se cair):
+
+- Ferramenta `bash`: {'command': 'curl.exe -s --max-time 5 http://localhost:8000/api/health; Write-Output ""; Write-Output "=== testando novos comandos ==="; Set-Content -Path "$env:TEMP\\opencode\\fluxos_req.json" -Value
+
+## Assistente
+`@fluxos-sessao` funcionando — o orquestrador agora responde com todos os fluxos. Agora o script com watchdog:
+
+- Ferramenta `write`: {'content': '# ============================================================\n# start_ariadne.ps1 — Servidor oficial do Ariadne com watchdog\n# Uso:  powershell -File start_ariadne.ps1\n# Sobe o backen
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Write-Output "=== testando start_ariadne.ps1 (servidor ja esta de pe, deve dizer OK) ==="; powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne\\backen
