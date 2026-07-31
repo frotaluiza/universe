@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:17:19.959241+00:00
+atualizado: 2026-07-31T05:20:01.486301+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1213,3 +1213,6 @@ Engine compila ✅. Reinicio o servidor com o código novo e crio as tarefas da 
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'Get-Process -Id 15424 -ErrorAction SilentlyContinue | Select-Object Id, ProcessName; Write-Output "---subindo com log---"; Remove-Item "$env:TEMP\\opencode\\up5_err.log" -ErrorAction Sile
+
+## Usuario
+Eu quero colocar como tarefa a implementação de um atalho do bloco de notas quando o modo puro de anotações estiver ativado e eu estiver dentro de um chat, eu quero que exista um atalho onde, ao selecionar uma parte do texto que for retornado e fazer tipo cntr shift x pra, mesmo aquele texto estando em um ponto avançado do texto em relação ao ultimo paragrafo de anotação escrita pelo usuário, consegue "ser passado pra cima" então ele tem o bloco de texto todo movido para antes do chat. Não sei o queao dificil isso seria de implementar. Porque que esse processo de iniciar o servidor está demorando tanto?
