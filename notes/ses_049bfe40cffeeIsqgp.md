@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T05:11:10.021017+00:00
+atualizado: 2026-07-31T05:11:52.802976+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1097,3 +1097,66 @@ Tarefas encontradas (4 "A fazer" no projeto Ariadne). A análise de gaps existe 
 Perfeito — a análise de gaps **existe e é acionável**: o orquestrador tem o comando `@analisar-lacunas`. Vou ver a sintaxe exata do comando:
 
 - Ferramenta `bash`: {'command': "$lines = Get-Content 'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\orquestrador\\engine.py'; $lines[612..672]"}
+
+## Assistente
+Sintaxe confirmada. Rodando a análise de gaps da nossa sessão via orquestrador:
+
+- Ferramenta `bash`: {'command': 'Set-Content -Path "$env:TEMP\\opencode\\gap_req.json" -Value \'{"message":"@analisar-lacunas --sessao 76f82942-ebad-4678-85be-43cb1395561e","contexto":{"projeto_id":"f3a58dfa-270a-4cf7-b5
+
+## Assistente
+O campo é `context` (inglês). Corrigindo:
+
+- Ferramenta `bash`: {'command': 'Set-Content -Path "$env:TEMP\\opencode\\gap_req.json" -Value \'{"message":"@analisar-lacunas --sessao 76f82942-ebad-4678-85be-43cb1395561e","context":{"projeto_id":"f3a58dfa-270a-4cf7-b50
+
+## Assistente
+A análise de gaps **funcionou** — rodou pelo orquestrador e retornou: `✅ Nenhuma lacuna encontrada em sessão 76f82942...` (0 gaps). Deixa eu ver o critério da análise para te explicar o porquê, e rodar no escopo do projeto inteiro:
+
+- Ferramenta `bash`: {'command': "$lines = Get-Content 'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\branch_finalizer.py'; $lines[367..400]"}
+- Ferramenta `bash`: {'command': 'Set-Content -Path "$env:TEMP\\opencode\\gap_req2.json" -Value \'{"message":"@analisar-lacunas","context":{"projeto_id":"f3a58dfa-270a-4cf7-b50f-9731e812897a","sessao_id":"76f82942-ebad-46
+
+## Assistente
+Diagnóstico completo. Aqui está a resposta às suas duas perguntas:
+
+---
+
+## 📋 1. Tarefas pendentes
+
+**Da sessão `clever-comet`**: nenhuma tarefa está vinculada a esta sessão no `ariadne.db` (o campo `sessao_id`/`sessao_links` da tabela `tarefas` não aponta para ela). As tarefas foram criadas por outras sessões (branch `feat/opencode-server-proxy`).
+
+**Pendentes do projeto Ariadne (8 "A fazer")**:
+
+| Prioridade | Tarefa |
+|---|---|
+| 🔴 Alta | Chat multi-origem na UI |
+| 🔴 Alta | Bloco de Notas diário |
+| 🔴 Alta | Fix: Noteblock altura vertical restrita |
+| 🟡 Média | Visualização Mindmap/Graph |
+| 🟡 Média | Bridge Notion ↔ ariadne.db |
+| 🟡 Média | "O próximo passo é conectar isso à interface do sistema" (tarefa solta) |
+| 🟢 Baixa | DeepTutor tutors na plataforma |
+| 🟢 Baixa | Eliminar state_json → queries agregadoras |
+
+*(+21 Concluídas, +3 "A fazer" de outros projetos)*
+
+## 🕳️ 2. Análise de gaps — sim, roda! E já rodei
+
+O orquestrador tem o comando **`@analisar-lacunas`** com escopos: `--sessao <id>` | `--branch <b>` | `"<criação>"` | projeto inteiro. Executei os dois:
+
+- `@analisar-lacunas --sessao 76f82942...` → `✅ Nenhuma lacuna encontrada`
+- `@analisar-lacunas` (projeto) → `✅ Nenhuma lacuna encontrada em projeto ariadne`
+
+**Mas tem uma limitação importante que descobri lendo o código** (`branch_finalizer.py`): a análise só considera sessões que **já têm artefatos vinculados** (filtro `Sessao.id IN (SELECT sessao_id FROM artefatos)`), e procura padrões de "tarefa" (`_RE_TASK_PATTERNS`) no texto da conversa. Como a nossa sessão **não tem artefatos**, ela nem entra na análise — por isso o resultado foi vazio, não porque não haja pendências.
+
+## 💡 Sugestão de próximo passo
+
+Quero registrar as pendências reais desta sessão como tarefas no ariadne.db (via `POST /api/tarefas`), vinculadas à sessão `clever-comet`:
+
+1. **Validar visual do tema com o usuário** (header, chat, bloco de notas, seletor de cores) — Alta
+2. **Fase 5 do tema**: stamps de status, rotações, faixas escuras — Média
+3. **Registrar fonte smokincola.com no Notion** (Fontes Projetos) + artefato de design tokens — Média
+4. **Commit da branch `plan/estetica-smokincola-2026-07-31`** — Alta
+5. **Modo de pintura** (upload/posicionamento de imagens no universo) — Média
+6. **Personagem mascote** (live2d-widget) no cantinho — Baixa
+7. **Rotinas agendadas no Ariadne** (tabela + runner + migrar Agente Diário/Semanal/Rollover) — Média
+
+Crio essas tarefas vinculadas à sessão? E se quiser, ajusto a análise de gaps para incluir sessões **sem** artefatos (só precisam ter `conteudo_json`) — aí gaps de sessões novas como a nossa passam a ser detectados.
