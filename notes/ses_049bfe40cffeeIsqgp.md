@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T15:33:20.254230+00:00
+atualizado: 2026-07-31T15:33:56.730076+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1468,3 +1468,25 @@ Vou confirmar tudo — servidor de pé, endpoint de tarefas funcionando e log li
 
 - Ferramenta `bash`: {'command': '$conn = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if ($conn) { $p = Get-Process -Id $conn.OwningProcess; "LISTENER: PID $(
 - Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/tarefas/" -UseBasicParsing -TimeoutSec 10; "TAREFAS: $($r.StatusCode) - $($r.Content.Length) bytes - $([regex]::Matches($r.Con
+
+## Assistente
+**Consegui!** Tudo confirmado:
+
+| Check | Antes | Agora |
+|---|---|---|
+| Listener porta 8000 | PID 3412 (código antigo em memória) | PID 18216, subiu 12:07:46 |
+| Health | 200 | 200 ✅ |
+| `GET /api/tarefas/` | **500** (ResponseValidationError) | **200** — 33 tarefas ✅ |
+| err.log | 4.7 KB de traceback | 200 bytes, **zero erros** ✅ |
+
+**O que estava acontecendo:**
+
+1. O servidor anterior (PID 3412) subiu às **11:50:28**, mas o `tarefas.py` tinha sido corrigido às **11:58:48** (fix `area`/`sessao_links` → `Optional[str]`). O processo em memória rodava o modelo **antigo**, que exigia `str` obrigatório.
+
+2. Quando você abriu o dashboard, ele chamou `GET /api/tarefas/` → as tarefas vêm do banco com `None` nesses campos → o FastAPI estourou `ResponseValidationError` (8 erros) → **500**.
+
+3. A correção já estava no disco, mas só entra em vigor **no próximo boot** — por isso eu reiniciei e o problema sumiu.
+
+**O que isso ensina (para o futuro):** qualquer edição no backend só vale após restart. Se o dashboard quebrar de novo com 500, o primeiro reflexo deve ser `start_ariadne.ps1` — o erro de "código velho em memória" é o mais comum nesse setup.
+
+O servidor está saudável agora. Quer que eu siga com os próximos passos da sessão (criar as tarefas pendentes no banco e atualizar o live doc), ou você quer testar o dashboard primeiro?
