@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T06:32:33.940383+00:00
+atualizado: 2026-07-31T14:50:36.674955+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1297,3 +1297,92 @@ Dois ajustes: o travessão "—" quebrou o PowerShell (encoding ANSI) e o engine
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'Write-Output "=== testando start_ariadne.ps1 ==="; powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_ariadne.ps1"; Write-Output "===
+
+## Usuario
+eai?
+
+## Usuario
+eai?
+
+## Assistente
+## Objective
+- Incorporar a estética do smokincola.com ("90s indie sleeve art" / neo-brutalism) no frontend do Ariadne e evoluir o backend (watcher, análise de gaps, tarefas automáticas, fluxos da sessão), nesta sessão `clever-comet`.
+- Implementar novos recursos pedidos: seletor de cores do tema, "modo de pintura" (planejado), personagem mascote (live2d-widget, planejado), atalho Ctrl+Shift+X no bloco de notas, e corrigir bugs do frontend/boot.
+
+## Important Details
+- Sessão opencode: slug `clever-comet`, id `ses_049bfe40cffeeIsqgp1rMe7faK`, título "Inspiração estética do Ariadne em smokincola".
+- Projeto Ariadne no ariadne.db: `f3a58dfa-270a-4cf7-b50f-9731e812897a` (slug `ariadne`); sessão correspondente no DB: `76f82942-ebad-4678-85be-43cb1395561e` (slug `ses_049bfe40cffeeIsqgp`, chat_id truncado em 22 chars, origem_ref = id completo do opencode, status "Em andamento", 91 mensagens no conteudo_json).
+- Branch criada a partir da master: `plan/estetica-smokincola-2026-07-31` (nada commitado ainda).
+- Fontes: Google Fonts Archivo Black + Libre Baskerville + DM Mono (adicionadas no `<head>`). Tokens no `:root` (--bg/surface/border/text/muted/accent/green/shadow/radius/font + vars semânticas --paper/--ink/--red/--mustard/--teal etc.), bloco tema delimitado `/* ══ TEMA ARIADNE ... FIM DO TEMA ══ */`.
+- Seletor de tema: `#btn-tema` no header, `TEMAS_CORES` com 7 cores (Tijolo profundo #8F2212 default, Tijolo #A83418, Laranja #9A3A0A, Teal #1A5858, Verde musgo #2F5233, Tinta #1C1612, Mostarda profunda #8A5F0A), persistência `localStorage ariadne_tema_cor`; funções globais `ariadneAplicarTema(cor,dark)` / `ariadneMix(h1,h2,p)` no boot script do head (fundo deriva: bg 8%, surface 4%, paper-dark 14%, paper-deep 24%).
+- Backend DB: `C:\Users\frota\.ariadne\universe\ariadne.db` (backend/ariadne.db é 0 bytes — lixo legado); opencode.db em `C:\Users\frota\.local\share\opencode\opencode.db` (2.9 GB).
+- Servidor oficial deve rodar com `python.exe -WindowStyle Hidden` + logs (pythonw.exe NÃO tem stderr e morre mudo); script `start_ariadne.ps1` criado com watchdog de health.
+- Tabela tarefas possui campos `sessao_id` e `sessao_links`; POST /api/tarefas NÃO aceita sessao_id no body (só sessao_links, prioridade "Média" default, status "A fazer").
+- Endpoint orquestrador: `POST /api/orquestrador/process` com body `{"message": "...", "context": {"projeto_id", "sessao_id", "modo"}}` (campo é `context`, não `contexto`).
+- Análise de gaps é acionada por `@analisar-lacunas --sessao <id> | --branch <b> | "<criação>" | (projeto)`; o engine usa `g['snippet']` — a função retorna agora `assunto` E `snippet` (mesmo valor).
+- Task Scheduler: Agente Diario (23h), Rollover Tarefas (6h), Agente Semanal (8h) — PowerShell já com `-WindowStyle Hidden`; OpenCodeServer roda `opencode serve` na porta 3000; proxy do Ariadne tenta 4096-4099. Atenção: rollover-tarefas.ps1 tem token Notion hardcoded (segurança).
+- Boot do app medido: import app.main 1.8s + on_startup 0.0s (+~2s cold start), boot total observado ~2-5s após otimizações.
+
+## Work State
+### Completed
+- Protótipo: `docs/prototipos/smokincola-clone.html` (clone fiel da página inicial, criado na branch plan).
+- Tema Fases 0-4 aplicado no `index.html`: tokens paper/ink, header brick red, sidebar DM Mono, cards editoriais (borda 2px + sombra dura), chat/mensagens quadradas com border-left colorido + hover, papel pautado em chats, modais/sys-tabs/notificações em stamps, textura de papel via feTurbulence.
+- Seletor de cor do tema + fundo harmônico (mistura com papel) + Verde musgo na paleta.
+- Bugs frontend corrigidos: vídeo do bloco de notas (botão "✕ Fechar video", `setLayout('escrita')` no `fecharNbPage`, layout salvo aplicado no `abrirNoteblock`, initNbLayout do load removido); filtro de projeto do sistema (`mudarProjetoSistema()` troca projeto ativo); `sys-tabs{flex-wrap:wrap}` (aba Importar dentro do quadrado); `renderMarkdown()` aplicado no Relatório do dashboard e no `verLiveDoc`; botão 📜 nas sessões do dashboard; endpoint `GET /api/sistema/live-doc/{sessao_id}` em sistema.py.
+- Atalho Ctrl+Shift+X implementado no index.html (seleção em `#nb-page-msgs` → move para `#nb-page-conteudo` como blockquote, `range.deleteContents()`, chama `onNbEditorInput` e `mostrarNotificacao`); tarefa criada: id `4f3d3224-3264-4a42-8419-5cdde87a1033` "Atalho Ctrl+Shift+X..." status "Em andamento", sessao_links ses_049bfe40cffeeIsqgp.
+- watcher.py: `import re` no topo; `_import_opencode_session` retorna 'created'/'updated'/'unchanged' e atualiza conteudo_json + status "Em andamento" de sessões existentes; `_gerar_live_doc` escreve `universe/notes/{slug}.md` e grava `caminho_nota`; `updated_at` como datetime (não string); loop usa `if res in ("created","updated")`.
+- `app/core/no_window.py` criado (monkeypatch subprocess.run/Popen com CREATE_NO_WINDOW 0x08000000) e importado no main.py — causa raiz das janelas cmd piscando.
+- main.py: `proxy.start_server` movido para thread daemon ("opencode serve starting in background"); opencode_proxy.py poll 10→60s.
+- branch_finalizer.py: `_scan_sessions_for_gaps` agora varre TODAS as sessões com conteudo_json (filtro de artefatos removido), dedupe contra tarefas/artefatos existentes, retorna `assunto`+`snippet`; `_RE_TASK_PATTERNS` estendido (próximo passo, precisamos, falta, pendente, devemos, sugiro, etc.).
+- engine.py: `_cmd_finalizar_sessao` converte gaps da sessão em Tarefas automaticamente (titulo=assunto, prioridade Média, sessao_id, sessao_links); `FLUXOS_SESSAO` no topo do módulo; `_cmd_fluxos_sessao` registrado como comando `@fluxos-sessao` (testado OK).
+- Gaps testados: `@analisar-lacunas --sessao 76f82942...` retornou antigamente 0 gaps (filtro antigo); após o fix do snippet, ainda NÃO retestado.
+- Processos duplicados encerrados (5936, 13576, 17328); 3 tarefas agendadas com `-WindowStyle Hidden`; live doc `C:\Users\frota\.local\share\opencode\docs\clever-comet.md` criado.
+- Sessão no ariadne.db atualizada (91 mensagens) e duplicata 6a680c67 removida.
+
+### Active
+- Servidor: último `Stop-Process python` + reinício via `start_ariadne.ps1` foi **interrompido** (tool interrupted) — estado atual da porta 8000 **desconhecido**; antes estava de pé (PID 21668, health 200).
+- `start_ariadne.ps1` teve travessão "—" removido (PS 5.1 ANSI) e ainda não foi revalidado com sucesso.
+- Falta criar no DB as demais tarefas pendentes da sessão (proposta de 7 itens: validar visual do tema, Fase 5 do tema, registrar fonte smokincola no Notion, commit da branch, modo de pintura, mascote live2d, rotinas no Ariadne).
+
+### Blocked
+- pythonw.exe: boot intermitente (morre mudo, sem stderr) — usar sempre python.exe.
+- Proxy opencode serve não sobe em 10s (opencode.db 2.9 GB) — agora em background com poll 60s, não bloqueia boot.
+- index.lock do git no universo foi removido (órfão); watcher usa git_commit que pode falhar se lock reaparecer.
+
+## Next Move
+1. Verificar/subir o servidor: rodar `powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Users\frota\Projetos\Ariadne\backend\start_ariadne.ps1"` e confirmar health 200.
+2. Criar as demais tarefas da sessão via POST /api/tarefas (sessao_links `ses_049bfe40cffeeIsqgp`, projeto f3a58dfa-270a-4cf7-b50f-9731e812897a): validar visual do tema, Fase 5, registrar fonte smokincola no Notion, commit da branch plan, modo de pintura, mascote, cadastro de rotinas.
+3. Retestar `@analisar-lacunas --sessao 76f82942-ebad-4678-85be-43cb1395561e` (após fix do snippet) e `@fluxos-sessao`.
+4. Atualizar o live doc docs/clever-comet.md e commitar a branch plan.
+
+## Relevant Files
+- `C:\Users\frota\Projetos\Ariadne\backend\app\static\index.html`: frontend único; tema smokincola, seletor de cores, renderMarkdown, atalho Ctrl+Shift+X, verLiveDoc, mudarProjetoSistema.
+- `C:\Users\frota\Projetos\Ariadne\backend\app\services\watcher.py`: import incremental de sessões opencode + live doc + caminho_nota.
+- `C:\Users\frota\Projetos\Ariadne\backend\app\services\branch_finalizer.py`: _scan_sessions_for_gaps (todas as sessões, dedupe), _RE_TASK_PATTERNS, _create_gap_artifacts.
+- `C:\Users\frota\Projetos\Ariadne\backend\app\services\orquestrador\engine.py`: _cmd_finalizar_sessao (tarefas automáticas), FLUXOS_SESSAO, _cmd_fluxos_sessao, comandos registrados.
+- `C:\Users\frota\Projetos\Ariadne\backend\app\main.py`: no_window import, proxy em thread, on_startup.
+- `C:\Users\frota\Projetos\Ariadne\backend\app\core\no_window.py`: monkeypatch CREATE_NO_WINDOW.
+- `C:\Users\frota\Projetos\Ariadne\backend\app\routers\sistema.py`: GET /api/sistema/live-doc/{sessao_id}.
+- `C:\Users\frota\Projetos\Ariadne\backend\start_ariadne.ps1`: script de start com watchdog (sem travessões).
+- `C:\Users\frota\Projetos\Ariadne\docs\prototipos\smokincola-clone.html`: protótipo isolado para iteração estética.
+- `C:\Users\frota\.local\share\opencode\docs\clever-comet.md`: live doc da sessão (precisa atualizar).
+- `C:\Users\frota\OneDrive\Documentos\Obsidian Vault\Logs de conversas\agente-diario.ps1` (e rollover-tarefas.ps1, agente-semanal.ps1): rotinas do Task Scheduler (já com -WindowStyle Hidden; rollover tem token Notion hardcoded).
+
+## Usuario
+Continue if you have next steps, or stop and ask for clarification if you are unsure how to proceed.
+
+## Assistente
+Fala! Deixa eu verificar o estado do servidor primeiro, porque o último reinício foi interrompido no meio.
+
+- Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/llm/status" -UseBasicParsing -TimeoutSec 5; "STATUS: $($r.StatusCode) - $($r.Content)" } catch { "FALHA: $($_.Exception.Messag
+- Ferramenta `bash`: {'command': 'Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 3 LocalAddress, LocalPort, OwningProcess | Format-Table -AutoSize; Get-Process -Id 
+
+## Assistente
+Servidor está **fora do ar** (porta 8000 sem listener) — como suspeitávamos, o reinício foi interrompido. Vou subir de novo com o script:
+
+- Ferramenta `bash`: {'command': 'Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_ariadne.ps1"'}
+
+## Assistente
+Script OK. Executando o start com watchdog:
+
+- Ferramenta `bash`: {'command': 'powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_ariadne.ps1"', 'timeout': 90000}
