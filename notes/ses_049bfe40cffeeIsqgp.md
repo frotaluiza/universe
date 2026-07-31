@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T06:31:42.579543+00:00
+atualizado: 2026-07-31T06:32:33.940383+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1286,3 +1286,14 @@ O uvicorn **depende do stderr para logging**. No `pythonw`, `sys.stderr` é `Non
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'Write-Output "=== testando start_ariadne.ps1 (servidor ja esta de pe, deve dizer OK) ==="; powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne\\backen
+
+## Assistente
+Dois ajustes: o travessão "—" quebrou o PowerShell (encoding ANSI) e o engine ainda espera o campo `snippet` (a nova análise retorna `assunto`). Corrigindo os dois:
+
+- Ferramenta `bash`: {'command': "$lines = Get-Content 'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\orquestrador\\engine.py'; $lines[672..695]"}
+
+## Assistente
+- Ferramenta `bash`: {'command': '$script = @\'\nimport io, re, subprocess\n\n# 1. branch_finalizer: retorna \'snippet\' E \'assunto\' (compatibilidade)\np1 = r"C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Write-Output "=== testando start_ariadne.ps1 ==="; powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_ariadne.ps1"; Write-Output "===
