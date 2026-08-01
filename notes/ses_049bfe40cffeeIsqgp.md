@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:51:38.393845+00:00
+atualizado: 2026-08-01T03:52:15.533830+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2078,3 +2078,11 @@ Agora o passo cirúrgico: extrair **só o tema** do `index.html` do `b3d97cd` (q
 O diff está misturando tema (meu) e galhos (outra sessão). Preciso ver o restante para localizar as funções JS do tema (toggleTemaPanel, TEMAS_CORES):
 
 - Ferramenta `bash`: {'command': '$diff = git diff "b31171d" "b3d97cd" -- "backend/app/static/index.html"; $lines = $diff -split "`n"; $lines | Select-Object -Skip 250 -First 260 | ForEach-Object { $_ }', 'workdir': 'C:\\
+
+## Usuario
+As sessões concomitantes precisam sempre trabalhar em workspaces totalmente separados. Adicione isso nas guidelines do agente do orquestrador
+
+## Assistente
+Preciso ver o restante do diff para localizar o JS do seletor de cores (TEMAS_CORES, toggleTemaPanel) que deve estar no script principal:
+
+- Ferramenta `bash`: {'command': '$diff = git diff "b31171d" "b3d97cd" -- "backend/app/static/index.html"; $lines = $diff -split "`n"; "TOTAL LINHAS DO DIFF: $($lines.Count)"; $lines | Select-Object -Skip 510 -First 200 |
