@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T04:04:52.833903+00:00
+atualizado: 2026-08-01T04:42:03.372045+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2317,3 +2317,81 @@ O `opencode.jsonc` tem **3 ocorrências** de "orquestrador"! Vou ver exatamente 
 **Achado!** O agente orquestrador **JÁ EXISTE no seu opencode** — está no `opencode.jsonc` (linhas 119-135), e o meu system prompt atual é exatamente ele. O backend do Ariadne o registra automaticamente no boot (`agent_registry.py` → `ensure_agent_in_opencode()` na linha 77 do `main.py`). Deixa eu ver o prompt completo registrado e comparar com o código do backend:
 
 - Ferramenta `bash`: {'command': '$lines = Get-Content "C:\\Users\\frota\\.config\\opencode\\opencode.jsonc" -Encoding UTF8; $lines[119..145]'}
+
+## Assistente
+Agora tenho o diagnóstico completo. Deixa eu ver as descrições completas dos comandos para montar o prompt atualizado:
+
+- Ferramenta `bash`: {'command': 'Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\orquestrador\\engine.py" -Pattern "register_command|_REGISTRY|COMANDOS\\s*=|comandos_disponiveis|descript
+
+## Assistente
+Tenho o diagnóstico completo. E como vamos editar a configuração do opencode (o agente em `opencode.jsonc`), vou carregar o skill de customização do opencode para fazer certo:
+
+- Ferramenta `skill`: {'name': 'customize-opencode'}
+
+## Assistente
+O skill carregado. Agora tenho o diagnóstico completo. Antes de editar, vou extrair as descrições reais dos comandos do engine para montar o prompt fiel (sem inventar):
+
+- Ferramenta `bash`: {'command': 'Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\orquestrador\\engine.py" -Pattern "^\\s+o\\.register_command" -Encoding UTF8 | ForEach-Object { $_.Line.T
+
+## Assistente
+Diagnóstico completo encontrado! Vou verificar o estado do `agent_registry.py` no worktree (nossa sessão) e comparar as duas fontes do prompt:
+
+- Ferramenta `bash`: {'command': '"=== agent_registry.py existe no worktree? ==="; Test-Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\agent_registry.py"; "=== prompt atual no jsonc (fonte real qu
+
+## Assistente
+🎯 **Resposta: SIM — o código do agente orquestrador já existe no seu opencode!** E o mais curioso: **eu sou ele** — este prompt que estou executando agora vem exatamente do agente "orquestrador" registrado no seu `opencode.jsonc` (linhas 119-135).
+
+## O que encontrei (integração já existe, mas com um problema)
+
+| Camada | Estado |
+|---|---|
+| **`opencode.jsonc`** (global) | ✅ Agente `orquestrador` registrado, `mode: primary` — é ele que me rege agora |
+| **`agent_registry.py`** (backend Ariadne) | ✅ `ORQUESTRADOR_AGENT` + `ensure_agent_in_opencode()` roda no boot (`main.py:77`) e registra o agente |
+| **`engine.py`** (orquestrador) | ✅ 24+ comandos reais registrados |
+| **⚠️ Prompt do agente** | ❌ **Desatualizado** — só lista `@carta, @chat, @finalizar-criacao`, mas o engine tem **24 comandos** |
+
+## O problema real
+
+O `ensure_agent_in_opencode()` **só adiciona se o agente não existe** — se o prompt muda, ele loga "already registered" e **não atualiza**. Por isso o prompt no seu opencode.jsonc ficou congelado numa versão antiga: quando o engine ganhou `@analisar-lacunas`, `@fluxos-sessao`, `@criar-galho`, `@documentar-sessao`, etc., o agente no opencode nunca soube.
+
+## A integração ideal (proposta)
+
+```
+engine.py (comandos reais) → agent_registry.py (gera prompt dinâmico) → opencode.jsonc
+        ↑                                                                    ↓
+        └────── usuário conversa com o orquestrador ←────────────────────────┘
+```
+
+O `agent_registry` deveria **sincronizar (upsert)** o prompt sempre que os comandos mudarem, não só criar. Posso implementar agora:
+
+1. **`agent_registry.py`**: prompt com a lista completa dos 24 comandos + `ensure_agent_in_opencode()` fazendo **upsert** (compara prompt, atualiza se mudou)
+2. **`opencode.jsonc`**: atualizar o prompt registrado
+3. **Tarefa no banco** para documentar a melhoria
+
+Quer que eu implemente?
+
+## Usuario
+Pode
+
+## Assistente
+Vou implementar. Primeiro, leio o `agent_registry.py` completo no worktree (nosso workspace, seguindo a guideline que acabamos de registrar):
+
+- Ferramenta `bash`: {'command': 'Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\agent_registry.py" -Encoding UTF8'}
+
+## Assistente
+Vou ver o `opencode.jsonc` completo para decidir a estratégia de escrita (preservar comentários é crítico):
+
+- Ferramenta `bash`: {'command': '$c = Get-Content "C:\\Users\\frota\\.config\\opencode\\opencode.jsonc" -Encoding UTF8; "TOTAL LINHAS: $($c.Count)"; $c[0..40]'}
+
+## Assistente
+O arquivo é JSON válido (sem comentários ativos). Agora vou reescrever o `agent_registry.py` com: (1) prompt com os 24 comandos reais do engine, (2) `ensure_agent_in_opencode()` com **upsert** (atualiza quando o prompt muda):
+
+- Ferramenta `write`: {'content': 'import json\nimport logging\nimport os\nfrom pathlib import Path\n\nlogger = logging.getLogger(__name__)\n\n# Lista de comandos do orquestrador (fonte de verdade para o prompt do agente).
+
+## Assistente
+Agora vou rodar o upsert para atualizar o `opencode.jsonc` e validar que o JSON continua válido:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\agent_registry.py"; "=== JSON valido? ==="; try { $j = Get-Content "C:\\Users\\fro
+
+## Assistente
+- Ferramenta `bash`: {'command': '"=== prompt atualizado no jsonc? ==="; $j = Get-Content "C:\\Users\\frota\\.config\\opencode\\opencode.jsonc" -Encoding UTF8 -Raw | ConvertFrom-Json; $ag = $j.agent.orquestrador; "agent e
