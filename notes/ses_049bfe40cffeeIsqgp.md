@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:10:21.642308+00:00
+atualizado: 2026-08-01T03:11:02.273842+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1738,3 +1738,22 @@ Servidor caiu (talvez o watcher do agente diário ou algo do sistema o derrubou)
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/health" -UseBasicParsing -TimeoutSec 5; "HEALTH: $($r.StatusCode)" } catch { "FAIL: $($_.Exception.Message)" }; try { $h = Inv
+
+## Assistente
+O script disse OK mas agora falhou — o servidor pode ter caído logo depois de subir. Vou investigar os logs e o processo:
+
+- Ferramenta `bash`: {'command': '$conn = Get-NetTCPConnection -LocalPort 8000 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1; if ($conn) { $p = Get-Process -Id $conn.OwningProcess; "PID: $($p.Id) | 
+- Ferramenta `bash`: {'command': '"=== ERR LOG (últimas 30) ==="; Get-Content "C:\\Users\\frota\\.ariadne\\logs\\ariadne-server.err.log" -Tail 30 -ErrorAction SilentlyContinue; "=== OUT LOG (últimas 15) ==="; Get-Content 
+
+## Assistente
+Curioso: o servidor (PID 14900) subiu, respondeu o health do watchdog, e **morreu logo depois sem traceback** — alguém o matou. E há um processo python (1916) iniciado às 00:10:19 de hoje. Deixa eu ver o que é esse processo e subir monitorando:
+
+- Ferramenta `bash`: {'command': 'Get-CimInstance Win32_Process -Filter "ProcessId = 1916" | Select-Object ProcessId, CreationDate, CommandLine | Format-List; "=== 14900 ainda existe? ==="; Get-Process -Id 14900 -ErrorAct
+
+## Assistente
+Achei algo importante: existe um **outro servidor Ariadne rodando na porta 8008** (PID 1916, iniciado às 00:10:19 de hoje — acabou de dar meia-noite!). Isso sugere que alguma rotina do Task Scheduler subiu um servidor concorrente. Deixa eu verificar quem está nas portas e subir o 8000 de novo:
+
+- Ferramenta `bash`: {'command': 'Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.LocalPort -in 8000, 8008, 3000 } | Select-Object LocalPort, OwningProcess, LocalAddress | Format-Table
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Get-CimInstance Win32_Process -Filter "ProcessId = 6548" | Select-Object ProcessId, ParentProcessId, CreationDate, CommandLine | Format-List'}
