@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:11:42.668269+00:00
+atualizado: 2026-08-01T03:12:17.451034+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1785,3 +1785,19 @@ Achei: `start_server.ps1`/`start_server.bat` no backend usam a 8008. Vou ver o c
 
 - Ferramenta `bash`: {'command': '"=== start_server.ps1 ==="; Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_server.ps1"; "=== start_server.bat ==="; Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\bac
 - Ferramenta `bash`: {'command': 'schtasks /query /fo CSV 2>$null | Out-String -Width 500 | ForEach-Object { $_ } | Select-String -Pattern "start_server|Ariadne|ariadne" | ForEach-Object { $_.Line }'}
+
+## Assistente
+O comando inline (`Tee-Object` para `ariadne_live.log`) veio de uma tarefa agendada com comando embutido. Vou procurar no Task Scheduler:
+
+- Ferramenta `bash`: {'command': 'Get-ScheduledTask -ErrorAction SilentlyContinue | ForEach-Object { $a = $_.Actions | Where-Object { $_.Execute -like "*powershell*" -and $_.Arguments -like "*8008*" -or $_.Arguments -like
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Get-ScheduledTask -ErrorAction SilentlyContinue | Where-Object { $_.State -ne "Disabled" } | ForEach-Object { $t = $_; $t.Actions | ForEach-Object { if ($_.Arguments -match "8008|ariadne_
+
+## Assistente
+A tarefa não aparece no query atual (pode ter sido registrada com nome diferente ou via registro antigo). Vou verificar o histórico de execuções do Task Scheduler por volta das 00:10:
+
+- Ferramenta `bash`: {'command': '$start = Get-Date "2026-08-01 00:05"; $end = Get-Date "2026-08-01 00:20"; Get-WinEvent -FilterHashtable @{LogName=\'Microsoft-Windows-TaskScheduler/Operational\'; StartTime=$start; EndTim
+
+## Assistente
+- Ferramenta `bash`: {'command': '$start = Get-Date "2026-08-01 00:00"; Get-WinEvent -FilterHashtable @{LogName=\'Microsoft-Windows-TaskScheduler/Operational\'; StartTime=$start} -MaxEvents 30 -ErrorAction SilentlyContinu
