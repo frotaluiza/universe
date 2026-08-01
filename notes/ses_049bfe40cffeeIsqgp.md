@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:52:15.533830+00:00
+atualizado: 2026-08-01T03:52:48.849950+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2086,3 +2086,24 @@ As sessões concomitantes precisam sempre trabalhar em workspaces totalmente sep
 Preciso ver o restante do diff para localizar o JS do seletor de cores (TEMAS_CORES, toggleTemaPanel) que deve estar no script principal:
 
 - Ferramenta `bash`: {'command': '$diff = git diff "b31171d" "b3d97cd" -- "backend/app/static/index.html"; $lines = $diff -split "`n"; "TOTAL LINHAS DO DIFF: $($lines.Count)"; $lines | Select-Object -Skip 510 -First 200 |
+
+## Assistente
+Entendido — lição clara desta sessão: duas sessões no mesmo working tree causaram conflito (stash cruzado, commit com `add -A` levando o tema junto). Vou registrar essa regra nas guidelines do orquestrador (AGENTS.md global + banco de guidelines do Ariadne) e continuar a extração do tema no worktree separado.
+
+- Ferramenta `bash`: {'command': 'Select-String -Path "C:\\Users\\frota\\.config\\opencode\\AGENTS.md" -Pattern "Guidelines do Universo Ariadne" | Select-Object LineNumber, Line'}
+- Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/guidelines" -TimeoutSec 5 -UseBasicParsing; "GET /api/guidelines -> $($r.StatusCode)"; $r.Content.Substring(0, [Math]::Min(500
+
+## Assistente
+- Ferramenta `bash`: {'command': '$r = Invoke-WebRequest -Uri "http://localhost:8000/api/guidelines" -TimeoutSec 5 -UseBasicParsing; $g = $r.Content | ConvertFrom-Json; "Total: $($g.Count)"; $g | Select-Object -First 30 |
+- Ferramenta `invalid`: {'tool': 'read', 'error': "Model tried to call unavailable tool 'read'. Available tools: bash, edit, invalid, search_session_logs, skill, task, todowrite, webfetch, websearch, write."}
+
+## Assistente
+A API tem 39 guidelines. Vou ver a tabela de guidelines no AGENTS.md para adicionar a nova regra no lugar certo:
+
+- Ferramenta `bash`: {'command': '$lines = Get-Content "C:\\Users\\frota\\.config\\opencode\\AGENTS.md" -Encoding UTF8; $lines[808..870]'}
+
+## Assistente
+Vou adicionar a regra nas duas camadas: tabela do AGENTS.md (que orienta todas as sessões) e a database de guidelines via API:
+
+- Ferramenta `bash`: {'command': '$path = "C:\\Users\\frota\\.config\\opencode\\AGENTS.md"; $c = Get-Content $path -Encoding UTF8 -Raw; $nova = "| Sessões concomitantes em workspaces separados | versionamento | Duas+ sess
+- Ferramenta `bash`: {'command': '$body = \'{"escopo":"global","categoria":"versionamento","chave":"workspaces_separados","regra":"obrigatorio","ativa":true}\'; try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api
