@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T04:00:26.164806+00:00
+atualizado: 2026-08-01T04:03:35.001414+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2233,3 +2233,48 @@ Vou confirmar o estado final e marcar a tarefa de commit como concluída:
 Vou marcar a tarefa de commit diretamente no banco (já que o servidor 8000 caiu, a API não respondeu):
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "import sqlite3; db=sqlite3.connect(r\'C:\\Users\\frota\\.ariadne\\universe\\ariadne.db\'); db.execute(\\"UPDATE tarefas SET status=\'Concluido\' 
+
+## Assistente
+- Ferramenta `write`: {'content': 'import sqlite3\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ariadne.db")\ndb.execute("UPDATE tarefas SET status=\'Concluido\' WHERE id=\'0d42f24d-7816-4063-ae57-94e243828
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\marcar_tarefa.py"'}
+
+## Assistente
+Tudo concluído. Resumo do que aconteceu:
+
+## ✅ Guideline adicionada — "Sessões em workspaces separados"
+
+**Duas camadas:**
+1. **AGENTS.md global** (linha 830, tabela Guidelines do Universo Ariadne):
+   > `| Sessões concomitantes em workspaces separados | versionamento | Duas ou mais sessões abertas no mesmo projeto DEVEM trabalhar em workspaces totalmente separados (git worktree ou clone dedicado por sessão). Nunca compartilhar a mesma pasta/repo ao mesmo tempo - risco de stash/commit cruzado, add -A pegando trabalho alheio e perda de arquivos |`
+2. **Banco de guidelines do Ariadne** (API, escopo global): `1ac570d2` — categoria `versionamento`, chave `workspaces_separados`, regra `obrigatorio`, ativa. Resolvida via `GET /api/guidelines/resolved/{projeto_id}/workspaces_separados`.
+
+## 🔧 O que aconteceu com o commit (história completa)
+
+O `git status` vazio + branch trocada tinham explicação: **a outra sessão** (feat/sistema-galhos) tinha feito `git stash -u` do meu trabalho e commitado com `add -A` (levando o tema junto no `b3d97cd`). Recuperei tudo:
+
+| Passo | Resultado |
+|---|---|
+| **Worktree separado** `C:\Users\frota\Projetos\Ariadne-tema` | Branch `plan/estetica-smokincola-2026-07-31`, sem conflitar com a outra sessão |
+| **Stash `-u` aplicado** | Todos os meus arquivos restaurados (watcher, fixes, `no_window.py`, `start_ariadne.ps1`, protótipo) |
+| **Extração cirúrgica do tema** | Só o tema smokincola (Fases 0-5) no `index.html` da plan — **sem** UI de galhos (que não existe no backend da plan) |
+| **Commit automático** | O watcher (nosso código, `commit_universo=auto`) commitou + pusheou: `2e3c326` — "feat: tema smokincola + fixes de UI" (12 arquivos, 2180 inserções) |
+| **Servidor do tema** | 🟢 **http://localhost:8001** (PID 10120) — health OK, Fase 5 servida, galhos ausentes ✅ |
+| **Tarefa `0d42f24d`** | Marcada **Concluído** (diretamente no banco, pois o servidor 8000 caiu — a outra sessão derrubou ele e o meu 8001 na primeira tentativa) |
+
+## 📌 Notas
+- O servidor 8000 (da outra sessão/meu antigo) **caiu** — ela ainda está ativa (4 processos opencode) e subiu outro uvicorn na 8008 para testes dela. Não mexi no working tree dela.
+- **Para ver o tema:** abra `http://localhost:8001` (Ctrl+Shift+R).
+- Duas sessões coexistiram sem novo conflito graças ao worktree — exatamente a regra que acabei de registrar.
+
+**Pendências para a sessão:** o live doc precisa de atualização (Fase 5, Blood Lines, guideline nova) — quer que eu atualize?
+
+## Usuario
+O código do agente orquestrador existe no meu opencode? O ideal seria ele estar integrado ao ariadne né?
+
+## Assistente
+Boa pergunta! Deixa eu verificar o que existe hoje: (1) configuração de agentes do opencode, (2) o código do orquestrador no Ariadne, e (3) se há integração entre eles:
+
+- Ferramenta `bash`: {'command': '"=== config do opencode ==="; Get-ChildItem "C:\\Users\\frota\\.config\\opencode" -ErrorAction SilentlyContinue | Select-Object Name; "=== .opencode no projeto Ariadne? ==="; if (Test-Pat
+- Ferramenta `bash`: {'command': '"=== codigo do orquestrador no backend Ariadne ==="; Get-ChildItem "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\orquestrador" -ErrorAction SilentlyContinue | Select-Objec
