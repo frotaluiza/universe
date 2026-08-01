@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:13:00.669470+00:00
+atualizado: 2026-08-01T03:19:29.162876+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1833,3 +1833,57 @@ O registry mostra só sessões órfãs antigas (12/07), nenhuma ativa agora alé
 
 - Ferramenta `bash`: {'command': '"=== processos opencode/node rodando ==="; Get-Process | Where-Object { $_.ProcessName -match "opencode|node" } | Select-Object Id, ProcessName, StartTime, Path | Format-Table -AutoSize; 
 - Ferramenta `bash`: {'command': '"=== agente-diario.ps1 (procura por uvicorn/8008/orquestrador) ==="; $f = "C:\\Users\\frota\\OneDrive\\Documentos\\Obsidian Vault\\Logs de conversas\\agente-diario.ps1"; if (Test-Path $f)
+
+## Assistente
+**Mistério resolvido — e você estava certíssimo!** Achei a prova nos processos:
+
+```
+PID 5008  opencode  ← OUTRA SESSÃO OPENCODE ativa
+ └─ PID 12648 (00:12:13) — comando:
+    "Start-Process powershell ... uvicorn app.main:app --port 8008 ... Tee-Object ariadne_live.log;
+     Start-Sleep 22; python -m pytest test_galhos.py test_feature_tracking.py test_guidelines.py"
+     └─ PID 8720 (00:12:14) → subiu o python 1916 na porta 8008
+```
+
+## Respostas às suas perguntas:
+
+**1. O start_server roda automaticamente?** **Não.** Os `start_server.ps1`/`start_server.bat` (porta 8008) são scripts legados — **não estão em nenhuma tarefa agendada** (verifiquei todas: Agente Diario, Semanal, Rollover, OpenCodeServer usam scripts fixos, nenhum com porta 8008).
+
+**2. Onde é rodado?** Foi a **outra sessão opencode ativa (PID 5008)** que subiu o uvicorn na porta 8008 às 00:10:19 — ela está **rodando testes** (`pytest test_galhos.py`, `test_feature_tracking.py`, `test_guidelines.py`). Ela subiu o servidor **na 8008 de propósito** (para não conflitar com o meu na 8000) e o log `ariadne_live.log` mostra o `POST /api/orquestrador/process` que os testes fizeram.
+
+**3. Por que o meu servidor (8000) morreu?** Provavelmente o **cleanup/teardown dos testes** da outra sessão matou processos python em geral — ou algum conflito entre as duas instâncias. O processo 14900 subiu, respondeu health e caiu sem traceback (morte externa, não erro).
+
+**Recomendação:** não vou matar o processo 1916 (porta 8008) — é da sua outra sessão fazendo testes, matar atrapalharia. Vou só subir o 8000 de novo para você ver a Fase 5:
+
+- Ferramenta `bash`: {'command': '"8008 ainda vivo: $([bool](Get-Process -Id 1916 -ErrorAction SilentlyContinue))"; powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_
+
+## Usuario
+O que foi implementado na fase 5?
+
+## Assistente
+A Fase 5 foi a camada de **texturas, carimbos e micro-interações** — o acabamento que transforma o tema de "estrutura editorial" para "objeto impresso". Tudo adicionado no bloco do tema do `index.html` (logo após o seletor de cores, antes do marcador FIM DO TEMA):
+
+## O que foi adicionado
+
+| Regra | Efeito visual |
+|---|---|
+| **`body::after`** | **Vinheta de papel envelhecido** — sombras internas suaves (90px + 18px) nas bordas da tela, como papel amarelado nas pontas |
+| **`.block:hover`** | **Cards "levantam"** — `translateY(-2px)` + sombra extra de 4px/6px de tinta. Ficha de biblioteca saindo da estante |
+| **`.block-title`** | Título com **carimbo de asterisco `*`** vermelho na frente + **linha pontilhada** embaixo (flex com `::before`) |
+| **`.empty-state`, `.block-empty`** | Viram **bilhetes recortados** — borda tracejada + fundo papel escuro |
+| **`.btn-primary`, `.btn-approve`** | **Efeito de carimbo** — borda dupla interna (anel branco) + sombra de 2px de tinta + **rotação -1°** no hover |
+| **`#dados-table-content th`** | Cabeçalho de tabela em **DM Mono uppercase** + linha grossa de tinta de 2px (ficha de catálogo) |
+| **`a`** | **Sublinhado pontilhado** editorial (vira sólido no hover) |
+| **`.chat-msg .bubble:hover`** | **Bolhas inclinam** — user roda -0.4°, assistant +0.4° (zine bagunçado) |
+| **`input[type=checkbox/radio]`** | **accent-color vermelho tijolo** + 15px (formulário impresso) |
+| **`.badge-proj`** | **Etiqueta de papel dobrada** — rotação -0.5° + sombra de 2px |
+| **Scrollbar** | **Pegada de caderno** — 8px, thumb com borda de 2px de papel, cantos retos |
+
+## O que NÃO mudou
+- Nenhuma estrutura HTML tocada — só CSS aditivo dentro do bloco do tema
+- Todas as regras usam os tokens existentes (`--ink`, `--paper`, `--red`, `--border`), então **respeitam o seletor de cores** do header (mudar a cor do tema continua funcionando)
+- Zero `!important` nas regras de layout (só nos estilos que já tinham conflito de borda)
+
+**Sobre o servidor:** está no ar (PID 16272, health OK). A outra sessão (PID 5008) aparentemente terminou os testes — o processo da 8008 (1916) já não existe mais, então o risco de conflito passou.
+
+Recarregue o dashboard (Ctrl+Shift+R) e me diga o que achou do visual — se aprovar, partimos para o commit da branch (`0d42f24d`).
