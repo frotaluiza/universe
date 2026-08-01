@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:47:27.548844+00:00
+atualizado: 2026-08-01T03:48:34.328647+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2018,3 +2018,11 @@ Tarefas de gatilho criadas (`07dbe7df` e `9b17b1f5`). Porém o `git status` veio
 
 ## Usuario
 Calma, tá tudo bem, só voltar pra sessão do smoking cola e rodar em outra porta
+
+## Assistente
+Calma, entendido! O importante: **o tema completo (incluindo Fase 5) está commitado** no `b3d97cd` (HEAD atual) — a outra sessão fez `add -A` e levou o `index.html` com o tema junto. Nada do tema se perdeu. Os 3 arquivos novos que sumiram do disco eu recrio rapidinho (são pequenos e eu sei o conteúdo).
+
+Antes de trocar de branch, preciso checar se a outra sessão ainda está ativa no working tree compartilhado (não quero quebrar os testes dela):
+
+- Ferramenta `bash`: {'command': '"=== processos opencode ativos ==="; Get-Process -Name "opencode*" -ErrorAction SilentlyContinue | Select-Object Id, StartTime | Format-Table -AutoSize; "=== quem esta na porta 8000? ==="
+- Ferramenta `bash`: {'command': '"=== health na 8000 ==="; try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/health" -TimeoutSec 5 -UseBasicParsing; "HTTP $($r.StatusCode)" } catch { "DOWN: $($_.Exception.Mess
