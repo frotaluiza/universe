@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:53:57.607264+00:00
+atualizado: 2026-08-01T03:54:28.851565+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2140,3 +2140,26 @@ Agora vou retomar a tarefa que estava no meio: **extrair o tema do `b3d97cd` par
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\extrair_tema.py"'}
+
+## Assistente
+Tema extraído com sucesso: bloco CSS + boot + botão + seletor, sem UI de galhos, tags balanceadas. Agora vou subir o servidor do worktree na porta **8001**:
+
+- Ferramenta `bash`: {'command': '"=== start_ariadne.ps1 no worktree? ==="; Test-Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\start_ariadne.ps1"; "=== no_window.py no worktree? ==="; Test-Path "C:\\Users\\frot
+
+## Assistente
+O worktree está completo (até o protótipo foi restaurado) e usa o mesmo banco compartilhado. Agora vou ver o `start_ariadne.ps1` restaurado e subir na porta 8001:
+
+- Ferramenta `bash`: {'command': 'Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\start_ariadne.ps1" -Encoding UTF8'}
+
+## Assistente
+O script está hardcoded para o backend original na porta 8000. Vou criar uma variante parametrizada no worktree para a porta 8001:
+
+- Ferramenta `write`: {'content': '# ============================================================\n# start_ariadne_tema.ps1 - Servidor do worktree smokincola (porta 8001)\n# Sobe o backend a partir do worktree separado, co
+
+## Assistente
+- Ferramenta `bash`: {'command': 'powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\start_ariadne_tema.ps1"', 'timeout': 90000}
+
+## Assistente
+O servidor já responde na 8001. Vou confirmar que é o processo do worktree e que o tema está sendo servido:
+
+- Ferramenta `bash`: {'command': '"=== quem esta na 8001 ==="; Get-NetTCPConnection -LocalPort 8001 -State Listen -ErrorAction SilentlyContinue | Select-Object OwningProcess; $pid8001 = (Get-NetTCPConnection -LocalPort 80
