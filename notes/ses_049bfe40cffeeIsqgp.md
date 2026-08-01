@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:49:54.651106+00:00
+atualizado: 2026-08-01T03:51:04.965991+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2048,3 +2048,21 @@ Confirmado: a branch plan **não tem o tema** (o commit do tema está só no `b3
 Achado importante: há um **stash** (`9f703d5 index on plan/estetica-smokincola...`) — a outra sessão fez `git stash` das minhas mudanças pendentes! E há um commit novo `eceb5f7` com `criacao_id` nas tarefas (feito por ela). Vou inspecionar o stash (pode conter meus arquivos "perdidos") e criar o worktree:
 
 - Ferramenta `bash`: {'command': '"=== stash 9f703d5: arquivos ==="; git stash show -p "stash@{0}" --stat 2>$null; if (-not $?) { git stash show -p "9f703d5" --stat }', 'workdir': 'C:\\Users\\frota\\Projetos\\Ariadne'}
+
+## Assistente
+O stash `9f703d5` contém **todas as minhas mudanças de backend da sessão** (watcher incremental, fix do `tarefas.py`, live doc, proxy em background, warmup) — a outra sessão fez `git stash` delas para commitar o sistema de galhos dela. Nada se perdeu, só foi movido.
+
+**Plano seguro (sem tocar no working tree da outra sessão):** criar um worktree git com a branch do smokincola, aplicar meu stash lá, trazer o `index.html` com o tema, e subir na porta **8001**:
+
+- Ferramenta `bash`: {'command': '"=== parent do b3d97cd (de onde partiu a outra sessao?) ==="; git log --oneline -1 "b3d97cd^"; "=== diff index.html entre plan e b3d97cd ==="; git diff --stat "b31171d" "b3d97cd" -- "back
+
+## Assistente
+A outra sessão partiu do mesmo ponto (`b31171d` = topo da branch plan) e commitou **tema + galhos juntos** no `index.html`. Vou criar o worktree da branch plan, aplicar meu stash lá, e extrair **apenas o bloco do tema** do `b3d97cd` para o `index.html` da plan (sem a UI de galhos, que não existe no backend da plan):
+
+- Ferramenta `bash`: {'command': 'git worktree add "C:\\Users\\frota\\Projetos\\Ariadne-tema" "plan/estetica-smokincola-2026-07-31" 2>&1; if ($?) { "=== worktree criado ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-te
+
+## Assistente
+Worktree criado em `C:\Users\frota\Projetos\Ariadne-tema` (branch plan, commit `b31171d`). Agora vou aplicar meu stash lá e analisar o diff do index.html para extrair só o tema:
+
+- Ferramenta `bash`: {'command': '"=== aplicando stash no worktree ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" stash apply "stash@{0}" 2>&1; if ($?) { "STASH APLICADO" }', 'workdir': 'C:\\Users\\frota\\Projeto
+- Ferramenta `bash`: {'command': '"=== diff do index.html b31171d..b3d97cd (cabecalho das mudancas) ==="; git diff "b31171d" "b3d97cd" -- "backend/app/static/index.html" | Select-String -Pattern "^\\+.*(TEMA ARIADNE|FIM D
