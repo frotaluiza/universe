@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:43:42.303862+00:00
+atualizado: 2026-08-01T03:45:15.614280+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1940,3 +1940,66 @@ Tenho tudo. Vou responder às suas perguntas e já aproveitar para commitar (aut
 Vou registrar isso como tarefas e commitar:
 
 - Ferramenta `write`: {'content': 'import json\nimport urllib.request\n\nAPI = "http://localhost:8000/api/tarefas/"\nSESSAO = "ses_049bfe40cffeeIsqgp"\nPROJETO = "f3a58dfa-270a-4cf7-b50f-9731e812897a"\n\ntarefas = [\n    {
+
+## Assistente
+## Objective
+- Incorporar a estética do smokincola.com ("90s indie sleeve art") no frontend do Ariadne e evoluir o backend (watcher, gaps, tarefas automáticas, fluxos da sessão), na sessão `clever-comet`.
+- Próximos passos definidos com o usuário: bloco de Ideias no dashboard (visível só com contexto da criação selecionado), fechar a lógica de níveis (artefatos × criação), Fase 5 do tema (implementada, aguardando validação visual), e avaliar incorporação do Blood Lines/Family Plot para mapas mentais 3D (licença GPL-3.0 verificada).
+
+## Important Details
+- Sessão opencode: slug `clever-comet`, id `ses_049bfe40cffeeIsqgp1rMe7faK`; sessão no DB: `76f82942-ebad-4678-85be-43cb1395561e` (origem_ref = id completo, chat_id truncado em 22 chars, "Em andamento", 91 mensagens).
+- Projeto Ariadne: `f3a58dfa-270a-4cf7-b50f-9731e812897a`. Criação ativa "Plataforma Ariadne": `d8d1d000-c51d-45ec-b4c2-4c04d6b98b92` (em_andamento); outras: `2266cbce-1a58-46bf-9d7f-8af2e417739a` (2 de roteiro, planejadas).
+- **Bug lógica de níveis**: tabela `artefatos` NÃO tem coluna `criacao_id` (só `projeto_id`, `sessao_id`, `agente_origem`, etc.) — por isso ao selecionar a criação nada aparece. Tarefa `20524da9` documenta migração + backfill + endpoint + frontend.
+- BD: `C:\Users\frota\.ariadne\universe\ariadne.db` (backend/ariadne.db é 0 bytes, lixo) — total 42 tarefas (7 Alta, 1 Em andamento).
+- Servidor: `python.exe -WindowStyle Hidden` via `start_ariadne.ps1` (watchdog; pythonw.exe morre mudo); boots atuais 2–4s. POST /api/tarefas NÃO aceita `sessao_id` no body (só `sessao_links`); default prioridade "Média", status "A fazer". Console: usar `$env:PYTHONIOENCODING="utf-8"` (cp1252 quebra com caracteres tipo \u2194).
+- Orquestrador: `POST /api/orquestrador/process` body `{"message", "context": {projeto_id, sessao_id, modo}}` (campo é `context`).
+- **Porta 8008 esclarecida**: `start_server.ps1`/`start_server.bat` (uvicorn :8008) são legados e NÃO estão em nenhuma tarefa agendada. O servidor 8008 foi subido por OUTRA sessão opencode ativa (PID 5008 → powershell 12648 em 01/08 00:12:13): comando inline `Start-Process powershell -WindowStyle Hidden -Command "cd ...backend; python -m uvicorn app.main:app --port 8008 2>&1 | Tee-Object $env:TEMP\ariadne_live.log"; Start-Sleep 22; python -m pytest test_galhos.py test_feature_tracking.py test_guidelines.py`. Log `%TEMP%\ariadne_live.log` mostra POST /api/orquestrador/process 200 e POST /api/galhos/reativar 405. O teardown dos testes provavelmente matou o servidor 8000.
+- **Blood Lines/Family Plot**: repo `oh-kay-blanket/family-plot` (106⭐), demo family-plot.ohkaycomputer.com; grafo 3D force-directed (react-force-graph-3d + d3-force-3d + three-spritetext, todas MIT), GEDCOM, timeline por ano, highlight de relações, busca com zoom, PWA. **LICENÇA REAL: GPL-3.0** (README diz ISC, mas o arquivo LICENSE é GPL-3.0 — copyleft). Incorporar código exigiria Ariadne GPL-3.0 se distribuído; opções: reimplementar com libs MIT, pedir permissão ao autor (oh-kay-blanket), ou usar só como referência de arquitetura.
+- Tema smokincola: bloco CSS no index.html entre `/* TEMA ARIADNE ... FIM DO TEMA */`; seletor `#btn-tema` + `TEMAS_CORES` (7 cores) + localStorage `ariadne_tema_cor`; funções `ariadneAplicarTema(cor,dark)`/`ariadneMix(h1,h2,p)` no head.
+- 4 processos opencode rodando: PIDs 5008, 12760, 17260, 18888 (iniciados 31/07 11:39–11:50) — há sessão(ões) concorrente(s) ativa(s); não matar seus processos.
+- Task Scheduler: Agente Diario 23h, Rollover 6h, Agente Semanal 8h, OpenCodeServer (opencode serve :3000); proxy Ariadne tenta 4096–4099. rollover-tarefas.ps1 tem token Notion hardcoded (segurança).
+
+## Work State
+### Completed
+- **Bug do 500 resolvido**: GET /api/tarefas/ retornava `ResponseValidationError` (area/sessao_links `None` × modelo com `str` obrigatório) porque o processo PID 3412 rodava código antigo (tarefas.py editado 11:58:48 após boot 11:50:28). Reinício → PID 18216: 200 OK, 33 tarefas, err.log limpo. Fix no disco: `area`/`sessao_links` como `Optional[str] = None` em `TarefaOut`.
+- **Fase 5 do tema IMPLEMENTADA** no index.html (inserida após `.tema-swatch-btn.active`, ~linha 314, antes do FIM DO TEMA): vinheta `body::after` (papel envelhecido), `.block:hover` levanta com sombra 4px, `.block-title` com carimbo `*` + borda pontilhada, empty states tracejados, botões primários com efeito carimbo (borda dupla + rotação -1°), cabeçalho de tabela mono uppercase, links pontilhados→sólidos, bolhas de chat inclinam no hover, checkbox/radio accent vermelho, `.badge-proj` rotacionada, scrollbar de caderno. Validado: 1 `<style>`/fechado, 3 `<script>`/fechados.
+- **10 tarefas criadas** via POST /api/tarefas (sessao_links `ses_049bfe40cffeeIsqgp`, projeto f3a58dfa...): `a1f7bd46` [Alta] Bloco de Ideias; `20524da9` [Alta] Lógica de níveis artefatos×criação; `294c3dec` [Média] Validar visual do tema; `febdb68b` [Baixa] Fase 5; `8bbaadf7` [Média] Fonte smokincola no Notion; `0d42f24d` [Alta] Commit+push branch; `dcf56902` [Baixa] Modo de pintura; `e3af3642` [Baixa] Mascote live2d; `74ac996a` [Média] Rotinas; `f022d7e3` [Média] Mapas mentais 3D Blood Lines/Family Plot (GPL-3.0). Mais `4f3d3224` [Em andamento] Ctrl+Shift+X.
+- Recap completo da sessão entregue ao usuário (tema Fases 0–4, fixes frontend/backend, bug do servidor, lista de tarefas).
+- Causa do servidor 8008 identificada e provada (outra sessão opencode rodando pytest) — não é automação agendada.
+- Watcher/branch_finalizer/engine/no_window/start_ariadne.ps1: tudo implementado e validado nas rodadas anteriores (import incremental, live doc `universe/notes/{slug}.md`, gaps→tarefas automáticas, `@fluxos-sessao`, CREATE_NO_WINDOW, boot sem janelas).
+
+### Active
+- Servidor no ar em `http://localhost:8000`: PID 16272 subiu via `start_ariadne.ps1` (health OK em 2s), após o PID 14900 ter sido morto externamente (provavelmente teardown de pytest da outra sessão). Usuário pediu para subir "pra eu ver" — **aguardando validação visual da Fase 5** (Ctrl+Shift+R).
+- Retestar `@analisar-lacunas --sessao 76f82942-...` (após fix do snippet) e `@fluxos-sessao` — pendente.
+- Live doc `C:\Users\frota\.local\share\opencode\docs\clever-comet.md` desatualizado (Fase 5, tarefas novas, Blood Lines).
+- Nada commitado ainda na branch `plan/estetica-smokincola-2026-07-31`.
+
+### Blocked
+- GPL-3.0 do Family Plot: decisão pendente sobre como aproveitar (reimplementar com libs MIT vs permissão do autor vs referência).
+- Risco de outra sessão opencode (pytest) matar o servidor 8000 durante teardown.
+- pythonw.exe: boot intermitente — usar sempre python.exe.
+- Proxy opencode serve em background (poll 60s, opencode.db 2.9 GB); index.lock do universo pode reaparecer.
+
+## Next Move
+1. Aguardar o usuário validar a Fase 5 no navegador (servidor já no ar; sugerir Ctrl+Shift+R). Se aprovar: commit+push da branch (tarefa `0d42f24d`) e atualizar o live doc.
+2. Implementar o Bloco de Ideias (`a1f7bd46`) no dashboard — visível apenas com contexto da criação selecionado; ações: cadastrar tarefa futura OU iniciar galho na criação.
+3. Tratar lógica de níveis (`20524da9`): migração `criacao_id` em artefatos + backfill para `d8d1d000-...` + endpoint por `criacao_id` + frontend.
+4. Retestar `@analisar-lacunas --sessao 76f82942-...` e `@fluxos-sessao`.
+
+## Relevant Files
+- `C:\Users\frota\Projetos\Ariadne\backend\app\static\index.html`: tema smokincola + Fase 5 (texturas/carimbos/micro-interações), seletor de cores, renderMarkdown, Ctrl+Shift+X, verLiveDoc.
+- `C:\Users\frota\Projetos\Ariadne\backend\app\routers\tarefas.py`: TarefaOut com area/sessao_links `Optional[str]` (fix já no disco; restart carrega).
+- `C:\Users\frota\Projetos\Ariadne\backend\start_ariadne.ps1`: script oficial com watchdog (validado várias vezes).
+- `C:\Users\frota\Projetos\Ariadne\backend\start_server.ps1` e `start_server.bat`: legados porta 8008, NÃO agendados.
+- `C:\Users\frota\AppData\Local\Temp\ariadne_live.log`: evidência do servidor 8008 da outra sessão (pytest).
+- `C:\Users\frota\Projetos\Ariadne\backend\app\services\watcher.py`, `branch_finalizer.py`, `orquestrador\engine.py`, `app\main.py`, `app\core\no_window.py`, `app\routers\sistema.py`: implementações da sessão (import incremental, gaps, FLUXOS_SESSAO, proxy em background, CREATE_NO_WINDOW, live-doc endpoint).
+- `C:\Users\frota\Projetos\Ariadne\docs\prototipos\smokincola-clone.html`: protótipo da estética.
+- `C:\Users\frota\.local\share\opencode\docs\clever-comet.md`: live doc da sessão (precisa atualizar).
+- `C:\Users\frota\OneDrive\Documentos\Obsidian Vault\Logs de conversas\`: agente-diario.ps1, rollover-tarefas.ps1 (token Notion hardcoded), agente-semanal.ps1.
+
+## Usuario
+Continue if you have next steps, or stop and ask for clarification if you are unsure how to proceed.
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\criar_tarefas_gatilhos.py"'}
+- Ferramenta `bash`: {'command': 'git status --short; git branch --show-current; git log --oneline -5', 'workdir': 'C:\\Users\\frota\\Projetos\\Ariadne'}
