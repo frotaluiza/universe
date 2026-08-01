@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:54:39.239787+00:00
+atualizado: 2026-08-01T03:55:17.489747+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2163,3 +2163,16 @@ O script está hardcoded para o backend original na porta 8000. Vou criar uma va
 O servidor já responde na 8001. Vou confirmar que é o processo do worktree e que o tema está sendo servido:
 
 - Ferramenta `bash`: {'command': '"=== quem esta na 8001 ==="; Get-NetTCPConnection -LocalPort 8001 -State Listen -ErrorAction SilentlyContinue | Select-Object OwningProcess; $pid8001 = (Get-NetTCPConnection -LocalPort 80
+
+## Assistente
+Um servidor na 8001 **já estava rodando antes** (PID 9648, iniciado 00:17:30) — provavelmente da outra sessão. E ele serve o index.html com **galhos** (do working tree principal), não o do worktree. Vou identificar o processo antes de decidir:
+
+- Ferramenta `bash`: {'command': '"=== cmdline do PID 9648 ==="; $wmi = Get-CimInstance Win32_Process -Filter "ProcessId = 9648"; $wmi.CommandLine; "=== pai ==="; Get-CimInstance Win32_Process -Filter "ProcessId = $($wmi.
+
+## Assistente
+O PID 9648 é um uvicorn **órfão** (pai já morreu) servindo o working tree principal (por isso tem galhos). Vou matá-lo e subir o do worktree limpo na 8001:
+
+- Ferramenta `bash`: {'command': 'Stop-Process -Id 9648 -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; "9648 morto?"; if (Get-Process -Id 9648 -ErrorAction SilentlyContinue) { "ainda vivo" } else { "morto O
+
+## Assistente
+- Ferramenta `bash`: {'command': 'powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\start_ariadne_tema.ps1"', 'timeout': 90000}
