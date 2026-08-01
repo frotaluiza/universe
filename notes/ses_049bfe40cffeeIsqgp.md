@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:52:48.849950+00:00
+atualizado: 2026-08-01T03:53:57.607264+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2107,3 +2107,36 @@ Vou adicionar a regra nas duas camadas: tabela do AGENTS.md (que orienta todas a
 
 - Ferramenta `bash`: {'command': '$path = "C:\\Users\\frota\\.config\\opencode\\AGENTS.md"; $c = Get-Content $path -Encoding UTF8 -Raw; $nova = "| Sessões concomitantes em workspaces separados | versionamento | Duas+ sess
 - Ferramenta `bash`: {'command': '$body = \'{"escopo":"global","categoria":"versionamento","chave":"workspaces_separados","regra":"obrigatorio","ativa":true}\'; try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api
+
+## Assistente
+A guideline na API foi criada (`1ac570d2`, categoria `versionamento`, regra `obrigatorio`). Mas a inserção no AGENTS.md **não pegou** (o Replace não encontrou a string — provável incompatibilidade de encoding). Vou corrigir:
+
+- Ferramenta `bash`: {'command': '$path = "C:\\Users\\frota\\.config\\opencode\\AGENTS.md"; "=== bytes no inicio (BOM?) ==="; $b = [System.IO.File]::ReadAllBytes($path)[0..3]; ($b | ForEach-Object { $_.ToString("X2") }) -
+
+## Assistente
+⚠️ O arquivo estava em cp1252 e meu `WriteAllText` em UTF-8 pode ter corrompido os acentos. Preciso verificar o estado real do arquivo:
+
+- Ferramenta `bash`: {'command': '$path = "C:\\Users\\frota\\.config\\opencode\\AGENTS.md"; $bytes = [System.IO.File]::ReadAllBytes($path); $latin = [System.Text.Encoding]::GetEncoding(1252).GetString($bytes); $utf8 = [Sy
+
+## Assistente
+O arquivo está em UTF-8 íntegro (linha 829 OK). O problema era `\n` vs `\r\n` (CRLF). Vou inserir com CRLF:
+
+- Ferramenta `bash`: {'command': '$path = "C:\\Users\\frota\\.config\\opencode\\AGENTS.md"; $c = [System.IO.File]::ReadAllText($path, [System.Text.Encoding]::UTF8); $alvo = "| Checar portas antes de feature | versionament
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Select-String -Path "C:\\Users\\frota\\.config\\opencode\\AGENTS.md" -Pattern "Sessões concomitantes" -Encoding UTF8 | ForEach-Object { "OK linha $($_.LineNumber): $($_.Line.Substring(0,9
+
+## Assistente
+- Ferramenta `bash`: {'command': '$c = [System.IO.File]::ReadAllText("C:\\Users\\frota\\.config\\opencode\\AGENTS.md", [System.Text.Encoding]::UTF8); "acentos OK? $($c.Contains(\'Sessões concomitantes em workspaces separa
+
+## Assistente
+Guideline registrada nas duas camadas:
+- ✅ **AGENTS.md** (linha 830) — tabela "Guidelines do Universo Ariadne"
+- ✅ **API do Ariadne** — `1ac570d2` (categoria `versionamento`, chave `workspaces_separados`, regra `obrigatorio`, escopo global)
+
+Agora vou retomar a tarefa que estava no meio: **extrair o tema do `b3d97cd` para o `index.html` da branch plan no worktree** e subir o servidor na porta 8001. Escrevo um script Python que copia apenas os blocos do tema (fontes, `:root`, bloco CSS, script de boot, botão `#btn-tema`, script do seletor) sem a UI de galhos:
+
+- Ferramenta `write`: {'content': '"""Extrai APENAS o tema smokincola do index.html do commit b3d97cd\ne aplica no index.html da branch plan (worktree Ariadne-tema).\n\nNao copia nada do sistema de galhos (aba, bau, funcoe
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\extrair_tema.py"'}
