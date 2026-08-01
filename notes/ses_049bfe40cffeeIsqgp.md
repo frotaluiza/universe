@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T02:47:43.160020+00:00
+atualizado: 2026-08-01T02:47:57.148920+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1620,3 +1620,10 @@ O Reddit bloqueou o fetch direto. Vou buscar o projeto por outros meios e ler o 
 
 - Ferramenta `websearch`: {'query': '"Blood Lines" 3D family tree in-browser webdev github', 'numResults': 8}
 - Ferramenta `bash`: {'command': 'Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html" | Select-Object -Skip 160 -First 170'}
+
+## Assistente
+Achei o projeto! E tenho ótimas notícias:
+
+**Sobre o Blood Lines:** o repositório real é [`oh-kay-blanket/family-plot`](https://github.com/oh-kay-blanket/blood-lines) (também conhecido como `blood-lines` / `mister-blanket`). É um visualizador 3D de árvores genealógicas com **force-directed graph 3D** (Three.js + react-force-graph-3d), timeline por ano de nascimento, highlighting de relações, busca com zoom, tema light/dark, PWA. Muito relevante para seus **mapas mentais** — a estrutura de grafo 3D com rótulos é exatamente o que você quer. Deixa eu verificar a licença:
+
+- Ferramenta `webfetch`: {'format': 'markdown', 'url': 'https://github.com/oh-kay-blanket/family-plot'}
