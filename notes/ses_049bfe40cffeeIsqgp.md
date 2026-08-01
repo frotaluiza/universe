@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:19:29.162876+00:00
+atualizado: 2026-08-01T03:43:04.031153+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1887,3 +1887,11 @@ A Fase 5 foi a camada de **texturas, carimbos e micro-interações** — o acaba
 **Sobre o servidor:** está no ar (PID 16272, health OK). A outra sessão (PID 5008) aparentemente terminou os testes — o processo da 8008 (1916) já não existe mais, então o risco de conflito passou.
 
 Recarregue o dashboard (Ctrl+Shift+R) e me diga o que achou do visual — se aprovar, partimos para o commit da branch (`0d42f24d`).
+
+## Usuario
+Pode commitar, mas antes quero saber quais são as tarefas pendentes dessa sessão. Daria para te programar para, a cada comando do commit, engatilhe a geração de artefatos de build? Queria uma coisa similar para os artefatos de planejamento. O que poderia ser um bom gatilho pra eles? Eu já tehnho algum watcher de documentação?
+
+## Assistente
+Boa pergunta! Vou puxar as tarefas pendentes da sessão e, em paralelo, investigar os watchers e hooks existentes para te responder com precisão:
+
+- Ferramenta `write`: {'content': 'import sqlite3\n\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ariadne.db")\nprint("=== TAREFAS DA SESSAO (ses_049bfe40cffeeIsqgp) ===")\nrows = db.execute(\n    "SELECT i
