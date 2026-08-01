@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-07-31T18:22:27.566241+00:00
+atualizado: 2026-08-01T02:47:12.923935+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1605,3 +1605,6 @@ A tabela **`artefatos` não tem coluna `criacao_id`** — só `projeto_id`/`sess
 ---
 
 **Próximos passos sugeridos:** validar o visual no navegador (tarefa `294c3dec`) e commitar a branch — quer que eu faça o commit agora ou prefere validar o tema antes?
+
+## Usuario
+Tem mais alguma coisa para implementar relacionada ao front end do tema? Se sim, pode implementar pra eu ver. Sobre essa descoberta de nao existir um criação id, pode colocar isso na lista de coisas para serem feitas. Nesse tópico mais visual, estava buscando referencias para implementar meus mapas mentais, e encontrei esse projeto aqui que acho que poderiamos incorporar (dando os devidos créditos, temos que ver se eu teria permissão pra incorporar no meu projeto: https://www.reddit.com/r/webdev/comments/hhg262/blood_lines_is_an_inbrowser_3d_family_tree/
