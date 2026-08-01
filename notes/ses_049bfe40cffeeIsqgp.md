@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:02:18.452710+00:00
+atualizado: 2026-08-01T03:02:24.577709+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1666,3 +1666,43 @@ O marcador FIM DO TEMA tem caracteres especiais que não batem. Vou usar a linha
 Fase 5 aplicada! Deixa eu validar que o HTML continua íntegro (tags balanceadas):
 
 - Ferramenta `bash`: {'command': '$c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html" -Raw -Encoding UTF8; "style abertos: $([regex]::Matches($c, \'<style\').Count) | fechados: $([rege
+
+## Assistente
+Tudo pronto e validado! Resumo do que fiz agora:
+
+## ✅ 1. Descoberta do `criacao_id` — já na lista
+
+Já está na BD como tarefa **Alta prioridade** (criada anteriormente):
+- **`20524da9`** — "Fechar lógica de níveis: artefatos vinculados a criação" — com o diagnóstico completo: a tabela `artefatos` **não tem coluna `criacao_id`** (só `projeto_id`/`sessao_id`), por isso ao clicar na criação "Plataforma Ariadne" o filtro retorna vazio. A tarefa cobre: migração + backfill + endpoint por `criacao_id` + frontend.
+
+## ✅ 2. Fase 5 do tema — IMPLEMENTADA (atualize o navegador com Ctrl+Shift+R)
+
+O que adicionei ao bloco do tema:
+
+| Item | Efeito |
+|---|---|
+| **Vinheta de papel** | `body::after` com sombras internas — bordas envelhecidas do papel |
+| **Cards "levantam"** | `.block:hover` sobe 2px com sombra de 4px — ficha de biblioteca |
+| **Títulos com carimbo** | `.block-title` com `*` vermelho + linha pontilhada embaixo |
+| **Empty states como bilhetes** | borda tracejada + papel mais escuro |
+| **Botões primários como carimbos** | borda dupla interna + sombra de tinta + rotação -1° no hover |
+| **Tabelas de ficha** | cabeçalho em mono uppercase + linha grossa de tinta |
+| **Links editoriais** | sublinhado pontilhado (vira sólido no hover) |
+| **Bolhas de chat inclinam** | user -0.4°, assistant +0.4° no hover (zine) |
+| **Checkbox/radio** | accent vermelho tijolo |
+| **Badge de contexto** | etiqueta dobrada com rotação -0.5° |
+| **Scrollbar de caderno** | 8px com borda de papel |
+
+## ⚠️ 3. Blood Lines — licença verificada: **GPL-3.0**
+
+**Importante:** o README do projeto diz "ISC License", mas o arquivo LICENSE real é **GPL-3.0** (o GitHub mostra na sidebar). ISC seria permissiva; GPL-3.0 é **copyleft**. O que isso significa para você:
+
+- **Se incorporar o código** do Family Plot no Ariadne e distribuir/publicar, o Ariadne inteiro teria que ser GPL-3.0 (o que pode conflitar com seus planos)
+- **Alternativas seguras:**
+  - **Reimplementar inspirado** no conceito (força-direta 3D de nós + rótulos + timeline) usando as mesmas libs MIT que ele usa: `react-force-graph-3d`, `d3-force-3d`, `three-spritetext` — todas MIT, sem contaminação
+  - **Pedir permissão** ao autor (oh-kay-blanket) para uso com outra licença — projeto pequeno (106⭐), autor acessível
+  - Ver o **código como referência de arquitetura** (não copiar arquivos)
+
+O conceito é ótimo para seus mapas mentais: grafo 3D com timeline, highlight de conexões, busca com zoom. Vou criar uma tarefa no banco documentando isso:
+
+- Ferramenta `write`: {'content': 'import json\nimport urllib.request\n\nAPI = "http://localhost:8000/api/tarefas/"\n\nt = {\n    "titulo": "Mapas mentais 3D: avaliar incorporacao do Blood Lines/Family Plot (GPL-3.0)",\n  
