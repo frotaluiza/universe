@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:45:53.659039+00:00
+atualizado: 2026-08-01T03:46:24.202107+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2011,4 +2011,7 @@ Tarefas de gatilho criadas (`07dbe7df` e `9b17b1f5`). Porém o `git status` veio
 - Ferramenta `bash`: {'command': '"=== markers no index.html ==="; Select-String -Path "backend\\app\\static\\index.html" -Pattern "TEMA ARIADNE|FIM DO TEMA|Fase 5|tema-swatch-btn" | ForEach-Object { "$($_.LineNumber): $(
 
 ## Assistente
-- Ferramenta `bash`: None
+⚠️ **Situação delicada detectada.** A branch atual é `feat/sistema-galhos` (da outra sessão, commit `b3d97cd`), o `git status` está limpo, e — pior — **meus 3 arquivos novos sumiram**: `no_window.py`, `start_ariadne.ps1` e `smokincola-clone.html` não existem mais no disco. A outra sessão provavelmente rodou `git clean` ou checkout entre branches. Preciso verificar o que exatamente sobreviveu:
+
+- Ferramenta `bash`: {'command': '"=== tema no HEAD (feat/sistema-galhos)? ==="; git show "HEAD:backend/app/static/index.html" | Select-String -Pattern "Fase 5|SMOKIN" | Select-Object -First 4; "=== arquivos novos procura
+- Ferramenta `bash`: {'command': '"=== procura start_ariadne.ps1 no sistema ==="; Get-ChildItem -Path "C:\\Users\\frota\\Projetos\\Ariadne" -Filter "start_ariadne*" -Recurse -ErrorAction SilentlyContinue | Select-Object -
