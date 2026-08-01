@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T04:03:35.001414+00:00
+atualizado: 2026-08-01T04:04:14.001258+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2278,3 +2278,26 @@ Boa pergunta! Deixa eu verificar o que existe hoje: (1) configuração de agente
 
 - Ferramenta `bash`: {'command': '"=== config do opencode ==="; Get-ChildItem "C:\\Users\\frota\\.config\\opencode" -ErrorAction SilentlyContinue | Select-Object Name; "=== .opencode no projeto Ariadne? ==="; if (Test-Pat
 - Ferramenta `bash`: {'command': '"=== codigo do orquestrador no backend Ariadne ==="; Get-ChildItem "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\orquestrador" -ErrorAction SilentlyContinue | Select-Objec
+
+## Assistente
+Achei algo importante — o `agent_registry.py` do backend **já registra o agente "orquestrador" no config do opencode**! Vou ver os detalhes:
+
+- Ferramenta `bash`: {'command': 'Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\agent_registry.py" -Pattern "ORQUESTRADOR_AGENT|config_path|opencode" -Encoding UTF8 | Select-Object -Fir
+- Ferramenta `bash`: {'command': '"=== opencode.jsonc tem agente orquestrador? ==="; if (Test-Path "C:\\Users\\frota\\.config\\opencode\\opencode.jsonc") { Select-String -Path "C:\\Users\\frota\\.config\\opencode\\opencod
+
+## Assistente
+O `opencode.jsonc` tem agentes (sync, push-to-notion, watch-sync) mas **não** o "orquestrador" — o `agent_registry.py` tenta registrá-lo mas aparentemente não chegou a rodar ou não persistiu. Vou ver o conteúdo completo do agente definido no backend e o estado real:
+
+- Ferramenta `bash`: {'command': '$c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\agent_registry.py" -Encoding UTF8; $c[0..28]'}
+- Ferramenta `bash`: {'command': '"=== agentes no opencode.jsonc atual ==="; $j = Get-Content "C:\\Users\\frota\\.config\\opencode\\opencode.jsonc" -Encoding UTF8 -Raw; if ($j -match \'"agent"\\s*:\\s*\\{\') { $start = $j
+
+## Assistente
+Encontrei o quadro completo. O código do agente orquestrador **existe, mas vive no backend do Ariadne** (`agent_registry.py`) — foi desenhado para ser registrado no seu `opencode.jsonc` via `ensure_agent_in_opencode()`, mas o registro **não está lá** (o jsonc tem session/sync/push-to-notion, mas não "orquestrador"). Vou confirmar os detalhes e comparar com os comandos reais do engine:
+
+- Ferramenta `bash`: {'command': '$c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\agent_registry.py" -Encoding UTF8; $c[29..95]'}
+- Ferramenta `bash`: {'command': '"=== comandos reais no engine.py do orquestrador ==="; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\services\\orquestrador\\engine.py" -Pattern "_cmd_|COMANDOS|
+
+## Assistente
+Tenho o quadro completo agora. Deixa eu verificar se o `ensure_agent_in_opencode()` é chamado no boot do backend e por que não persistiu:
+
+- Ferramenta `bash`: {'command': '"=== ensure_agent_in_opencode chamado no boot? ==="; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\main.py" -Pattern "ensure_agent|agent_registry" -Encoding UTF8
