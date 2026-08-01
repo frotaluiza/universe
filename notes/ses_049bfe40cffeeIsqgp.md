@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:01:40.923888+00:00
+atualizado: 2026-08-01T03:02:18.452710+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1651,3 +1651,18 @@ Implementando a Fase 5 — texturas, carimbos e micro-interações:
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$lines = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html" -Encoding UTF8; for ($i = 309; $i -le 318; $i++) { "$($i+1): $($lines[$i])" }'}
+
+## Assistente
+Perfeito, agora insiro a Fase 5 (texturas, carimbos, micro-interações) antes do marcador FIM DO TEMA:
+
+- Ferramenta `edit`: {'filePath': 'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html', 'oldString': '.tema-swatch-btn.active{outline:3px solid var(--mustard-lt);outline-offset:1px}\n\n/* ��������������
+
+## Assistente
+O marcador FIM DO TEMA tem caracteres especiais que não batem. Vou usar a linha 314 como âncora:
+
+- Ferramenta `edit`: {'filePath': 'C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html', 'newString': ".tema-swatch-btn.active{outline:3px solid var(--mustard-lt);outline-offset:1px}\n\n/* Fase 5: Textur
+
+## Assistente
+Fase 5 aplicada! Deixa eu validar que o HTML continua íntegro (tags balanceadas):
+
+- Ferramenta `bash`: {'command': '$c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\app\\static\\index.html" -Raw -Encoding UTF8; "style abertos: $([regex]::Matches($c, \'<style\').Count) | fechados: $([rege
