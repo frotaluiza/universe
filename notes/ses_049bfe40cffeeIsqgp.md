@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:09:49.067609+00:00
+atualizado: 2026-08-01T03:10:21.642308+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1735,3 +1735,6 @@ Vou verificar se o servidor ainda está de pé (o index.html é servido do disco
 Servidor caiu (talvez o watcher do agente diário ou algo do sistema o derrubou). Subindo de novo:
 
 - Ferramenta `bash`: {'command': 'powershell -NoProfile -ExecutionPolicy Bypass -File "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_ariadne.ps1"', 'timeout': 90000}
+
+## Assistente
+- Ferramenta `bash`: {'command': 'try { $r = Invoke-WebRequest -Uri "http://localhost:8000/api/health" -UseBasicParsing -TimeoutSec 5; "HEALTH: $($r.StatusCode)" } catch { "FAIL: $($_.Exception.Message)" }; try { $h = Inv
