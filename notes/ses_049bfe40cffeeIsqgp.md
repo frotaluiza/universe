@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:46:24.202107+00:00
+atualizado: 2026-08-01T03:47:27.548844+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2015,3 +2015,6 @@ Tarefas de gatilho criadas (`07dbe7df` e `9b17b1f5`). Porém o `git status` veio
 
 - Ferramenta `bash`: {'command': '"=== tema no HEAD (feat/sistema-galhos)? ==="; git show "HEAD:backend/app/static/index.html" | Select-String -Pattern "Fase 5|SMOKIN" | Select-Object -First 4; "=== arquivos novos procura
 - Ferramenta `bash`: {'command': '"=== procura start_ariadne.ps1 no sistema ==="; Get-ChildItem -Path "C:\\Users\\frota\\Projetos\\Ariadne" -Filter "start_ariadne*" -Recurse -ErrorAction SilentlyContinue | Select-Object -
+
+## Usuario
+Calma, tá tudo bem, só voltar pra sessão do smoking cola e rodar em outra porta
