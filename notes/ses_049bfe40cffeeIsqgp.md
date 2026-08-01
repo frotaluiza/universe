@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:43:11.982182+00:00
+atualizado: 2026-08-01T03:43:42.303862+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1899,3 +1899,44 @@ Boa pergunta! Vou puxar as tarefas pendentes da sessão e, em paralelo, investig
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\tarefas_sessao.py"'}
 - Ferramenta `bash`: {'command': '"=== Watchers/rotinas de documentacao existentes ==="; Get-ChildItem "C:\\Users\\frota\\.local\\share\\opencode\\scripts" -Filter "*.ps1" -ErrorAction SilentlyContinue | Select-Object -Ex
+
+## Assistente
+Tenho tudo. Vou responder às suas perguntas e já aproveitar para commitar (autorizado):
+
+## 📋 Tarefas pendentes da sessão (11)
+
+**🔴 Alta**
+1. **Bloco de Ideias no dashboard** (contexto da criação) — `a1f7bd46`
+2. **Fechar lógica de níveis: artefatos vinculados a criação** — `20524da9`
+3. **Commit e push da branch plan** — `0d42f24d` (fazendo agora)
+4. **Atalho Ctrl+Shift+X** — `4f3d3224` *(Em andamento — implementado, falta validar no navegador)*
+
+**🟡 Média**
+5. Validar visual do tema no navegador — `294c3dec`
+6. Registrar fonte smokincola no Notion — `8bbaadf7`
+7. Cadastro de rotinas do Ariadne — `74ac996a`
+8. Mapas mentais 3D: Blood Lines/Family Plot (GPL-3.0) — `f022d7e3`
+
+**🟢 Baixa**
+9. Fase 5 do tema *(implementada hoje — falta apenas validar/marcar)* — `febdb68b`
+10. Modo de pintura — `dcf56902`
+11. Mascote live2d — `e3af3642`
+
+## 🤖 Gatilhos de artefatos — resposta às suas perguntas
+
+**1. Commit → artefatos de build?** Sim, e o caminho mais limpo é um **git hook `post-commit`** no repo do Ariadne. O schema já suporta: a tabela `artefatos` tem `commit_hash`, `branch_universo`, `criacao_repo_branch`, `tipo`, `status` (pending → aprovação). Um script pós-commit leria `git log -1`, extrairia a mensagem, e criaria um artefato `tipo=build`, `status=pending` → apareceria no seu pipeline de aprovação do dashboard. *Alternativa mais robusta: o watcher.py faz poll de `git log` e detecta commits novos (funciona mesmo sem hook instalado).*
+
+**2. Gatilho para artefatos de planejamento?** O gatilho mais natural dado o seu fluxo:
+- **Merge de branch `plan/*` → `master`** (hook `post-merge`): quando um plano é mergeado, gera artefato `tipo=planejamento` aprovado automaticamente (o plano "concluiu")
+- Ou: **comando de planejamento no orquestrador** (`@carta`/`@fluxos-sessao` em modo `plan`) → artefato `tipo=planejamento` `status=pending` para você aprovar
+
+**3. Watcher de documentação que você já tem?** **Sim, 3 camadas:**
+- `watch-live-doc.ps1` — genérico: monitora `docs/{slug}.md`, apenda entradas e envia heartbeat a cada 5min
+- `watch-tcc-logs.ps1` — específico TCC (duplo log)
+- `watcher.py` (backend Ariadne) — importa sessões do opencode.db → ariadne.db + gera live docs em `universe/notes/`
+
+**Falta justamente a camada de *artefatos* (build/planejamento) — nenhum watcher/hook gera artefatos ainda.**
+
+Vou registrar isso como tarefas e commitar:
+
+- Ferramenta `write`: {'content': 'import json\nimport urllib.request\n\nAPI = "http://localhost:8000/api/tarefas/"\nSESSAO = "ses_049bfe40cffeeIsqgp"\nPROJETO = "f3a58dfa-270a-4cf7-b50f-9731e812897a"\n\ntarefas = [\n    {
