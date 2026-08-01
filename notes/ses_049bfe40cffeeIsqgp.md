@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:11:02.273842+00:00
+atualizado: 2026-08-01T03:11:42.668269+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1757,3 +1757,31 @@ Achei algo importante: existe um **outro servidor Ariadne rodando na porta 8008*
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'Get-CimInstance Win32_Process -Filter "ProcessId = 6548" | Select-Object ProcessId, ParentProcessId, CreationDate, CommandLine | Format-List'}
+
+## Assistente
+Achei a causa! **Uma rotina do Task Scheduler subiu um servidor Ariadne concorrente na porta 8008** (via PowerShell hidden, com log em `Temp\ariadne_live.log`). Vou descobrir qual tarefa agendada é essa:
+
+- Ferramenta `bash`: {'command': 'Get-CimInstance Win32_Process -Filter "ProcessId = 12196" | Select-Object ProcessId, ParentProcessId, Name, CommandLine | Format-List; "=== procurando a tarefa agendada ==="; schtasks /qu
+
+## Assistente
+O processo pai já saiu (era transitório). Vou procurar a tarefa agendada responsável:
+
+- Ferramenta `bash`: {'command': 'schtasks /query /fo CSV 2>$null | Out-String -Width 300 | Select-String -Pattern "ariadne|Ariadne|8008" -AllMatches | ForEach-Object { $_.Line }'}
+- Ferramenta `bash`: {'command': '"=== log ariadne_live ==="; if (Test-Path "C:\\Users\\frota\\AppData\\Local\\Temp\\ariadne_live.log") { Get-Content "C:\\Users\\frota\\AppData\\Local\\Temp\\ariadne_live.log" -Tail 20 } e
+
+## Assistente
+O log revela: alguém subiu o servidor na 8008 **e usou o orquestrador** (POST /api/orquestrador/process). Isso é uma rotina com vida própria. Vou achar o script que usa a porta 8008:
+
+- Ferramenta `bash`: {'command': 'Get-ChildItem "C:\\Users\\frota\\OneDrive\\Documentos\\Obsidian Vault\\Logs de conversas" -Filter "*.ps1" -ErrorAction SilentlyContinue | ForEach-Object { $hit = Select-String -Path $_.Fu
+
+## Assistente
+- Ferramenta `bash`: {'command': 'schtasks /query /fo LIST /v 2>$null | Out-String -Width 400 | Select-String -Pattern "8008|ariadne_live|uvicorn" -Context 5,2 | ForEach-Object { $_.ToString() } | Select-Object -First 40'
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Get-ChildItem "C:\\Users\\frota\\Projetos\\Ariadne" -Recurse -Include "*.ps1","*.bat","*.cmd","*.py" -ErrorAction SilentlyContinue | ForEach-Object { $h = Select-String -Path $_.FullName 
+
+## Assistente
+Achei: `start_server.ps1`/`start_server.bat` no backend usam a 8008. Vou ver o conteúdo e quem os chama:
+
+- Ferramenta `bash`: {'command': '"=== start_server.ps1 ==="; Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\start_server.ps1"; "=== start_server.bat ==="; Get-Content "C:\\Users\\frota\\Projetos\\Ariadne\\bac
+- Ferramenta `bash`: {'command': 'schtasks /query /fo CSV 2>$null | Out-String -Width 500 | ForEach-Object { $_ } | Select-String -Pattern "start_server|Ariadne|ariadne" | ForEach-Object { $_.Line }'}
