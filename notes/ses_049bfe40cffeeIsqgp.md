@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T03:12:17.451034+00:00
+atualizado: 2026-08-01T03:13:00.669470+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1801,3 +1801,35 @@ A tarefa não aparece no query atual (pode ter sido registrada com nome diferent
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$start = Get-Date "2026-08-01 00:00"; Get-WinEvent -FilterHashtable @{LogName=\'Microsoft-Windows-TaskScheduler/Operational\'; StartTime=$start} -MaxEvents 30 -ErrorAction SilentlyContinu
+
+## Assistente
+O log do Task Scheduler está vazio (log desabilitado). Mas o log `ariadne_live.log` mostra que **alguém usou o servidor 8008 para chamar o orquestrador** — isso cheira a rotina (agente diário/rollover) que sobe servidor próprio. Deixa eu conferir os scripts das rotinas:
+
+- Ferramenta `bash`: {'command': 'Get-ChildItem "C:\\Users\\frota\\OneDrive\\Documentos\\Obsidian Vault\\Logs de conversas" -Filter "*.ps1" -ErrorAction SilentlyContinue | ForEach-Object { $hits = Select-String -Path $_.F
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Get-ChildItem "C:\\Users\\frota\\OneDrive\\Documentos\\Obsidian Vault" -Recurse -Filter "*.ps1" -ErrorAction SilentlyContinue | ForEach-Object { $hits = Select-String -Path $_.FullName -P
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Get-ChildItem "C:\\Users\\frota\\.ariadne" -Recurse -Include "*.ps1","*.py","*.bat","*.cmd" -ErrorAction SilentlyContinue | ForEach-Object { $hits = Select-String -Path $_.FullName -Patte
+
+## Assistente
+Não achei o script nos locais óbvios. Vou checar as tarefas agendadas com formato de tabela (o CSV pode ter falhado por encoding) e também o registro do Windows:
+
+- Ferramenta `bash`: {'command': '$out = schtasks /query /fo TABLE 2>$null | Out-String; $lines = $out -split "`r?`n"; $lines | ForEach-Object { if ($_ -match "Di|Sem|Roll|Aria|aria|8008|opencode") { $_.Substring(0, [Math
+- Ferramenta `bash`: {'command': 'reg query "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\TaskCache\\Tree" /s 2>$null | Select-String -Pattern "ariadne|Ariadne|8008" -Context 1,3 | ForEach-Object { $_.
+
+## Usuario
+Esse startserver acontece autmaticamente? Onde que ele é rodado? Eu estou com uma outra sessão ativa, pode ter sido ela quem subiu
+
+## Assistente
+Ótima hipótese! Faz todo sentido — o comando com `Tee-Object` para `Temp\ariadne_live.log` parece tool call de agente, não tarefa agendada (essas usam scripts fixos). Deixa eu verificar as sessões ativas e os comandos reais das tarefas agendadas:
+
+- Ferramenta `bash`: {'command': '"=== Session Registry (sessoes ativas) ==="; if (Test-Path "C:\\Users\\frota\\.local\\share\\opencode\\scripts\\session-registry.ps1") { & "C:\\Users\\frota\\.local\\share\\opencode\\scri
+- Ferramenta `bash`: {'command': '"=== Comandos das tarefas agendadas ==="; Get-ScheduledTask -TaskName "Agente Diario","Agente Semanal","Rollover Tarefas","OpenCodeServer" -ErrorAction SilentlyContinue | ForEach-Object {
+
+## Assistente
+O registry mostra só sessões órfãs antigas (12/07), nenhuma ativa agora além desta. As tarefas agendadas usam scripts fixos, **não** comandos inline com `Tee-Object`. Vou confirmar se há outras sessões opencode rodando e o que o agente-diario faz:
+
+- Ferramenta `bash`: {'command': '"=== processos opencode/node rodando ==="; Get-Process | Where-Object { $_.ProcessName -match "opencode|node" } | Select-Object Id, ProcessName, StartTime, Path | Format-Table -AutoSize; 
+- Ferramenta `bash`: {'command': '"=== agente-diario.ps1 (procura por uvicorn/8008/orquestrador) ==="; $f = "C:\\Users\\frota\\OneDrive\\Documentos\\Obsidian Vault\\Logs de conversas\\agente-diario.ps1"; if (Test-Path $f)
