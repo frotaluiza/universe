@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T02:47:57.148920+00:00
+atualizado: 2026-08-01T02:48:25.422342+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -1627,3 +1627,11 @@ Achei o projeto! E tenho ótimas notícias:
 **Sobre o Blood Lines:** o repositório real é [`oh-kay-blanket/family-plot`](https://github.com/oh-kay-blanket/blood-lines) (também conhecido como `blood-lines` / `mister-blanket`). É um visualizador 3D de árvores genealógicas com **force-directed graph 3D** (Three.js + react-force-graph-3d), timeline por ano de nascimento, highlighting de relações, busca com zoom, tema light/dark, PWA. Muito relevante para seus **mapas mentais** — a estrutura de grafo 3D com rótulos é exatamente o que você quer. Deixa eu verificar a licença:
 
 - Ferramenta `webfetch`: {'format': 'markdown', 'url': 'https://github.com/oh-kay-blanket/family-plot'}
+
+## Assistente
+Achei o projeto: **Family Plot (Blood Lines)** — `oh-kay-blanket/family-plot`, 106 ⭐, demo ao vivo, force-directed graph 3D com Three.js. Porém há uma **inconsistência na licença**: a sidebar do GitHub diz "GPL-3.0 license" mas o README diz "ISC License". Isso é crucial para saber se você pode incorporar — deixa eu verificar o arquivo LICENSE real:
+
+- Ferramenta `webfetch`: {'format': 'text', 'url': 'https://raw.githubusercontent.com/oh-kay-blanket/family-plot/main/LICENSE'}
+
+## Assistente
+- Ferramenta `bash`: None
