@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-01T04:42:46.563539+00:00
+atualizado: 2026-08-02T14:11:15.236441+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2420,3 +2420,31 @@ Tarefa registrada (`16baeff6`). Agora vou commitar a melhoria no worktree:
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" push origin "plan/estetica-smokincola-2026-07-31" 2>&1; "=== confirmacao ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" status -
+
+## Assistente
+✅ **Push concluído** (`2e3c326..c6e2e62` → origin). O erro "NativeCommandError" é só o PowerShell tratando o stderr do git como erro — o push foi bem-sucedido.
+
+## Resumo da implementação
+
+**Respondendo sua pergunta original:** sim, o código do agente orquestrador já existia no seu opencode — era o agente `orquestrador` registrado no `opencode.jsonc` (e é ele que me rege neste exato momento). A integração com o Ariadne já existia (backend registra o agente no boot; o agente usa a API REST), mas tinha um defeito: **o prompt estava congelado numa versão antiga**, com só 3 comandos.
+
+### O que mudou (`agent_registry.py`, commit `c6e2e62`)
+
+| Antes | Depois |
+|---|---|
+| Prompt com 5 comandos (@carta, @cartas, @chat, @finalizar-criacao, @finalizar-feature) | **24 comandos reais** do engine (`@novo-projeto`, `@analisar-lacunas`, `@fluxos-sessao`, `@criar-galho`, `@criar-repo`, `@documentar-*`, etc.) |
+| `ensure_agent_in_opencode()` só criava (se existia, logava "already registered" e saía) | **Upsert**: se prompt/tools/mode/description divergirem, reescreve o bloco do agente |
+| Lista de comandos espalhada no texto | **`ORQUESTRADOR_COMANDOS`** — fonte única que gera o prompt; adicionou comando no engine, adicionou na lista, o opencode.json é sincronizado no próximo boot |
+| — | Pode rodar manualmente: `python agent_registry.py` |
+
+### Validações
+- ✅ `opencode.jsonc` parseado como JSON válido após o upsert
+- ✅ Prompt agora tem 2064 chars com todos os `@comandos` (verificado `@analisar-lacunas`, `@criar-galho`, `@fluxos-sessao`, `@documentar-branch`, `@criar-repo`)
+- ✅ **Idempotente**: rodar 2x não altera o arquivo (MD5 igual)
+- ✅ Tarefa registrada no banco: `16baeff6` (via API da 8001, mesmo banco)
+
+### ⚠️ Importante
+O opencode **carrega config só no boot** — esta sessão continua com o prompt antigo. Para usar o novo prompt (com todos os comandos), **reinicie o opencode** na próxima sessão. Quer que eu registre essa melhoria no live doc da sessão também?
+
+## Usuario
+Então, gere os artefatos dessa ultima implementação. Gostaria de ver depois como está o fluxo no momento de criação dos live docs e criação de artefatos. Garantir que os livr docs estão sendo feitos, e estão acessiveis pelo ariadne quando eu clico em qualquer sessão, é fundamental. Garantir também que toda documentação está sendo gerada automaticamente (gatilhos de doc de implementação e gatilho de doc de planejamento - artefatos no caso) e muito importante, e quero saber em que pé estpa isso. Outra coisa, quais são as tarefas pendentes nessa sessão? Acho que seria bom ter um acompanhamento constante de tarefas por sessão no ariadne, que vai sendo atualizado pelo orquestrador
