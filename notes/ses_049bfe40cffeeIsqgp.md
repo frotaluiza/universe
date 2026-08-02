@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-02T14:11:15.236441+00:00
+atualizado: 2026-08-02T14:12:22.197498+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2448,3 +2448,73 @@ O opencode **carrega config só no boot** — esta sessão continua com o prompt
 
 ## Usuario
 Então, gere os artefatos dessa ultima implementação. Gostaria de ver depois como está o fluxo no momento de criação dos live docs e criação de artefatos. Garantir que os livr docs estão sendo feitos, e estão acessiveis pelo ariadne quando eu clico em qualquer sessão, é fundamental. Garantir também que toda documentação está sendo gerada automaticamente (gatilhos de doc de implementação e gatilho de doc de planejamento - artefatos no caso) e muito importante, e quero saber em que pé estpa isso. Outra coisa, quais são as tarefas pendentes nessa sessão? Acho que seria bom ter um acompanhamento constante de tarefas por sessão no ariadne, que vai sendo atualizado pelo orquestrador
+
+## Assistente
+Boa — vamos fazer um diagnóstico completo do fluxo de documentação antes de gerar os artefatos. Preciso verificar: (1) live docs estão sendo gerados e acessíveis? (2) em que pé estão os gatilhos de artefatos? (3) tarefas da sessão? Vou investigar tudo em paralelo:
+
+- Ferramenta `bash`: {'command': '"=== 1. LIVE DOCS - notas geradas no universo ==="; $notes = "C:\\Users\\frota\\.ariadne\\universe\\notes"; if (Test-Path $notes) { Get-ChildItem $notes -Filter "*.md" | Select-Object Nam
+- Ferramenta `bash`: {'command': '"=== 2. ARTEFATOS no banco (tipos e status) ==="; $env:PYTHONIOENCODING="utf-8"; python -c "import sqlite3; db=sqlite3.connect(r\'C:\\Users\\frota\\.ariadne\\universe\\ariadne.db\'); rows
+
+## Assistente
+## Objective
+- Incorporar a estética smokincola (Fase 5) e evoluir o backend/integração do Ariadne. Foco atual: (a) manter sessões concomitantes em workspaces separados (guideline registrada), (b) recuperar o trabalho da sessão via worktree, (c) integrar o agente orquestrador ao opencode com prompt sincronizado (upsert) com os comandos reais do engine.
+
+## Important Details
+- **Sessão agora opera no worktree `C:\Users\frota\Projetos\Ariadne-tema`** (branch `plan/estetica-smokincola-2026-07-31`, commit `2e3c326`) — o repo principal `C:\Users\frota\Projetos\Ariadne` está na branch `feat/sistema-galhos` (**outra sessão ativa**: 4 opencode PIDs 5008, 12760, 17260, 18888; NÃO tocar no working tree dela).
+- **Servidores**: 8000 CAIU (morto pelo teardown de pytest da outra sessão); **8001 UP** (PID 10120, worktree, serve Fase 5, sem galhos); 8008 UP (PID 3064, da outra sessão).
+- **Commit `2e3c326`** (plan branch, auto-commit do watcher, pusheado): tema smokincola completo + fixes backend (tarefas Optional, watcher incremental, warmup, no_window) + `start_ariadne_tema.ps1` (porta 8001) + protótipo `docs/prototipos/smokincola-clone.html`. Tarefa commit `0d42f24d` marcada **Concluido** (via SQL direto no DB).
+- **Recuperação**: outra sessão tinha feito `git stash -u` (9f703d5) do meu trabalho e commitado `add -A` (b3d97cd, tema + galhos juntos). Stash aplicado no worktree; tema extraído cirurgicamente do b3d97cd (script `extrair_tema.py`) **sem** UI de galhos.
+- **Guideline nova**: "Sessões concomitantes em workspaces separados" — AGENTS.md global linha 830 + API `1ac570d2` (categoria `versionamento`, chave `workspaces_separados`, regra `obrigatorio`, escopo global). ACENTS.md usa encoding UTF-8 sem BOM, CRLF.
+- **Agente orquestrador JÁ EXISTE no opencode**: `opencode.jsonc` linhas 119–135, `mode: primary` — é o agente que rege esta sessão. Backend o registra via `agent_registry.py → ensure_agent_in_opencode()` chamado em `main.py:77`.
+- **Problema diagnosticado**: `ensure_agent_in_opencode()` só criava se ausente ("already registered") — prompt congelado listando só `@carta, @chat, @finalizar-criacao` enquanto o engine tem 22+ comandos reais (`@analisar-lacunas`, `@fluxos-sessao`, `@criar-galho`, `@documentar-sessao`, etc.).
+- **Integração ideal**: engine.py → agent_registry.py (prompt dinâmico com todos os comandos) → opencode.jsonc (upsert, não só create).
+- BD: `C:\Users\frota\.ariadne\universe\ariadne.db`, projeto `f3a58dfa-270a-4cf7-b50f-9731e812897a`, criação `d8d1d000-c51d-45ec-b4c2-4c04d6b98b92`, sessão DB `76f82942-ebad-4678-85be-43cb1395561e`. Orquestrador: `POST /api/orquestrador/process` body `{"message", "context": {projeto_id, sessao_id, modo}}`.
+- Tarefas novas desta rodada: `07dbe7df` (gatilho build via hook post-commit) e `9b17b1f5` (gatilho planejamento via merge plan/* ou comando plan) — criadas via API.
+- Watchers de doc já existentes: `watch-live-doc.ps1`, `watch-tcc-logs.ps1`, `watcher.py` (backend); nenhum gera artefatos ainda.
+- Blood Lines/Family Plot: **GPL-3.0 real** (LICENSE do repo; README diz ISC) — decisão de incorporação pendente.
+- Console: `$env:PYTHONIOENCODING="utf-8"` (cp1252 quebra acentos); bash via PowerShell.
+
+## Work State
+### Completed
+- **`agent_registry.py` reescrito** em `C:\Users\frota\Projetos\Ariadne-tema\backend\app\services\agent_registry.py`: lista `ORQUESTRADOR_COMANDOS` (22 comandos com args+desc), prompt dinâmico gerado via join, `ensure_agent_in_opencode()` agora faz **upsert** (compara e atualiza se divergir, não só insere), bloco `if __name__ == "__main__"` para execução direta.
+- Guideline `workspaces_separados` registrada (AGENTS.md + API `1ac570d2`).
+- Worktree `Ariadne-tema` criado → stash aplicado → tema extraído → `start_ariadne_tema.ps1` criado → servidor 8001 no ar (PID 10120, detached via Start-Process, para não morrer com timeout do comando).
+- Commit `2e3c326` auto-commitado/pusheado; tarefa `0d42f24d` Concluido.
+- Fase 5 do tema: documentada para o usuário (vinheta, carimbos, micro-interações).
+- Tarefas de gatilho `07dbe7df` e `9b17b1f5` criadas.
+
+### Active
+- **`agent_registry.py` novo escrito mas NÃO executado/testado** — falta rodar (`python agent_registry.py`) para atualizar `opencode.jsonc` e verificar se o prompt gravado tem os 22 comandos. Aguarda próximo passo.
+- Validação visual da Fase 5 no navegador (`http://localhost:8001`) ainda pendente de feedback do usuário.
+- Live doc `C:\Users\frota\.local\share\opencode\docs\clever-comet.md` desatualizado (worktree, guideline nova, agente sync).
+
+### Blocked
+- (none)
+
+## Next Move
+1. Executar `python agent_registry.py` no worktree para aplicar o upsert no `opencode.jsonc`; conferir se o prompt gravado lista os 22 comandos e se o JSON ficou válido (buscar `"orquestrador"` no jsonc).
+2. Avisar o usuário que opencode precisa ser **reiniciado** para carregar o novo prompt do agente (config não é hot-reload, conforme skill customize-opencode).
+3. Commitar o `agent_registry.py` atualizado no worktree (watcher pode auto-commitar; se não, `git add` + commit na branch plan).
+4. Retomar pendências: validar Fase 5 na 8001, atualizar live doc, implementar gatilhos de artefatos (07dbe7df/9b17b1f5).
+
+## Relevant Files
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\app\services\agent_registry.py`: reescrito com upsert + 22 comandos (NÃO testado/commitado ainda).
+- `C:\Users\frota\.config\opencode\opencode.jsonc`: agente `orquestrador` linhas 119–135 — será atualizado ao rodar o agent_registry.
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\start_ariadne_tema.ps1`: servidor do worktree porta 8001.
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\app\static\index.html`: tema smokincola Fase 5 (extraído do b3d97cd, sem galhos).
+- `C:\Users\frota\.config\opencode\AGENTS.md` (linha 830) + DB guidelines `1ac570d2`: regra workspaces separados.
+- `C:\Users\frota\Projetos\Ariadne\backend\app\services\orquestrador\engine.py`: fonte dos 22+ comandos (register_command).
+- `C:\Users\frota\Projetos\Ariadne\backend\app\main.py` (linha 77): chama `ensure_agent_in_opencode()` no boot.
+- `C:\Users\frota\AppData\Local\Temp\opencode\extrair_tema.py`: script de extração do tema (usado, mantido em temp).
+- `C:\Users\frota\.local\share\opencode\docs\clever-comet.md`: live doc da sessão (desatualizado).
+
+## Usuario
+Continue if you have next steps, or stop and ask for clarification if you are unsure how to proceed.
+
+## Assistente
+O PowerShell está quebrando os escapes do Python inline — vou escrever scripts em arquivos para evitar isso:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sqlite3, sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ariadne.
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\diag_docs.py"'}
