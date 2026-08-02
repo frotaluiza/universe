@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-02T14:12:22.197498+00:00
+atualizado: 2026-08-02T14:13:06.564531+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2518,3 +2518,38 @@ O PowerShell está quebrando os escapes do Python inline — vou escrever script
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\diag_docs.py"'}
+
+## Assistente
+O esquema de `tarefas` é diferente do esperado. Vou verificar o schema real e completar o diagnóstico:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sqlite3, sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ariadne.
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\diag_schema.py"'}
+
+## Assistente
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sqlite3, sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ariadne.
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\diag_tarefas.py"'}
+
+## Assistente
+Panorama inicial claro. Agora vou verificar o estado real do código: o que o watcher gera, se há rota de live doc na API, e como os artefatos pending surgiram:
+
+- Ferramenta `bash`: {'command': '"=== arquivos-chave no worktree ==="; Get-ChildItem "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app" -Recurse -Filter "*.py" | Where-Object { $_.Name -match "watch|artifact|finali
+- Ferramenta `bash`: {'command': '"=== rotas live-doc/artefato/nota no main.py ==="; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\main.py" -Pattern "live|nota|artefato|artifact|watcher" -Ca
+
+## Assistente
+- Ferramenta `bash`: {'command': '"=== rotas do router notas ==="; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\routers\\notas.py" -Pattern "@router|def " | Select-Object Line | Format-Tabl
+- Ferramenta `bash`: {'command': '"=== watcher.py: o que ele faz com live docs? ==="; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\watcher.py" -Pattern "def |notes|caminho_nota|li
+
+## Assistente
+O watcher já gera live docs (`_gerar_live_doc` → `~/.ariadne/universe/notes/{slug}.md` + grava `caminho_nota`). Agora preciso confirmar como o **frontend** exibe isso ao clicar numa sessão, e se há endpoint servindo o conteúdo:
+
+- Ferramenta `bash`: {'command': '"=== frontend: busca por caminho_nota / live doc / notas ==="; Get-ChildItem "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static" -Recurse -Include "*.js","*.html","*.ts" | Se
+
+## Assistente
+O frontend chama `GET /api/sistema/live-doc/{sessaoId}`. Vou confirmar que a rota existe no backend e testá-la ao vivo:
+
+- Ferramenta `bash`: {'command': '"=== rota live-doc no router sistema ==="; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\routers\\sistema.py" -Pattern "@router|def " | Select-Object Line |
+- Ferramenta `bash`: {'command': '"=== teste ao vivo na 8001: live-doc da sessao atual ==="; try { $r = Invoke-RestMethod -Uri "http://localhost:8001/api/sistema/live-doc/76f82942-ebad-4678-85be-43cb1395561e" -TimeoutSec 
