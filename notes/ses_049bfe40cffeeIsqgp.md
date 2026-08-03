@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:34:27.243647+00:00
+atualizado: 2026-08-03T04:01:17.674740+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2985,3 +2985,81 @@ Agora vou atualizar o live doc da sessão com todo o progresso e registrar a dec
 Live doc está sendo atualizado pelo watcher (249KB, 00:33). Tenho o panorama completo. Vou limpar os scripts temporários de teste e apresentar o resultado:
 
 - Ferramenta `bash`: {'command': 'Remove-Item "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\teste_documentor.py","C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\teste_engine.py","C:\\Users\\frota\\AppData\\Local\\
+
+## Assistente
+Pronto. Aqui está o panorama completo do que você pediu:
+
+---
+
+## 📦 1. Artefatos da última implementação — GERADOS ✅
+
+Ao pedir, descobri e corrigi um **bug crítico**: o orquestrador nunca committava ao final do `process()` — os artefatos de `@documentar-*` eram retornados na resposta (ID gerado via `flush`) mas **silenciosamente descartados** (sessão fechada sem commit). Nenhum artefato dessa sessão tinha persistido de verdade.
+
+**Correção (commit `454deee`, já no GitHub):**
+- `engine.process()` agora faz `db.commit()` no final (com rollback em erro)
+- Fix do `blocked_actions` (UnboundLocalError quando o interceptor falhava)
+- O servidor 8001 estava rodando código velho — reiniciado limpo
+
+**Artefatos persistidos agora:**
+| Artefato | Tipo | Status |
+|---|---|---|
+| `e246a88d` — Relatório Consolidado: Plataforma Ariadne | relatorio_criacao | approved |
+| `739fab2d` — Relatório: sessão smokincola | relatorio_sessao | approved |
+| `a9b8dd81` — Relatório: sessão explore | relatorio_sessao | approved |
+
+---
+
+## 📄 2. Fluxo de Live Docs — FUNCIONANDO, com 1 gap de UI
+
+| Etapa | Estado |
+|---|---|
+| Watcher gera `~/.ariadne/universe/notes/{slug}.md` | ✅ (sessão atual: 249KB, atualizado agora) |
+| `caminho_nota` gravado na tabela sessoes | ✅ |
+| API `GET /api/sistema/live-doc/{id}` retorna conteúdo | ✅ (testado: 200, conteúdo completo) |
+| **Frontend abre live doc ao clicar na sessão** | ❌ **GAP** — `verLiveDoc()` existe mas **nenhum botão a chama**. Clicar numa sessão abre conversa/noteblock, não o live doc |
+
+**Falta plugar o botão** "📄 Live Doc" na view da sessão (dashboard + tabela de sessões).
+
+---
+
+## ⚙️ 3. Gatilhos de documentação automática — EM PÉ DIFERENCIADO
+
+- **Já existe**: `branch_finalizer` cria tarefas "Documentar: X" + artefatos changelog/doc_geral ao finalizar branches/criações; comandos `@documentar-sessao/branch/criacao` funcionam (agora com persistência!)
+- **Pendentes (A fazer)**: tarefa `07dbe7df` (gatilho de build via **git hook post-commit**) e `9b17b1f5` (gatilho de planejamento via merge plan/*) — **não implementados**. Estes são os "gatilhos automáticos" que você quer garantir.
+
+---
+
+## 📋 4. Tarefas pendentes da sessão (vinculadas a `ses_049bfe40`)
+
+| Prioridade | Tarefa |
+|---|---|
+| 🔴 Alta | `4f3d3224` Atalho Ctrl+Shift+X (Em andamento) |
+| 🔴 Alta | `a1f7bd46` Bloco de Ideias no dashboard |
+| 🔴 Alta | `20524da9` Fechar lógica de níveis: artefatos vinculados a criação |
+| 🟡 Média | `294c3dec` Validar visual do tema smokincola |
+| 🟡 Média | `8bbaadf7` Registrar fonte smokincola no Notion |
+| 🟡 Média | `74ac996a` Cadastro de rotinas |
+| 🟡 Média | `f022d7e3` Blood Lines/Family Plot |
+| 🟡 Média | `07dbe7df` Gatilho build (hook post-commit) |
+| 🟡 Média | `9b17b1f5` Gatilho planejamento |
+| 🟢 Baixa | `febdb68b` Fase 5 detalhes, `dcf56902` Modo pintura, `e3af3642` Mascote |
+| ✅ Concluída | `16baeff6` Sync prompt orquestrador (feita nesta rodada) |
+| 🆕 Nova | `542e1457` Fix persistência orquestrador (criada agora) |
+
+---
+
+## 🗂️ 5. Acompanhamento constante de tarefas por sessão — PROPOSTA
+
+Hoje o dashboard mostra **contagem** (`state.tarefas_pendentes`) mas não lista as tarefas **da sessão aberta**. Proposta: na view da sessão (que já lista artefatos), adicionar bloco "Tarefas da sessão" consultando `/api/tarefas?sessao_id=X` — e o orquestrador passa a criar/atualizar tarefas com `sessao_id` sempre que detecta pendências (já faz em parte via `_sync_tarefas`).
+
+---
+
+**Próximos passos sugeridos (ordem de prioridade):**
+1. **Plugar o botão "📄 Live Doc" na sessão** (gap crítico do item 2) — pequeno, alto valor
+2. **Implementar os 2 gatilhos automáticos** (07dbe7df + 9b17b1f5) — hooks post-commit/merge
+3. **Bloco de tarefas por sessão** no frontend (item 5)
+
+Quer que eu comece pelo item 1 (botão de Live Doc — é o que você disse ser "fundamental")?
+
+## Usuario
+Temos que implementar a aba dentro da sessão de abrir o live doc que o watcher gera. Pode ser um um botão no dashboard também, mas quero isso pra dentro do bloco de notas. Podemos entrar depois na branch_finalizer para terminar as implementações que faltam. Gostei da sua proposta sobre sua visualização de tarefas, podemos implementar depois que voce fizer essas outras coisas. Pode começar
