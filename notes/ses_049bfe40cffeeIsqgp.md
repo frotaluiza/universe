@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:05:30.087882+00:00
+atualizado: 2026-08-03T04:06:00.852402+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3250,4 +3250,9 @@ A linha com `\\'` já estava na working copy (não fui eu). Mas se `node --check
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" show HEAD:backend/app/static/index.html | Select-String -Pattern "abrirNoteblockDeNota" -Encoding UTF8 | F
 
 ## Assistente
-- Ferramenta `bash`: None
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" show HEAD:backend/app/static/index.html > "$env:TEMP\\opencode\\index_head.html" 2>$null; python -c "\nwit
+
+## Assistente
+O HEAD não tem essas funções — são mudanças pré-existentes na working copy de sessões anteriores. Preciso verificar se esse `\\'` realmente quebra o JS ou se o `node --check` está sendo enganado pelo contexto. Vou testar isoladamente:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport re\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, encoding=\'utf-8\') as f:\n    htm
