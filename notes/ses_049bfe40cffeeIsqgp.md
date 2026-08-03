@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T17:07:23.301237+00:00
+atualizado: 2026-08-03T17:22:09.971863+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -4120,3 +4120,6 @@ O que é exatamente o "fix de overflow da aba de configurações" que você quer
 Se for o **caso 3** (merge geral), posso fazer — mas o usuário disse "pode adiar dar commit por conta da outra sessão, mas pelo menos dá merge nisso", o que sugere que é algo **específico** e já pronto para merge.
 
 Consegue me dizer qual dos casos é, ou descrever o problema de overflow que você está vendo? Assim eu localizo a correção exata e faço o merge correto na main sem risco de trazer trabalho incompleto da outra sessão.
+
+## Usuario
+Ok, é o overflow da aba do sys quando o usuário abre, quero que as abas internas estejam empilhadas ao inves de quebrar o quadrado. Depois de dar merge nisso documente e volte para as atividades anteriores
