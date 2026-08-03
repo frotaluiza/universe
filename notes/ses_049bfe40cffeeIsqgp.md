@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T16:01:07.448788+00:00
+atualizado: 2026-08-03T16:37:41.885284+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3897,6 +3897,9 @@ O `branch_finalizer` também **não tem** fluxos de teste/notificação/verifica
 O modelo Tarefa **não tem** `parent_id` (subtarefas), `tipo`, `plano_execucao`, `etapa` ou `avaliacao_usuario`. Vou ver o `_cmd_tarefa` e `_track_branch`, e como as notificações foram integradas ao engine pela outra sessão:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport io, sys\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=\'utf-8\')\np = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\
+
+## Usuario
+eai? Uma pergunta, voce ja deu merge com a main da branch de alteraçoões na estética do front?
 
 ## Usuario
 eai? Uma pergunta, voce ja deu merge com a main da branch de alteraçoões na estética do front?
