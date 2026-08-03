@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:31:57.090049+00:00
+atualizado: 2026-08-03T03:32:06.408066+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2939,3 +2939,6 @@ Agora deixa eu registrar a tarefa da correção do bug e responder ao usuário c
 A nova tarefa foi criada (`542e1457`). O PUT na tarefa deu 405 — o router `tarefas.py` tem PUT em `/tarefas/{tarefa_id}` mas talvez exija outro formato. Vou verificar a rota e atualizar a tarefa `16baeff6`:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\routers\\tarefas.py" -Encoding UTF8; for ($i = 85; $i -lt 105 -and $i -lt $c.Count
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\routers\\tarefas.py" -Pattern "@router.put|@router.patch|@router.post" | Select
