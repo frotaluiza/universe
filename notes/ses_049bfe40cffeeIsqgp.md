@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T17:22:09.971863+00:00
+atualizado: 2026-08-03T17:22:49.415707+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -4123,3 +4123,8 @@ Consegue me dizer qual dos casos é, ou descrever o problema de overflow que voc
 
 ## Usuario
 Ok, é o overflow da aba do sys quando o usuário abre, quero que as abas internas estejam empilhadas ao inves de quebrar o quadrado. Depois de dar merge nisso documente e volte para as atividades anteriores
+
+## Assistente
+Entendido — é o problema visual do Sys Panel: quando abre, as abas internas quebram o quadrado (o painel estoura). Quero que as abas fiquem empilhadas/contidas. Vou primeiro localizar o layout atual do Sys Panel para entender o bug:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport io, sys, re\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\np = r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\in
