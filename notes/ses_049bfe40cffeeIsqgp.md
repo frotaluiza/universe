@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:02:31.563905+00:00
+atualizado: 2026-08-03T04:03:40.657251+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3102,4 +3102,77 @@ O arquivo tem CRLF e emojis como caracteres reais. Vou ler o trecho exato para c
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; for ($i = 426; $i -lt 440 -and $i -lt $c.Count
 
 ## Assistente
-- Ferramenta `edit`: None
+O arquivo tem emojis em encoding não-UTF8 (??). Vou editar por âncoras sem emojis. Primeiro, inserir as tabs após a abertura do `nb-page-side`:
+
+- Ferramenta `edit`: {'filePath': 'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html', 'newString': '          <div id="nb-page-side" style="width:40%;border-right:1px solid var(--border);backgrou
+
+## Assistente
+O encoding dos emojis está quebrando o match. Vou fazer a edição via Python, que lida melhor com UTF-8:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\nP = r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.
+
+## Assistente
+## Objective
+- Implementar a aba de Live Doc dentro do bloco de notas (noteblock) e um botão no dashboard, exibindo o live doc que o watcher gera. Depois disso: terminar as implementações pendentes no `branch_finalizer` (gatilhos de artefatos) e, por fim, implementar a visualização de tarefas por sessão no dashboard (proposta aceita pelo usuário).
+
+## Important Details
+- **Sessão opera no worktree `C:\Users\frota\Projetos\Ariadne-tema`** (branch `plan/estetica-smokincola-2026-07-31`). Repo principal `C:\Users\frota\Projetos\Ariadne` é de outra sessão ativa — NÃO tocar.
+- **Servidores**: 8001 = worktree (uvicorn app.main:app, código novo com fix de commit — último PID confirmado 14064, reiniciado limpo); 8000 voltou ao ar (PID 6640, não usado nesta rodada); 8008 = outra sessão. Banco único: `C:\Users\frota\.ariadne\universe\ariadne.db` (WAL, `UNIVERSE_DIR` fixo em database.py).
+- **Prioridade do usuário**: 1º Live Doc no noteblock, 2º branch_finalizer/gatilhos, 3º tarefas por sessão.
+- **Bug crítico corrigido**: `engine.process()` não commitava ao final — artefatos de `@documentar-*` eram retornados com ID (flush) mas descartados (sessão fechada sem commit). Fix: commit final + rollback em erro, e `blocked_actions = []` inicializado (evita UnboundLocalError). Commit `454deee` pusheado.
+- **Live docs funcionam**: watcher gera `~/.ariadne/universe/notes/{slug}.md` (sessão atual 249KB), `caminho_nota` gravado, rota `GET /api/sistema/live-doc/{sessao_id}` retorna 200 com conteúdo. **GAP**: `verLiveDoc()` (index.html linha 2836) existe mas nenhum botão/evento a chama; cliques em sessão abrem `abrirNoteblock` ou `abrirConversaSessao`.
+- **Frontend**: `verLiveDoc` linha 2836 (usa fetch → renderMarkdown → modal-overlay), `abrirNoteblock` linha 1171, `toggleLiveDoc` 922, `carregarLiveDoc` 935, botão global `btn-livedoc` linha 464 (modal). Estrutura HTML do noteblock ainda em mapeamento.
+- Artefatos gerados nesta rodada persistiram (approved): `e246a88d` (Relatório Consolidado: Plataforma Ariadne), `739fab2d`/`a9b8dd81` (relatórios sessões via @documentar-criacao), `f2afde72` (relatório sessão via API).
+- Tarefas: `16baeff6` (sync prompt orquestrador) **Concluido**; `542e1457` (fix persistência orquestrador) criada; gatilhos pendentes `07dbe7df` (build via post-commit hook) e `9b17b1f5` (planejamento via merge plan/*) — "A fazer"; demais pendências da sessão: `4f3d3224` (Ctrl+Shift+X, Em andamento), `a1f7bd46`, `20524da9` (Alta), `294c3dec`, `8bbaadf7`, `74ac996a`, `f022d7e3` (Média), `febdb68b`, `dcf56902`, `e3af3642` (Baixa).
+- PATCH `/api/tarefas/{id}` (não PUT) é o método para atualizar tarefas; POST `/api/tarefas/` cria; não existe POST `/api/artefatos` (criação via orquestrador/scanner).
+- Console: `$env:PYTHONIOENCODING="utf-8"` (cp1252 quebra acentos); PowerShell trata stderr do git como "erro" (push bem-sucedido com exit 0).
+- Commits da branch plan: `2e3c326` → `c6e2e62` (agent_registry upsert + 24 comandos) → `454deee` (fix commit process() + blocked_actions + migração tarefas.ordem + mastery_path mount).
+
+## Work State
+### Completed
+- `agent_registry.py` reescrito e validado: `ORQUESTRADOR_COMANDOS` (24 comandos reais), `ensure_agent_in_opencode()` faz upsert; rodado 2x com MD5 igual (idempotente), opencode.json parseável, prompt 2064 chars.
+- Commit `c6e2e62` pusheado; commit `454deee` (fix orquestrador + agent_registry + migração + mastery_path) pusheado.
+- Bug de persistência do orquestrador corrigido, testado local (`1c633912` persistiu) e via API (`f2afde72` persistiu, approved).
+- Artefatos da implementação gerados e persistidos via `@documentar-criacao "Plataforma Ariadne"` (2 relatórios + consolidado).
+- Tarefa `16baeff6` marcada Concluida (PATCH); tarefa `542e1457` criada.
+- Diagnosticado fluxo de live docs (geração ✅, API ✅, frontend ❌).
+
+### Active
+- Implementação da aba Live Doc dentro do noteblock: mapeamento da estrutura HTML do `nb-page` em andamento (linhas 105-109 CSS, 257 CSS, abas/views do noteblock ainda não localizadas).
+- Botão de Live Doc no dashboard também previsto (não iniciado).
+- `verLiveDoc()` linha 2836 pronto para reuso (fetch → renderMarkdown → modal) — decisão: reutilizar ou adaptar para dentro do noteblock.
+
+### Blocked
+- (none)
+
+## Next Move
+1. Localizar e mapear a estrutura de abas/views do noteblock em `index.html` (região do `nb-page`, ex.: menus de navegação do bloco de notas) para inserir a aba "Live Doc".
+2. Implementar aba Live Doc no noteblock: ao abrir com `sessao_id`, chamar `/api/sistema/live-doc/{id}` e renderizar `renderMarkdown(conteudo)`; adicionar botão no dashboard que abre o noteblock com o live doc.
+3. Testar no navegador (http://localhost:8001) com a sessão `76f82942-ebad-4678-85be-43cb1395561e`.
+4. Após aprovação: entrar no `branch_finalizer` para implementar os gatilhos de artefatos (tarefas `07dbe7df` e `9b17b1f5`).
+5. Por fim: visualização de tarefas por sessão no dashboard.
+
+## Relevant Files
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\app\static\index.html`: frontend — `verLiveDoc` linha 2836, `abrirNoteblock` 1171, `toggleLiveDoc` 922, `carregarLiveDoc` 935, botão global `btn-livedoc` linha 464; tema smokincola.
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\app\services\orquestrador\engine.py`: fix commit final do `process()` (linha ~366-375) + `blocked_actions` inicializado (linha ~331).
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\app\services\watcher.py`: `_gerar_live_doc` (linha 211) gera notas em `~/.ariadne/universe/notes/` e grava `caminho_nota`.
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\app\routers\sistema.py`: rota GET `/live-doc/{sessao_id}` (linha 433) lê o arquivo via `caminho_nota`.
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\app\services\documentor.py`: `documentar_sessao` + `_criar_artefato` (faz flush; commit agora garantido pelo engine).
+- `C:\Users\frota\Projetos\Ariadne-tema\backend\app\routers\tarefas.py`: POST `/` e PATCH `/{tarefa_id}` (PATCH para atualizar status).
+- `C:\Users\frota\.ariadne\universe\notes\ses_049bfe40cffeeIsqgp.md`: live doc da sessão atual (249KB, atualizado pelo watcher).
+
+## Usuario
+Continue if you have next steps, or stop and ask for clarification if you are unsure how to proceed.
+
+## Assistente
+Vou ajustar o script para preservar CRLF (evitar diff gigante) e executá-lo:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\nP = r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\edit_livedoc_html.py"'}
+
+## Assistente
+CRLF não foi preservado — vou verificar qual era o line ending original do arquivo:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, \'rb\') as f:\n    b = f.read()\nprint(\'CRLF
