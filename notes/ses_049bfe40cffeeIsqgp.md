@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:34:13.153745+00:00
+atualizado: 2026-08-03T04:35:00.229764+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3531,3 +3531,20 @@ Diffs vazios mas marcados como modificados — provavelmente por causa do encodi
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\check_encodings.py"'}
+
+## Assistente
+Diffs vazios mas status `M` — sinal clássico de mudança de line endings (CRLF↔LF) que o git normaliza. Vou confirmar:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; foreach ($f in @("backend/app/main.py", "backend/app/models/__init__.py", "backend/app/routers/failures.py")) { git -C "C:\\Users\\frota\\Projetos\\Ariadne-
+
+## Assistente
+Confirmado: `main.py`, `models/__init__.py` e `routers/failures.py` têm diff **zero** ignorando espaços no fim de linha — são apenas mudanças de CRLF↔LF (sem alteração de conteúdo real). O que importa é o que o git registrará.
+
+Vamos verificar o estado completo dos arquivos untracked e o que há em `backend/data/` e `scripts/`:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== untracked: backend/scripts ==="; Get-ChildItem "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\scripts" -Recurse -ErrorAction SilentlyContinue | Se
+
+## Assistente
+Diffs vazios mas `M` = só mudança de CRLF↔LF (sem conteúdo real). Preciso entender se o `main.py` já registra os routers de notificações. Vou inspecionar:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport io, sys\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=\'utf-8\')\np = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\
