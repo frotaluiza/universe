@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T17:22:49.415707+00:00
+atualizado: 2026-08-03T17:23:07.869805+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -4126,5 +4126,17 @@ Ok, é o overflow da aba do sys quando o usuário abre, quero que as abas intern
 
 ## Assistente
 Entendido — é o problema visual do Sys Panel: quando abre, as abas internas quebram o quadrado (o painel estoura). Quero que as abas fiquem empilhadas/contidas. Vou primeiro localizar o layout atual do Sys Panel para entender o bug:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport io, sys, re\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\np = r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\in
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\sys_html.py"'}
+
+## Assistente
+Agora vejo o problema! O `.sys-tabs` tem 10 botões numa linha só, sem `flex-wrap`, e o `.sys-panel` tem `max-height:85vh`. As abas internas (10 botões com emojis e labels) **quebram o quadrado** — estouram o painel porque não cabem na largura e não há `overflow`/`flex-wrap` nas tabs.
+
+O usuário quer que "as abas internas estejam empilhadas ao invés de quebrar o quadrado". Ou seja: as tabs devem **empilhar** (quebrar linha / wrap) dentro do painel em vez de estourar o quadrado.
+
+Vou ver o CSS atual das `.sys-tabs` e `.sys-tab` na working copy (que é o que está rodando no servidor) para fazer o fix:
 
 - Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport io, sys, re\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\np = r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\in
