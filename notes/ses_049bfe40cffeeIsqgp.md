@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T16:56:03.750612+00:00
+atualizado: 2026-08-03T17:04:28.257502+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3905,3 +3905,66 @@ Se ela não tem essa infraestrutura, podemos criar ela depois que terminarmos as
 Perfeito. Então o plano fica: **terminar as pendências anteriores desta sessão primeiro**, e depois criar a infraestrutura de fluxo completo no engine. Deixa eu completar o diagnóstico (incluindo a pergunta sobre sessões ativas em tempo real) e verificar o estado atual do worktree:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== Sessao paralela ainda ativa? Estado do worktree ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" status --short; "---"; "=== Sessoes ativas (PM)
+
+## Assistente
+A sessão em paralelo **continua ativa** — o worktree tem agora ainda mais arquivos modificados (file_watcher.py, providers.py novo, notif_engine.py, watcher.py) além do que vimos antes. A sessão `jolly-eagle` ("Ariadne — Sessão Diária — 03/08/2026") está ativa desde 16:23.
+
+Isso confirma: **não é o momento de implementar código no worktree** — há outra sessão trabalhando ativamente nele agora. Vou consolidar o diagnóstico completo para você, e deixar claro o plano.
+
+## Diagnóstico completo — Auditoria do engine
+
+### O que você pediu vs o que existe hoje
+
+| Fluxo que você quer | Estado atual no engine |
+|---|---|
+| **Tarefa por rodada de implementação** (criar antes de alterar repo, marcar executada ao final) | ❌ Não existe — `@tarefa` só cria manualmente; o engine não gera tarefa automaticamente ao implementar |
+| **Tarefa de testes junto com a de implementação** | ❌ Não existe — fluxo de testes não está programado |
+| **Tarefas para mudanças no universo** (planejamento/arquitetura) | ❌ Não existe — alterações de universo não geram tarefas |
+| **Camada de documentação associada às tarefas** | ⚠️ Parcial — `@documentar-*` gera artefatos, mas sem vínculo automático com a tarefa |
+| **Função única: planejar → implementar → documentar → testar → documentar teste → notificar erros → verificação usuário → concluir + notificar** | ❌ Não existe — comandos são soltos, sem orquestração de ciclo |
+| **Subtarefas brancheadas (galhos)** | ❌ Não existe — modelo Tarefa não tem `parent_id`/`tipo`/`etapa` |
+| **Logs de erros no sistema de notificações** | ✅ **Parcial** — a sessão em paralelo (jolly-eagle) acabou de integrar: `process()` posta notificação `@comando (concluido/falhou)` com severidade e fonte `orquestrador.ok`/`orquestrador.erro`, com controle de supressão pela fonte |
+| **Visualização em tempo real** | ⚠️ Parcial — PM dashboard funciona (sessões ativas), mas não mostra o ciclo de tarefas |
+
+### Pontos que já existem e servem de base
+- ✅ **Notificações integradas no `process()`** (feito pela jolly-eagle): posta status de cada `@comando`, fonte cadastrável, supressão controlada na aba Sys
+- ✅ **`_track_branch`**: grava `criacao_repo_branch` na sessão
+- ✅ **Modelo Tarefa** já tem `sessao_id`, `branch_universo`, `criacao_repo_branch`, `commit_hash`, `criacao_id`
+- ✅ **Branch_finalizer**: escaneia gaps, cria artefatos, verifica tarefas pendentes, faz merge
+
+### O que falta construir (para depois das pendências)
+1. **Modelo Tarefa estendido**: `parent_id`, `tipo` (implementacao/teste/documentacao/planejamento), `etapa`, `plano_execucao`, `resultado_testes`, `avaliacao_usuario`
+2. **Ciclo único no engine**: `_ciclo_tarefa()` que faz planejar → implementar → documentar → testar → documentar teste → notificar → verificação usuário → concluir
+3. **Geração automática de subtarefas** (brancheadas do galho da tarefa principal)
+4. **Visualização em tempo real** do ciclo (dashboard)
+
+## Pendências anteriores desta sessão (ainda em aberto)
+
+1. **`07dbe7df`** — Gatilho de artefatos de build via git hook post-commit
+2. **`9b17b1f5`** — Gatilho de artefatos de planejamento (merge `plan/*` ou comando plan)
+3. **`8ad18da1`** — Visualização de tarefas por sessão no dashboard (acabei de criar)
+
+## Recomendação
+
+Como a sessão `jolly-eagle` está **ativa agora** no worktree (com 10+ arquivos modificados em andamento), eu **não recomendo** implementar as pendências 1-3 neste exato momento — há risco real de conflito (é o cenário que o PM-Watcher foi criado para evitar).
+
+**Minha sugestão**: aguardar a `jolly-eagle` concluir (ou verificar com ela), e então eu executo as pendências 1-3. Quer que eu verifique com a outra sessão o que ela está fazendo / quando termina, ou prefere que eu já comece alguma coisa que não conflite (ex: preparar o design da infraestrutura do ciclo no engine em um documento, sem tocar no código)?
+
+## Usuario
+Precisamos dar merge na main para incorporar o fix no overflow da aba de configurações, eu achava que isso tinha sido consertado mas não foi, pode adiar dar commit por conta da outra sessão, mas pelo menos dá merge nisso
+
+## Assistente
+Vou investigar onde está o fix de overflow da aba de configurações para fazer o merge correto:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== branches e ultimos commits ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" branch -vv; "=== HEAD atual ==="; git -C "C:\\Users\\frota\\Projetos
+
+## Assistente
+Interessante — a sessão em paralelo commitou mais um commit (`16a3148`, notificações) na branch `plan/estetica-smokincola-2026-07-31`. O HEAD agora é `16a3148`.
+
+Agora, sobre o fix de overflow: o usuário disse "dar merge na main para incorporar o fix no overflow da aba de configurações". Preciso descobrir:
+1. Qual branch tem esse fix de overflow?
+2. A main está em `b31171d` (atrás de origin/master em 3 commits)
+
+Deixa eu verificar o que a main tem, e procurar o fix de overflow. Vou verificar o histórico da main e das branches em busca de "overflow" nas mensagens de commit.A sessão em paralelo commitou mais um (`16a3148`). Agora vou procurar o fix de overflow — verificando a main e procurando commits sobre overflow:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== commits com \'overflow\' em todas as branches ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" log --all --oneline --grep="overflow" -i | ForEac
