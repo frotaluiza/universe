@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:09:38.726156+00:00
+atualizado: 2026-08-03T04:10:19.614014+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3371,3 +3371,26 @@ Isso está confuso. Vou verificar o tamanho do index.html no commit 2e3c326 e co
 O commit `2e3c326` dizia "tema smokincola" mas o index.html nele não tem o tema. Vou ver o que ele realmente alterou:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" show 2e3c326 -- backend/app/static/index.html | Select-String -Pattern "^[+-](?!(\\+\\+|--))" -Encoding UT
+
+## Assistente
+Contradição: o diff do 2e3c326 mostra o tema sendo adicionado, mas o arquivo dele não tem "smokincola". Vou investigar a estrutura real:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nwith open(r\'C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\index_2e3c326.html\', encoding=\'utf-8\', errors=\'replace\') as f:\n    h = f.r
+
+## Assistente
+O arquivo no commit é UTF-16. Vou reler corretamente:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nwith open(r\'C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\index_2e3c326.html\', encoding=\'utf-16\', errors=\'replace\') as f:\n    h = f.
+
+## Assistente
+Meu teste do HEAD estava errado (UTF-16 lido como UTF-8). Vou reler o HEAD corretamente:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nwith open(r\'C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\index_head.html\', encoding=\'utf-16\', errors=\'replace\') as f:\n    h = f.rea
+
+## Assistente
+Agora ficou claro: **o arquivo no repo é UTF-16** (com BOM) e a working copy atual está em UTF-8 (após minhas edições). Isso explicaria um diff gigante. Preciso entender o estado real antes de commitar:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, \'rb\') as f:\n    b = f.read(2000)\nprint(\'
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" check-attr -a -- backend/app/static/index.html; "---"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" c
