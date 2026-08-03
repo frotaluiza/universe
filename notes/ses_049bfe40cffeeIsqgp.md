@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T17:23:20.189419+00:00
+atualizado: 2026-08-03T17:23:48.386716+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -4143,3 +4143,33 @@ Vou ver o CSS atual das `.sys-tabs` e `.sys-tab` na working copy (que é o que e
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\sys_css.py"'}
+
+## Assistente
+Agora entendo o layout:
+- `.sys-panel`: `max-height:85vh; display:flex; flex-direction:column` — painel vertical
+- `.sys-tabs`: `display:flex` (uma linha horizontal), **sem `flex-wrap`** — os 10 botões ficam todos numa linha e estouram a largura do painel (800px), quebrando o quadrado
+- `.sys-body`: `flex:1; overflow-y:auto`
+
+O problema: `.sys-tabs` é `display:flex` sem wrap, então com 10 abas (Sessões, Pipeline, Git, Dados, Features, Guidelines, Criações, Falhas, Notificações, Importar — cada uma com emoji + texto), elas **não cabem numa linha** e estouram o painel horizontalmente (ou o painel cresce além do esperado).
+
+O usuário quer: "as abas internas estejam empilhadas ao invés de quebrar o quadrado" = as tabs devem **quebrar linha / empilhar** (flex-wrap: wrap) para ficarem contidas dentro do quadrado do painel.
+
+O fix: adicionar `flex-wrap:wrap` ao `.sys-tabs` e garantir que o painel contenha (`.sys-tabs` com `flex-shrink:0` para não espremer, e talvez `overflow` no body). Vou aplicar o fix no CSS. Como a working copy é a mesma que o servidor serve, vou editar direto.
+
+Vou verificar qual CSS é o "ativo" — a primeira ocorrência é o base, e a segunda (com var(--rule-dark)) é do tema smokincola que sobrescreve. Preciso adicionar `flex-wrap:wrap` no `.sys-tabs` do tema (a segunda, que tem prioridade por vir depois).
+
+Na verdade, a segunda `.sys-tabs` só tem `border-bottom` e `background` — não redefine `display`. Então o `display:flex` da primeira continua valendo. Vou adicionar `flex-wrap:wrap` na segunda (a do tema) para garantir que sobrescreva corretamente.
+
+Vou aplicar o fix:Agora entendi o bug: `.sys-tabs` é `display:flex` **sem `flex-wrap`** — os 10 botões de aba estouram a largura do painel e quebram o quadrado. O fix é fazer as abas empilharem (`flex-wrap:wrap`). Vou aplicar na working copy (que o servidor serve):
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport io, sys\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=\'utf-8\')\np = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\
+
+## Assistente
+Fix aplicado nas duas regras `.sys-tabs`. Agora vou verificar como ficou e testar via servidor:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport io, sys\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=\'utf-8\')\np = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\
+
+## Assistente
+Fix aplicado. Agora vou confirmar que o servidor serve o HTML atualizado e verificar o diff:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport urllib.request\nhtml = urllib.request.urlopen(\'http://localhost:8001/\', timeout=10).read().decode(\'utf-8\', errors=\'replace\')\nprin
