@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:14:22.459606+00:00
+atualizado: 2026-08-03T03:15:11.457498+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2788,3 +2788,12 @@ Servidor no ar (PID 17680). Agora o teste definitivo do `@documentar-sessao` + p
 
 ## Assistente
 - Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sqlite3, sys, io, json\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ar
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\ver_persist.py"'}
+
+## Assistente
+Um novo artefato do scanner (`9d327e15`) **persistiu** (03/08 01:43), mas o do documentor (`e8b8902e`) não. Isso significa que o scanner commita separadamente e algo descarta a transação do documentor. Vou ver o log de erro e como o scanner/interceptor lidam com a sessão:
+
+- Ferramenta `bash`: {'command': '"=== err log tail ==="; if (Test-Path "C:\\Users\\frota\\.ariadne\\logs\\ariadne-tema-server.err.log") { Get-Content "C:\\Users\\frota\\.ariadne\\logs\\ariadne-tema-server.err.log" -Tail 
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== ArtifactScanner: cria sessao propria? commit? ==="; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\artifact_sca
