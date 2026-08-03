@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:30:46.150992+00:00
+atualizado: 2026-08-03T03:31:16.676048+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2914,4 +2914,14 @@ Commit `454deee` pusheado (exit 0 — o "erro" é só o PowerShell tratando stde
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\criar_artefato_impl.py"'}
 
 ## Assistente
+Redirect 307 — o endpoint de artefatos pode estar em outro path ou exigir trailing slash. Vou verificar a rota no router:
+
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\routers\\artefatos.py" -Pattern "@router" | Select-Object Line | Format-Table -
+
+## Assistente
+Não há POST `/api/artefatos` — só GET/approve/reject. A criação de artefatos é feita pelo orquestrador ou pelo scanner. Vou usar o `@documentar-sessao` já funcionando (que gera o relatório da sessão — que é o artefato da implementação desta sessão) e o scanner de reply. Também posso usar o `@documentar-branch` para documentar a branch inteira:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $body = @{ message = \'@documentar-branch "plan/estetica-smokincola-2026-07-31"\'; context = @{ projeto_id = \'f3a58dfa-270a-4cf7-b50f-9731e812897a\'; sessa
+
+## Assistente
+- Ferramenta `write`: None
