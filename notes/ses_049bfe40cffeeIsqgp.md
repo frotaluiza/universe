@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:38:10.232026+00:00
+atualizado: 2026-08-03T04:38:55.197135+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3611,3 +3611,53 @@ O commit `3b0c632` foi criado **há ~12 minutos** (01:25, hora local atual 01:37
 Situação reveladora! O commit `3b0c632` foi criado **em paralelo às 01:25** (há ~12 min, durante nossa conversa) e **já incluiu TODAS as minhas mudanças de live doc** — as tabs, `mostrarAbaNb`, `carregarLiveDocNb`, botões 📃 — junto com o sistema de notificações. Vou verificar o estado remoto e o que exatamente resta:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== status vs remoto ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" status -sb | Select-Object -First 3; "=== 3b0c632 ja pusheado? ==="; git -C "C
+
+## Assistente
+O commit `3b0c632` já foi pusheado e **já incluiu todo o meu trabalho de live doc**. Vou confirmar o estado final do que resta:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== status completo ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" status; "=== setup_aljabr no HEAD? ==="; git -C "C:\\Users\\frota\\Projetos\\Ar
+
+## Assistente
+O quadro agora está claro. Deixa eu verificar o que falta no index.html (4+/4-) e se `backend/data/` deveria estar no .gitignore:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== .gitignore tem data/? ==="; if (Test-Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\.gitignore") { Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-te
+
+## Assistente
+Agora tenho o quadro completo. A resposta à sua pergunta é:
+
+## Sim — está tudo na mesma branch que a minha
+
+Verifiquei em detalhes e houve uma **reviravolta durante nossa conversa**:
+
+### O que descobri
+
+**1. Todas as alterações estão na branch `plan/estetica-smokincola-2026-07-31`** — a mesma onde trabalho. Não há nada da branch `feat/sistema-galhos` (outro worktree) misturado aqui.
+
+**2. Um commit em paralelo já pegou quase tudo** — o commit `3b0c632` ("feat: sistema unificado de notificacoes...") foi criado **às 01:25, ~12 min atrás, DURANTE nossa conversa** (provavelmente por outra sessão ativa no mesmo worktree), e **já incluiu também todo o meu trabalho de live doc**:
+- As tabs Conversa / Live Doc
+- `mostrarAbaNb()` + `carregarLiveDocNb()`
+- Botões 📃 no dashboard e na tabela do Sys Panel
+- Coluna "Live Doc" na tabela
+
+E foi **pusheado** para `origin/plan/estetica-smokincola-2026-07-31`. Ou seja: o live doc já está commitado e no remoto — mas **junto com as notificações**, não separado como você pediu.
+
+### O que resta agora na working copy
+
+| Item | Estado | Pertence a |
+|---|---|---|
+| `index.html` (4+/4-) | Modificado | Ajustes de layout do **PDF viewer** (iframe) — de outra feature |
+| `backend/scripts/setup_aljabr_mastery.py` | Untracked | Script de setup do **Mastery Al-Jabr** |
+| `backend/data/` (chat_history.db, aljabr.pdf 18MB...) | Untracked | **Dados de runtime** — não devem ir pro git (adicionar ao .gitignore) |
+
+### Como proceder?
+
+Como o live doc + notificações já foram commitados juntos no `3b0c632`, o "commit separado" ideal já não é mais possível retroativamente — mas posso:
+
+1. **Commits separados para o que resta**:
+   - `feat: setup mastery al-jabr` → `setup_aljabr_mastery.py`
+   - `fix: layout pdf viewer no noteblock` → os 4+/4- do index.html
+   - `.gitignore` → adicionar `backend/data/`
+
+2. **Ou**, se preferir realmente separar o live doc das notificações no histórico, eu poderia **reordenar/reescrever** com `git rebase` — mas isso reescreveria o histórico já pusheado (exige force-push, e outra sessão está ativa no worktree — arriscado).
+
+Qual caminho prefere?
