@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:12:58.157827+00:00
+atualizado: 2026-08-03T03:13:40.240676+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2780,3 +2780,8 @@ Agora reinicio o servidor e re-testo o fluxo completo (documentar + persistênci
 O servidor foi iniciado mas o comando deu timeout por causa do job em background. Vou verificar o status e testar:
 
 - Ferramenta `bash`: {'command': '"=== health 8001 ==="; try { (Invoke-WebRequest -Uri "http://localhost:8001/api/health" -TimeoutSec 5 -UseBasicParsing).StatusCode } catch { "sem resposta" }; "=== pid uvicorn 8001 ==="; 
+
+## Assistente
+Servidor no ar (PID 17680). Agora o teste definitivo do `@documentar-sessao` + persistência:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $body = @{ message = \'@documentar-sessao "76f82942-ebad-4678-85be-43cb1395561e"\'; context = @{ projeto_id = \'f3a58dfa-270a-4cf7-b50f-9731e812897a\'; sess
