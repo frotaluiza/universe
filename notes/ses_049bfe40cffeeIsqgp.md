@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:35:55.669295+00:00
+atualizado: 2026-08-03T04:36:28.441922+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3576,3 +3576,13 @@ O HEAD importa `notificacoes` mas o arquivo é untracked? Isso é estranho. Vou 
 Os arquivos EXISTEM no HEAD! Mas o status mostra como untracked — algo está errado. Vou investigar:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== ls-files (rastreados) ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" ls-files -- backend/app/routers/notificacoes.py backend/app/models/notifi
+
+## Assistente
+O `ls-files` mostra que os arquivos de notificação SÃO rastreados no HEAD, e o status curto não os lista como untracked. O primeiro status que vi estava desatualizado. Vou rodar o status completo agora:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" status --short; "=== ls-files scripts/ ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" ls-files --
+
+## Assistente
+Estado mudou desde o primeiro status — os arquivos de notificação agora aparecem como rastreados e sem modificação. Vou verificar o histórico deles para entender quando foram commitados:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== log notificacoes.py ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" log --oneline --all -- backend/app/routers/notificacoes.py; "=== log ariadn
