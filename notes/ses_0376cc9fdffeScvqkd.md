@@ -4,7 +4,7 @@ titulo: Ariadne â€” Sessão Diária — 03/08/2026
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T18:01:44.161908+00:00
+atualizado: 2026-08-03T18:01:53.192547+00:00
 ---
 
 # Ariadne â€” Sessão Diária — 03/08/2026
@@ -102,3 +102,14 @@ Sem tarefas no banco. Vou verificar o project state local:
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'sqlite3 -header -column "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "SELECT substr(contexto,1,120) as contexto, substr(escolha,1,120) as escolha, created_at FROM decisoes WHERE pro
+
+## Assistente
+Você tem razão, consultei o `ariadne.db`. Resumo do que encontrei em `C:\Users\frota\.ariadne\universe\ariadne.db`:
+
+- **Projeto**: Livro de Algebra do Jorge (`livro-algebra-jorge`), status **Ideia**, área IA, ordem 999
+- **Notas**: vazias (sem descrição registrada)
+- **Sessões** (4, todas hoje): `nova`, `teste crof`, `Sessão Diária — 03/08/2026`, `Chat — 02/08/2026 23:48`
+- **Tarefas**: nenhuma vinculada
+- **Decisões**: nenhuma registrada
+
+Ou seja, o banco tem o projeto criado mas ainda sem conteúdo definido. Quer que eu consulte algo mais no banco ou no Notion?
