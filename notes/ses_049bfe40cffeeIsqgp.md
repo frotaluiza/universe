@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T02:51:31.600332+00:00
+atualizado: 2026-08-03T02:52:15.102048+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2757,3 +2757,16 @@ O log confirmou um bug adicional: `blocked_actions` fica indefinido se o interce
 
 ## Usuario
 Eai?
+
+## Assistente
+Boa pergunta — estou no meio de uma caça a bug. Resumo do que descobri até agora:
+
+**O que o usuário pediu** e o status:
+1. ✅ **Live docs**: estão sendo gerados (`~/.ariadne/universe/notes/{slug}.md`, 214KB na sessão atual), rota `/api/sistema/live-doc/{id}` serve, mas **o frontend não tem botão que chama `verLiveDoc`** — gap a corrigir.
+2. 🔍 **Gatilhos de doc automática**: descobri um **bug crítico** — o `@documentar-sessao` cria o artefato com `flush` mas o `process()` do engine **nunca commita** → o artefato é devolvido na resposta (`artefato_id`) mas **nunca persiste no banco**. Já adicionei `db.commit()` no final, mas apareceu um segundo erro.
+3. 🔍 **Tarefas pendentes**: já listadas (14 vinculadas à sessão).
+4. 🔍 **Acompanhamento de tarefas por sessão**: a analisar.
+
+**Erro atual**: `UnboundLocalError: blocked_actions` — a variável só é definida dentro do `try` do interceptor; se algo falha antes, o `return` quebra. Vou inicializar `blocked_actions = []` junto com as outras e re-testar:
+
+- Ferramenta `edit`: {'filePath': 'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\orquestrador\\engine.py', 'oldString': '        artifacts_pending = []\n        artifacts_registered = []\n        if db
