@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:10:19.614014+00:00
+atualizado: 2026-08-03T04:10:59.326850+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3394,3 +3394,8 @@ Agora ficou claro: **o arquivo no repo é UTF-16** (com BOM) e a working copy at
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" check-attr -a -- backend/app/static/index.html; "---"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" c
+
+## Assistente
+Descobri um ponto crítico: **o arquivo no repositório (HEAD) está em UTF-16 com BOM**, mas a working copy está em UTF-8 sem BOM (provavelmente convertido por sessões anteriores e nunca commitado). Isso explica o diff grande. Vou verificar como o git classifica o arquivo e o que realmente mudou:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" diff --stat HEAD -- backend/app/static/index.html; "---"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema
