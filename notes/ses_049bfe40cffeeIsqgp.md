@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:23:10.008322+00:00
+atualizado: 2026-08-03T04:33:24.221143+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3474,3 +3474,44 @@ Vou verificar se alguma dessas sessões ativas trabalha na branch `plan/estetica
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== clever-comet ==="; Get-Content "C:\\Users\\frota\\.local\\share\\opencode\\docs\\clever-comet.md" -Encoding UTF8 -TotalCount 25; "`n=== quiet-sailor (f
+
+## Assistente
+Sim — **estão na mesma branch que a minha**. Verifiquei em detalhes. Aqui está o quadro completo:
+
+## Diagnóstico
+
+**Worktrees e branches ativas:**
+| Worktree | Branch | Último commit |
+|---|---|---|
+| `C:\Users\frota\Projetos\Ariadne` (outra sessão) | `feat/sistema-galhos` | `f968783` |
+| `C:\Users\frota\Projetos\Ariadne-tema` (a minha) | `plan/estetica-smokincola-2026-07-31` | `454deee` |
+
+**As mudanças não commitadas estão todas no worktree `Ariadne-tema`, na branch `plan/estetica-smokincola-2026-07-31`** — a mesma branch onde estou trabalhando. Ou seja:
+
+- ✅ **Sem risco de misturar branches** — não há trabalho de `feat/sistema-galhos` ou outra branch na working copy
+- ⚠️ **Mas não são minhas**: foram feitas por sessões anteriores neste mesmo worktree, **depois do último commit `454deee`** (03/08 00:29) — os timestamps dos arquivos (notificações 00:48–00:51, index.html 01:06) batem com a sessão `nimble-knight` ("Ariadne — Sessão Diária — 03/08/2026", iniciada 01:41) ou trabalho anterior que ficou solto
+
+**Conteúdo das mudanças soltas (não commitadas):**
+- Sistema de notificações completo (model + router + engine + UI) — mencionado no AGENTS.md como parte do ecossistema
+- Bloco Mastery Al-Jabr no dashboard + `setup_aljabr_mastery.py`
+- PDF viewer + markdown preview no noteblock
+- Blocos de notas no dashboard
+- Minhas mudanças de Live Doc (as tabs)
+
+## O que isso muda
+
+Como está tudo na mesma branch, **não há conflito de branches** — é só trabalho em andamento que ficou na working copy sem commit. Isso torna a opção **1 (commitar tudo)** muito mais segura do que parecia: é a evolução natural desta mesma linha de desenvolvimento, sem misturar contextos.
+
+Duas formas de fazer, a seu critério:
+
+**A) Commit único** — tudo de uma vez, ex: `feat: notificacoes + mastery + live doc no noteblock + pdf/markdown preview`
+**B) Commits temáticos separados** (mais limpo):
+1. Sistema de notificações (models/notificacao.py, routers/notificacoes.py, services/notif_engine.py + main.py + parte do index.html)
+2. Mastery Al-Jabr (setup script + bloco dashboard)
+3. Live Doc no noteblock (minhas mudanças no index.html)
+4. PDF/markdown preview do noteblock
+
+Como você quer proceder? Ou prefere deixar como está (funcionando no servidor 8001) e revisar manualmente antes de commitar?
+
+## Usuario
+Vamos fazer o commit separado por uma questão de organização
