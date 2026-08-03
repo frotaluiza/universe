@@ -4,7 +4,7 @@ titulo: Ariadne â€” Sessão Diária — 03/08/2026
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T18:00:28.957889+00:00
+atualizado: 2026-08-03T18:01:01.175281+00:00
 ---
 
 # Ariadne â€” Sessão Diária — 03/08/2026
@@ -56,3 +56,23 @@ Você tem razão. Encontrei `C:\Users\frota\ariadne.db`. Vou consultá-lo.
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'Get-Item "C:\\Users\\frota\\ariadne.db" | Select-Object Length; Get-Item "C:\\Users\\frota\\Projetos\\Ariadne\\backend\\ariadne.db" | Select-Object Length'}
+
+## Assistente
+- Ferramenta `bash`: {'command': 'Get-ChildItem -Path "C:\\Users\\frota" -Filter "*.db" -Recurse -Depth 3 -ErrorAction SilentlyContinue | Select-Object FullName, Length | Format-Table -AutoSize'}
+
+## Assistente
+O banco real é `C:\Users\frota\.ariadne\universe\ariadne.db` (70MB). Consultando:
+
+- Ferramenta `bash`: {'command': 'sqlite3 "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" ".tables"'}
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header -column "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "SELECT id, nome, slug, status, area FROM projetos WHERE slug LIKE \'%algebra%\' OR nome LIKE \'%algebra%\' OR n
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header -column "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "SELECT p.nome, p.slug, p.status, p.area, p.ordem, substr(p.notas,1,400) as notas FROM projetos p WHERE p.id=\'c
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header -column "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "SELECT titulo, status, prioridade, data FROM sessoes WHERE projeto_id=\'cb2de1fb-aa22-491a-a229-22d536e7c202\' 
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "PRAGMA table_info(sessoes);"'}
