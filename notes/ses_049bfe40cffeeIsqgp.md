@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:05:20.966325+00:00
+atualizado: 2026-08-03T04:05:30.087882+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3243,3 +3243,11 @@ Esse erro na linha do `abrirNoteblockDeNota` — preciso verificar se é pré-ex
 Vou verificar se essa linha problemática é pré-existente (comparando com o HEAD do git):
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" diff HEAD -- backend/app/static/index.html | Select-String -Pattern "abrirNoteblockDeNota|module-item" -En
+
+## Assistente
+A linha com `\\'` já estava na working copy (não fui eu). Mas se `node --check` falha, o JS inteiro quebraria no navegador. Vou ver o que o HEAD tinha nessa linha:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" show HEAD:backend/app/static/index.html | Select-String -Pattern "abrirNoteblockDeNota" -Encoding UTF8 | F
+
+## Assistente
+- Ferramenta `bash`: None
