@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T17:23:07.869805+00:00
+atualizado: 2026-08-03T17:23:20.189419+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -4140,3 +4140,6 @@ O usuário quer que "as abas internas estejam empilhadas ao invés de quebrar o 
 Vou ver o CSS atual das `.sys-tabs` e `.sys-tab` na working copy (que é o que está rodando no servidor) para fazer o fix:
 
 - Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport io, sys, re\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\np = r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\in
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\sys_css.py"'}
