@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:33:56.197414+00:00
+atualizado: 2026-08-03T03:34:27.243647+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2971,3 +2971,17 @@ Excelente! `@documentar-criacao` gerou 2 relatórios (artefato principal `e246a8
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\listar_finais.py"'}
+
+## Assistente
+Os artefatos foram gerados e **persistiram** (antes, nenhum persistia). O `@documentar-criacao` gerou:
+- `e246a88d` — Relatório Consolidado: Plataforma Ariadne (approved)
+- `739fab2d` + `a9b8dd81` — relatórios das 2 sessões (approved)
+
+Agora vou atualizar o live doc da sessão com todo o progresso e registrar a decisão. Depois respondo ao usuário com o panorama completo:
+
+- Ferramenta `bash`: {'command': '"=== live doc da sessao ==="; $f = "C:\\Users\\frota\\.ariadne\\universe\\notes\\ses_049bfe40cffeeIsqgp.md"; if (Test-Path $f) { "tamanho: $((Get-Item $f).Length) bytes"; "ultima atualiza
+
+## Assistente
+Live doc está sendo atualizado pelo watcher (249KB, 00:33). Tenho o panorama completo. Vou limpar os scripts temporários de teste e apresentar o resultado:
+
+- Ferramenta `bash`: {'command': 'Remove-Item "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\teste_documentor.py","C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\teste_engine.py","C:\\Users\\frota\\AppData\\Local\\
