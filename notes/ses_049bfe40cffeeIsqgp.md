@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:31:25.885506+00:00
+atualizado: 2026-08-03T03:31:57.090049+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2931,3 +2931,11 @@ Na verdade, o artefato `f2afde72` (Relatório: Inspiração estética do Ariadne
 Agora deixa eu registrar a tarefa da correção do bug e responder ao usuário com o resumo completo. Vou atualizar o estado das tarefas — a `16baeff6` (sync prompt) já está "A fazer", vou marcá-la como concluída via API (a 8001 está funcionando):
 
 - Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport json, urllib.request, sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\nBASE = "http://localhost:8001"\n\ndef api(path, method
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\atualizar_tarefas.py"'}
+
+## Assistente
+A nova tarefa foi criada (`542e1457`). O PUT na tarefa deu 405 — o router `tarefas.py` tem PUT em `/tarefas/{tarefa_id}` mas talvez exija outro formato. Vou verificar a rota e atualizar a tarefa `16baeff6`:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\routers\\tarefas.py" -Encoding UTF8; for ($i = 85; $i -lt 105 -and $i -lt $c.Count
