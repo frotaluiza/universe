@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:15:52.929269+00:00
+atualizado: 2026-08-03T03:19:32.995759+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2803,3 +2803,38 @@ Um novo artefato do scanner (`9d327e15`) **persistiu** (03/08 01:43), mas o do d
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\scanner.py" -Encoding UTF8; for ($i = 185; $i -lt 290 -and $i -lt $c.Cou
+
+## Assistente
+O scanner usa **a mesma sessão `db`** e faz `commit()` (linha 283) — então ele deveria ter persistido também o artefato do documentor (que foi adicionado antes com `flush`). Isso é contraditório. Vou verificar se o artefato do documentor existe com outro status ou foi sobrescrito, e olhar o interceptor (que pode fazer rollback):
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sqlite3, sys, io, json\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ar
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\ver_artefatos_recentes.py"'}
+
+## Assistente
+O artefato do scanner (`9d327e15`, criado agora) persistiu, mas o do documentor não — e o scanner commita na **mesma sessão db**. Isso é contraditório. Vou ver o `_gerar_extras_se_necessario` do documentor (pode ter rollback) e testar o documentor direto, isolado do engine:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\documentor.py" -Pattern "def _gerar_extras_se_necessario" | Select-Ob
+
+## Assistente
+O `_gerar_extras_se_necessario` não faz rollback. Vou testar o documentor **isolado** (fora do engine) para ver se ele persiste — isso isola se o bug é no documentor ou no fluxo do engine:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sys, io, uuid\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\nsys.path.insert(0, r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend")
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\teste_documentor.py"'}
+
+## Assistente
+O documentor isolado funciona — o problema está no fluxo do engine. Vou rodar o engine completo em script (sem API) para reproduzir e ver exatamente onde a transação se perde:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\nsys.path.insert(0, r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend")\n\nfr
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\teste_engine.py"'}
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\orquestrador\\__init__.py" -Pattern "import|class" | Select-Object Li
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\services\\orquestrador\\schemas.py" -Pattern "^class " | Select-Object Line | F
