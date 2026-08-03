@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T15:58:16.317537+00:00
+atualizado: 2026-08-03T15:59:04.330725+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3880,5 +3880,15 @@ Estrutura clara. Vou ver o registro de comandos e os fluxos de finalização (qu
 
 ## Assistente
 Agora vou ver os fluxos de finalização (o mais próximo do "fluxo completo") e como tarefas são criadas:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport io, sys\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=\'utf-8\')\np = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\
+
+## Assistente
+Os comandos de finalização delegam para o `branch_finalizer` service. Vou auditar esse service — é onde deve estar a lógica de fluxo:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport io, sys, re\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=\'utf-8\')\np = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\back
+
+## Assistente
+O `branch_finalizer` também **não tem** fluxos de teste/notificação/verificação/aprovação/conclusão. Vou ver o modelo Tarefa (se suporta subtarefas/galhos) e como o `_cmd_tarefa` funciona:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport io, sys\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=\'utf-8\')\np = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\
