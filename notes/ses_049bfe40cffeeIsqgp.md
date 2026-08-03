@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T17:26:10.667897+00:00
+atualizado: 2026-08-03T17:26:38.142479+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -4380,3 +4380,39 @@ Deixa eu atualizar o live doc:
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\append_fix_sys.py"'}
+
+## Assistente
+Live doc atualizado. Agora vou verificar o estado das atividades anteriores (tarefas pendentes da sessão) para retomar:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; try { $r = Invoke-RestMethod -Uri "http://localhost:8001/api/tarefas/" -Method Get -TimeoutSec 10; $r | Where-Object { $_.id -in @("07dbe7df", "9b17b1f5", "
+
+## Assistente
+Tudo registrado. Aqui está o resumo do que foi feito:
+
+## ✅ Fix do overflow do Sys Panel — feito e na main
+
+**Problema**: as 10 abas internas do Sys Panel (Sessões, Pipeline, Git, Dados, Features, Guidelines, Criações, Falhas, Notificações, Importar) ficavam numa linha só sem `flex-wrap`, estourando o quadrado do painel (`max-width:800px; max-height:85vh`) quando o usuário abria.
+
+**Correção**: adicionei `flex-wrap:wrap` + `flex-shrink:0` na regra `.sys-tabs` — agora as abas **empilham em várias linhas** em vez de quebrar o painel.
+
+**Merge na main** (sem conflitar com a outra sessão):
+- Criei um **worktree temporário** na master (`C:\Users\frota\AppData\Local\Temp\opencode\ariadne-master`) para não tocar na working copy da sessão ativa no `Ariadne-tema`
+- Commit `5a8a87c` na master → **pusheado** (`93079fc..5a8a87c master -> master`)
+- Worktree temporário removido (só os 2 originais continuam: Ariadne e Ariadne-tema)
+
+**Também aplicado na working copy do Ariadne-tema** (regra base + regra do tema smokincola) — já está no ar em `http://localhost:8001` para você conferir.
+
+**Documentação**: registrado no live doc da sessão (contexto, causa, fix, merge, decisão).
+
+## 🔄 Atividades anteriores — estado atual
+
+As pendências da sessão continuam registradas (A fazer):
+| Tarefa | Descrição |
+|---|---|
+| `07dbe7df` | Gatilho de artefatos de build via git hook post-commit |
+| `9b17b1f5` | Gatilho de artefatos de planejamento (merge `plan/*` ou comando plan) |
+| `8ad18da1` | Visualização de tarefas por sessão no dashboard (criada hoje) |
+
+⚠️ **Atenção**: a sessão em paralelo (`jolly-eagle`) **continua ativa** no worktree `Ariadne-tema` (último commit dela: `16a3148`). Como você mencionou adiar os commits por causa dela, as pendências de implementação (gatilhos + visualização) ficam aguardando — ou posso começar algo que não conflite (ex: o design da infraestrutura do ciclo de tarefas no engine, documentado sem tocar no código).
+
+Quer que eu aguarde a outra sessão, ou prefere começar por algo que não gere conflito?
