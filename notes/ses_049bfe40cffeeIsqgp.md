@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:35:00.229764+00:00
+atualizado: 2026-08-03T04:35:12.477846+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3548,3 +3548,8 @@ Vamos verificar o estado completo dos arquivos untracked e o que há em `backend
 Diffs vazios mas `M` = só mudança de CRLF↔LF (sem conteúdo real). Preciso entender se o `main.py` já registra os routers de notificações. Vou inspecionar:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport io, sys\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding=\'utf-8\')\np = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\
+
+## Assistente
+Diffs vazios mas status `M` e o main.py importa `notificacoes` — situação ambígua. Vou comparar o main.py do HEAD com o da working copy diretamente:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" show HEAD:backend/app/main.py > "$env:TEMP\\opencode\\main_head.py" 2>$null; python -c "\nimport io, sys\n
