@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:56:11.283230+00:00
+atualizado: 2026-08-03T04:56:55.369123+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3687,3 +3687,23 @@ Entendido — o script lê dados locais em `backend/data/` e gera os arquivos de
 **Passo 2**: Commits separados. Primeiro o .gitignore + setup do mastery:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" add .gitignore backend/scripts/setup_aljabr_mastery.py; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" 
+
+## Assistente
+Apareceram mais modificações (CRLF↔LF de arquivos já commitados no 3b0c632 — não são conteúdo real). Vou commitar apenas o que está staged (setup + .gitignore):
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" commit -m "chore: gitignore backend/data/ + script de setup do mastery path Al-Jabr (gera material e modul
+
+## Assistente
+Commit 1 feito (`a11d390`). Agora preciso confirmar que os `M` restantes em main.py, notificacao.py etc. são apenas CRLF↔LF (sem conteúdo real), para não commitar ruído:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; foreach ($f in @("backend/app/main.py", "backend/app/models/notificacao.py", "backend/app/routers/notificacoes.py", "backend/app/services/notif_engine.py", 
+
+## Assistente
+Há diffs reais que apareceram **depois** do commit 3b0c632 — a sessão em paralelo continua modificando arquivos. Vou ver o que mudou:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== main.py ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" diff HEAD -- backend/app/main.py | Select-String -Pattern "^[+-](?!(\\+\\+|--))" -Encod
+
+## Assistente
+A sessão em paralelo continua trabalhando no sistema de notificações (migração de colunas, melhorias no engine) — **isso NÃO é para eu commitar**. Vou verificar o estado do index.html (meu alvo) e commitar apenas o que é de layout do PDF:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== diff atual index.html vs HEAD ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" diff HEAD -- backend/app/static/index.html | Select-String -Patte
