@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T08:19:18.731252+00:00
+atualizado: 2026-08-03T15:53:21.893449+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3819,3 +3819,6 @@ Estes você disse explicitamente para fazer **depois**, então não são "faltan
 3. **Aviso**: a outra sessão está **ativa agora** neste worktree trabalhando nas notificações (lixeira, modal de detalhe) — implementar os gatilhos ou tarefas-por-sessão **agora** pode conflitar com ela
 
 Quer que eu execute as ações 1 e 2 agora, ou prefere deixar tudo para depois que a sessão em paralelo terminar?
+
+## Usuario
+Temos que revisar se o orquestrador está com seu engine programado para, em toda rodada de implementação, ter uma tarefa associada por exemplo. No sentido de que, para cada alteração da repo da criação, antes de ele fazer uma alteração no repo interno ou externo daquela criação, ele gerar uma tarefa na bd que é marcada como executada ao final da rodada. Também, junto com a tarefa de implementação, deve existir uma tarefa de testes, seguindo também os fluxos que são programados no engine. Esses fluxos de teste estão programados? Se for um momento onde estamos apenas alterando, ou acrescentando os arquivos do universo, seja de planeajmento ou arquiteturas, devemos também gerar tarefas que são criadas antes e finalizadas depois das execuções, tudo isso associado ao meu sistema novo de notificações. Também obviamente, no engine, voce precisa garantir que existe uma camada de documentação totalmente associada a essas tarefas. Acho que isso tudo precisa virar uma função só, que faz o orquestrador planejar (dar inicio a tarefa e registrar o plano de execução ao gerar a tarefa, ou seja, tarefas brancheadas dessa tarefa principal, dá pra incluir na lógica de galhos que estamos implementando, o esquema de voce ver as sessões atuais já está funcionando? Precisamos montar uma visualização em tempo real de tudo isso pra mim),  implementar, gerar documentação de implementação, testar, gerar documentação de teste, colocar os logs dos erros no sistema de notificações pra eu investigar (cadastrar fonte para permitir e deixar eu controlar isso na aba do sys), e quando tiver terminado de testar ainda ter uma etapa de verificação com o usuário se o usuário quiser (etapa opcional, default ativado), e depois que ele tiver documentado também como foi essa avaliação do usuário, pode, apenas depois de ter resolvido todas as mini tarefas desse objeto maior que é uma tarefa, marcar a tarefa como concluida e notificar o usuário. SObre as suas sugestoes de implementação, pode fazer essas duas sugestões.
