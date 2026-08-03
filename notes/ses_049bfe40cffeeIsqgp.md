@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:04:11.329051+00:00
+atualizado: 2026-08-03T04:04:50.391645+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3202,3 +3202,29 @@ Agora vou ver o dashboard para localizar onde as sessões são listadas (para o 
 Vou ver o dashboard para adicionar o botão de live doc na listagem de sessões:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; for ($i = 725; $i -lt 770 -and $i -lt $c.Count
+
+## Assistente
+Agora vou aplicar as mudanças JS via Python (para preservar emojis/encoding). São 3 edits:
+
+1. **Dashboard**: botão 📄 em cada sessão do bloco Sessões (linha 741)
+2. **`abrirNoteblock`**: mostrar tabs quando há `sessao_id` + disparar carregamento do live doc
+3. **Novas funções**: `mostrarAbaNb` + `carregarLiveDocNb`
+4. **Tabela do Sys Panel**: coluna com botão 📄 por sessão
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\nP = r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\edit_livedoc_js.py"'}
+
+## Assistente
+Erro de sintaxe na concatenação. Vou corrigir:
+
+- Ferramenta `edit`: {'filePath': 'C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\edit_livedoc_js.py', 'newString': 'old4b = "\'<td style=\\"font-size:11px;color:var(--muted);max-width:120px;overflow:hidden;text-overfl
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\edit_livedoc_js.py"'}
+
+## Assistente
+Todos os 6 edits aplicados com sucesso. Agora vou verificar a sintaxe do JS final (checando os trechos alterados) e validar que o HTML continua íntegro:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport re\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, encoding=\'utf-8\') as f:\n    htm
