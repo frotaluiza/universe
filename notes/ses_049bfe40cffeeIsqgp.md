@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T08:17:39.367609+00:00
+atualizado: 2026-08-03T08:18:09.889636+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3778,3 +3778,8 @@ O fix do process() mostra `self.db.commit()` = False, mas o commit 454deee dizia
 O fix do `process()` está implementado (linha 406-411: `db.commit()` com rollback). Vou verificar os próximos passos registrados no live doc da sessão e cruzar com o que falta:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $p = "C:\\Users\\frota\\.ariadne\\universe\\notes\\ses_049bfe40cffeeIsqgp.md"; $tail = Get-Content $p -Encoding UTF8 -Tail 40; $tail | ForEach-Object { $_ }
+
+## Assistente
+Vou verificar se a proposta de "tarefas por sessão" (aceita pelo usuário) tem tarefa registrada, e confirmar se o atalho Ctrl+Shift+X está completo:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; try { $r = Invoke-RestMethod -Uri "http://localhost:8001/api/tarefas/" -Method Get -TimeoutSec 10; "Total tarefas: $($r.Count)"; "`n=== tarefas com \'sessao
