@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:03:40.657251+00:00
+atualizado: 2026-08-03T04:04:11.329051+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3176,3 +3176,29 @@ Vou ajustar o script para preservar CRLF (evitar diff gigante) e executá-lo:
 CRLF não foi preservado — vou verificar qual era o line ending original do arquivo:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, \'rb\') as f:\n    b = f.read()\nprint(\'CRLF
+
+## Assistente
+O arquivo original usa LF (2878 LF vs 177 CRLF que eu inseri). Vou normalizar tudo para LF para manter consistência:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, encoding=\'utf-8\', newline=\'\') as f:\n    
+
+## Assistente
+Agora vou adicionar o JavaScript. Preciso ver as funções existentes `abrirNoteblock`, `verLiveDoc`, `carregarLiveDoc`, `renderMarkdown` para integrar corretamente:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; for ($i = 1160; $i -lt 1210 -and $i -lt $c.Cou
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; for ($i = 2820; $i -lt 2880 -and $i -lt $c.Cou
+
+## Assistente
+Agora vou ver o dashboard para localizar onde as sessões são listadas (para o botão de live doc):
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; Select-String -Path "C:\\Users\\frota\\Projeto
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; for ($i = 2088; $i -lt 2175 -and $i -lt $c.Cou
+
+## Assistente
+Vou ver o dashboard para adicionar o botão de live doc na listagem de sessões:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; for ($i = 725; $i -lt 770 -and $i -lt $c.Count
