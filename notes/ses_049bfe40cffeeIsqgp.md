@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:13:40.240676+00:00
+atualizado: 2026-08-03T03:14:22.459606+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2785,3 +2785,6 @@ O servidor foi iniciado mas o comando deu timeout por causa do job em background
 Servidor no ar (PID 17680). Agora o teste definitivo do `@documentar-sessao` + persistência:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $body = @{ message = \'@documentar-sessao "76f82942-ebad-4678-85be-43cb1395561e"\'; context = @{ projeto_id = \'f3a58dfa-270a-4cf7-b50f-9731e812897a\'; sess
+
+## Assistente
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sqlite3, sys, io, json\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\ndb = sqlite3.connect(r"C:\\Users\\frota\\.ariadne\\universe\\ar
