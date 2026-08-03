@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:29:36.005286+00:00
+atualizado: 2026-08-03T03:30:07.218279+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2896,3 +2896,11 @@ Agora vou commitar essas correções no worktree, depois responder ao usuário c
 Há mais mudanças do que esperava (main.py, tarefas.py, start_ariadne.ps1 etc.) — devem ser do meu trabalho anterior nesta sessão (ou do stash aplicado). Vou ver o que são antes de commitar, para não incluir lixo:
 
 - Ferramenta `bash`: {'command': 'cd "C:\\Users\\frota\\Projetos\\Ariadne-tema"; git diff backend/app/main.py backend/app/models/tarefa.py backend/start_ariadne.ps1 | Select-Object -First 120'}
+
+## Assistente
+Essas mudanças (main.py, tarefas.py, start_ariadne.ps1) fazem parte do trabalho desta sessão — são legítimas (migração `ordem` em tarefas, router mastery_path, parametrização do start). Vou commitar tudo junto com uma mensagem clara:
+
+- Ferramenta `bash`: {'command': 'cd "C:\\Users\\frota\\Projetos\\Ariadne-tema"; git add -A; if ($?) { git commit -m "fix: orquestrador commita no final do process() + blocked_actions seguro; agent_registry upsert; migrac
+
+## Assistente
+- Ferramenta `bash`: {'command': 'cd "C:\\Users\\frota\\Projetos\\Ariadne-tema"; git push origin "plan/estetica-smokincola-2026-07-31" 2>&1 | Out-String; "exit: $LASTEXITCODE"'}
