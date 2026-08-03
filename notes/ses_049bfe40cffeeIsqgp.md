@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:02:00.051257+00:00
+atualizado: 2026-08-03T04:02:31.563905+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3085,3 +3085,21 @@ Agora vou ver a estrutura HTML do noteblock para saber onde adicionar a aba de L
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; "=== HTML completo do noteblock (398-465) ==="
+
+## Assistente
+Agora entendo a estrutura. Vou implementar:
+
+1. **Abas "Conversa" / "Live Doc"** no painel lateral do noteblock (aparecem quando a sessão tem `sessao_id`)
+2. **Botão "📄 Live Doc"** no dashboard (na listagem de sessões) e na tabela de sessões
+
+Vou fazer os edits no HTML do noteblock primeiro — adicionar as tabs e o painel de live doc:
+
+- Ferramenta `edit`: {'filePath': 'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html', 'newString': '          <div id="nb-page-side" style="width:40%;border-right:1px solid var(--border);backgrou
+
+## Assistente
+O arquivo tem CRLF e emojis como caracteres reais. Vou ler o trecho exato para copiar com precisão:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; $c = Get-Content "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html" -Encoding UTF8; for ($i = 426; $i -lt 440 -and $i -lt $c.Count
+
+## Assistente
+- Ferramenta `edit`: None
