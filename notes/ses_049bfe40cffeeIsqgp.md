@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:10:59.326850+00:00
+atualizado: 2026-08-03T04:22:39.265975+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3399,3 +3399,72 @@ Agora ficou claro: **o arquivo no repo é UTF-16** (com BOM) e a working copy at
 Descobri um ponto crítico: **o arquivo no repositório (HEAD) está em UTF-16 com BOM**, mas a working copy está em UTF-8 sem BOM (provavelmente convertido por sessões anteriores e nunca commitado). Isso explica o diff grande. Vou verificar como o git classifica o arquivo e o que realmente mudou:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" diff --stat HEAD -- backend/app/static/index.html; "---"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema
+
+## Assistente
+Tudo implementado e testado. Mas encontrei uma questão importante sobre o commit que preciso esclarecer antes de prosseguir.
+
+## Resumo do que fiz
+
+**Implementação da aba Live Doc no noteblock** (em `backend/app/static/index.html`):
+
+1. **Abas "Conversa" / "Live Doc"** no painel lateral do bloco de notas (`nb-side-tabs`) — aparecem quando a sessão tem `sessao_id`
+2. **`carregarLiveDocNb()`** — busca `/api/sistema/live-doc/{sessao_id}` e renderiza com `renderMarkdown()` no painel
+3. **`mostrarAbaNb(aba)`** — alterna entre conversa e live doc no painel lateral
+4. **Botão 📄 no dashboard** (bloco Sessões) e **coluna "Live Doc" na tabela do Sys Panel** — abrem via `verLiveDoc()`
+5. **Bug pré-existente corrigido**: sintaxe JS inválida na linha `abrirNoteblockDeNota(\\''+n.id+''\\')` (escape errado quebrava o parse do script inteiro no navegador)
+
+**Testes realizados (tudo OK):**
+- `node --check` → JS sem erros de sintaxe
+- HTML da região do noteblock balanceado (10/10 divs)
+- API `live-doc/{id}` → 200 (269.012 chars)
+- API `sessoes-detailed` → 30 sessões
+- Página servida em `http://localhost:8001` já contém as tabs (não precisa reiniciar — estáticos lidos do disco)
+
+## Preciso de esclarecimento antes de commitar
+
+Ao inspecionar o `git status` do worktree `Ariadne-tema`, encontrei **muitas mudanças não commitadas que não são minhas**:
+
+- `backend/app/main.py`, `models/__init__.py`, `routers/failures.py` (modificados)
+- `models/notificacao.py`, `routers/notificacoes.py`, `services/notif_engine.py` (novos — sistema de notificações)
+- `scripts/`, `backend/data/`, `setup_aljabr_mastery.py` (novos)
+- No `index.html`: ~230 linhas de mudanças pré-existentes (bloco Mastery Al-Jabr, PDF viewer, markdown preview, blocos de notas no dashboard, notificações)
+
+O `index.html` no repositório está em **UTF-16 com BOM**, mas a working copy está em **UTF-8** (conversão de sessões anteriores nunca commitada) — então o diff do arquivo mostra 276 inserções que misturam trabalho de outras features com o meu.
+
+**Como deseja proceder?**
+1. **Commitar tudo** (index.html + backend) — arriscado, mistura trabalho de outras sessões/features
+2. **Commitar só o index.html** — ainda inclui as ~230 linhas de outras features
+3. **Não commitar agora** — deixo tudo na working copy (funcionando no servidor 8001) e você revisa/aprova antes
+4. **Commit seletivo** via `git add -p` — só minhas linhas de live doc (mais trabalhoso, mas mais limpo)
+
+## Usuario
+Essas alterações estão na mesma branch que a sua?
+
+## Assistente
+Boa pergunta — vou verificar isso com precisão, olhando os worktrees, as branches e a origem das mudanças:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" worktree list; "---"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" branch -vv'}
+
+## Assistente
+A resposta curta: **sim, estão na mesma branch** — mas deixa eu verificar a origem delas para te dar o quadro completo:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" log --all --oneline -- backend/app/routers/notificacoes.py backend/app/services/notif_engine.py backend/ap
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== Timestamps dos arquivos modificados/novos ==="; Get-ChildItem "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\models\\notificacao.py","C:\\Use
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" log --format="%h %ci %s" -6 plan/estetica-smokincola-2026-07-31'}
+
+## Assistente
+Agora tenho o quadro completo. Vou verificar também se há outra sessão ativa mexendo nesse worktree:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; if (Test-Path "C:\\Users\\frota\\.local\\share\\opencode\\scripts\\session-registry.ps1") { & "C:\\Users\\frota\\.local\\share\\opencode\\scripts\\session-r
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\.local\\share\\opencode\\scripts\\project-manager.py" status 2>$null; if (-not $?) { "project-manager falhou" }'}
+
+## Assistente
+Vou verificar se alguma dessas sessões ativas trabalha na branch `plan/estetica-smokincola-2026-07-31`:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport json\ntry:\n    with open(r\'C:\\Users\\frota\\.local\\share\\opencode\\pm-index\\sessions-index.json\', encoding=\'utf-8\') as f:\n    
