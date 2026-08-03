@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:32:06.408066+00:00
+atualizado: 2026-08-03T03:32:37.323628+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2942,3 +2942,11 @@ A nova tarefa foi criada (`542e1457`). O PUT na tarefa deu 405 — o router `tar
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; Select-String -Path "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\routers\\tarefas.py" -Pattern "@router.put|@router.patch|@router.post" | Select
+
+## Assistente
+É PATCH, não PUT. Vou atualizar via PATCH:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport json, urllib.request, sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\nBASE = "http://localhost:8001"\n\ndef api(path, method="
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\patch_tarefa.py"'}
