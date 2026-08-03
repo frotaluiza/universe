@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T17:06:38.156807+00:00
+atualizado: 2026-08-03T17:07:23.301237+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -4085,4 +4085,38 @@ Deixa eu ver o `sys-panel` completo:
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\check_sys_panel.py"'}
 
 ## Assistente
+O CSS do `sys-panel`, `sys-body` e `sys-overlay` é **idêntico** entre a master e a branch plan — não há fix de overflow diferente entre elas nessa área. O `.sys-panel` já tem `max-height:85vh` e `.sys-body` já tem `overflow-y:auto`.
+
+Isso significa que o fix de overflow que o usuário menciona **não está nem na master nem na branch plan** — ou seja, o "fix" nunca foi commitado, ou está em outro lugar que ainda não identifiquei. Preciso perguntar diretamente ao usuário para localizar o problema exato. Estou gastando tempo procurando às cegas.
+
+Deixa eu fazer uma última verificação rápida — procurar "settings" ou a aba de configurações em outro arquivo (talvez haja uma página de settings separada), e verificar o outro worktree:
+
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== arquivos html/js do backend (possiveis abas de config) ==="; Get-ChildItem "C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static" -Recurse -I
+
+## Assistente
+Não há nenhum commit de "overflow" em nenhuma branch nem worktree, e o CSS do sys-panel é idêntico entre master e branch plan. Preciso esclarecer com o usuário — estou procurando algo que não consigo localizar sozinho. Vou perguntar de forma objetiva o que exatamente é o problema de overflow que ele quer incorporar na main.
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; "=== ultimos commits da branch plan nao mergeados na master ==="; git -C "C:\\Users\\frota\\Projetos\\Ariadne-tema" log --oneline master..plan/estetica-smok
+
+## Assistente
+Não consigo localizar um "commit de fix de overflow da aba de configurações" — ele não existe em nenhuma branch do histórico, e o CSS do sys-panel/sys-body é idêntico entre master e branch plan. Antes de fazer qualquer merge, preciso entender exatamente do que você está falando.
+
+## O que verifiquei
+
+1. **Histórico completo** (todas as branches + worktrees): nenhum commit contém "overflow" na mensagem
+2. **CSS do Sys Panel** (a "aba de configurações" — o modal que abre com 🔧): `.sys-panel` tem `max-height:85vh` + `overflow-y:auto` no `.sys-body` — **idêntico entre master e a branch plan**
+3. **Commits da branch plan ainda não mergeados na master** (6 commits): `2e3c326` (tema smokincola), `c6e2e62` (agent_registry), `454deee` (fix orquestrador), `3b0c632` (notificações), `a11d390` (mastery), `16a3148` (fontes notif)
+
+## Minha dúvida
+
+O que é exatamente o "fix de overflow da aba de configurações" que você quer incorporar na main?
+
+1. **É um problema que você vê no navegador agora?** (ex: conteúdo da aba Dados/🔧 estourando para fora do painel, scroll quebrado) — se sim, qual aba exatamente e qual o comportamento errado?
+
+2. **É uma correção que existe em algum arquivo/branch que eu devia localizar?** — se sim, onde você viu essa correção? (qual sessão/branch/commit)
+
+3. **É o merge geral da branch plan na main** que você quer (incorporando todos os 6 commits)? — nesse caso, o "fix de overflow" seria parte do tema/UI que a branch traz
+
+Se for o **caso 3** (merge geral), posso fazer — mas o usuário disse "pode adiar dar commit por conta da outra sessão, mas pelo menos dá merge nisso", o que sugere que é algo **específico** e já pronto para merge.
+
+Consegue me dizer qual dos casos é, ou descrever o problema de overflow que você está vendo? Assim eu localizo a correção exata e faço o merge correto na main sem risco de trazer trabalho incompleto da outra sessão.
