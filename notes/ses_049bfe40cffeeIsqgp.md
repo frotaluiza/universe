@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T04:06:40.435045+00:00
+atualizado: 2026-08-03T04:07:19.637523+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3266,3 +3266,31 @@ Preciso entender o que realmente está no arquivo. Vou inspecionar os bytes exat
 Achei um bug de sintaxe **pré-existente** na working copy (linha do `abrirNoteblockDeNota` com `\\''` mal escapado) — isso quebraria TODO o script no navegador. Preciso corrigir para o live doc funcionar. Vou ver o contexto completo da função e corrigir:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, encoding=\'utf-8\') as f:\n    html = f.read(
+
+## Assistente
+Achei um bug **pré-existente** de sintaxe JS na working copy (linha do `abrirNoteblockDeNota` com escape errado `\\''`). Isso quebraria TODO o script no navegador — preciso corrigir antes de testar. A intenção era gerar `onclick="abrirNoteblockDeNota('ID')"`:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, encoding=\'utf-8\', newline=\'\') as f:\n    
+
+## Assistente
+O PowerShell interpretou o script inline. Vou usar um arquivo Python em vez de inline:
+
+- Ferramenta `write`: {'content': '# -*- coding: utf-8 -*-\nimport sys, io\nsys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")\n\nP = r"C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.
+
+## Assistente
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\fix_escape.py"'}
+
+## Assistente
+Corrigido. Agora o `onclick="abrirNoteblockDeNota(\''+n.id+'\')"` gera `abrirNoteblockDeNota('ID')` corretamente. Vou validar o JS completo novamente:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python -c "\nimport re\nP = r\'C:\\Users\\frota\\Projetos\\Ariadne-tema\\backend\\app\\static\\index.html\'\nwith open(P, encoding=\'utf-8\') as f:\n    htm
+
+## Assistente
+JS válido. Agora vou testar a rota do live doc via API e reiniciar o servidor 8001 para servir o HTML novo:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; try { $r = Invoke-RestMethod -Uri "http://localhost:8001/api/sistema/live-doc/76f82942-ebad-4678-85be-43cb1395561e" -Method Get -TimeoutSec 10; if ($r.conte
+
+## Assistente
+A rota funciona (268KB de conteúdo). Agora vou verificar se o servidor 8001 está rodando e reiniciá-lo para servir o HTML atualizado:
+
+- Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; Get-Process -Id 14064 -ErrorAction SilentlyContinue | Select-Object Id, ProcessName, StartTime; if (-not (Get-Process -Id 14064 -ErrorAction SilentlyContinu
