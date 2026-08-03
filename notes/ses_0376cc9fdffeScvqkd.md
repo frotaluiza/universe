@@ -4,7 +4,7 @@ titulo: Ariadne â€” Sessão Diária — 03/08/2026
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T18:01:09.701106+00:00
+atualizado: 2026-08-03T18:01:44.161908+00:00
 ---
 
 # Ariadne â€” Sessão Diária — 03/08/2026
@@ -82,3 +82,23 @@ O banco real é `C:\Users\frota\.ariadne\universe\ariadne.db` (70MB). Consultand
 
 ## Assistente
 - Ferramenta `bash`: {'command': 'sqlite3 -header -column "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "SELECT id, titulo, status, prioridade, substr(descricao,1,150) as descricao FROM tarefas WHERE projeto_id=\'cb2
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "PRAGMA table_info(tarefas);"'}
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header -column "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "SELECT substr(titulo,1,50) as titulo, status, prioridade, substr(descricao,1,100) as descricao FROM tarefas WHE
+
+## Assistente
+Sem tarefas no banco. Vou verificar o project state local:
+
+- Ferramenta `bash`: {'command': 'Get-ChildItem "C:\\Users\\frota\\.local\\share\\opencode\\project-state" -ErrorAction SilentlyContinue | Select-Object Name; Test-Path "C:\\Users\\frota\\.local\\share\\opencode\\project-
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header -column "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "SELECT substr(titulo,1,60) as titulo, substr(conteudo,1,200) as conteudo, criado_em FROM decisoes WHERE projeto
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "PRAGMA table_info(decisoes);"'}
+
+## Assistente
+- Ferramenta `bash`: {'command': 'sqlite3 -header -column "C:\\Users\\frota\\.ariadne\\universe\\ariadne.db" "SELECT substr(contexto,1,120) as contexto, substr(escolha,1,120) as escolha, created_at FROM decisoes WHERE pro
