@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T03:20:55.365272+00:00
+atualizado: 2026-08-03T03:28:26.751700+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -2850,3 +2850,21 @@ O documentor isolado funciona — o problema está no fluxo do engine. Vou rodar
 
 ## Assistente
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; python "C:\\Users\\frota\\AppData\\Local\\Temp\\opencode\\teste_engine.py"'}
+
+## Assistente
+O teste local **persistiu** (`1c633912`, approved) — o código do worktree está correto agora. Mas o servidor 8001 ainda não persiste, o que sugere que o processo em execução usa código antigo. Vou matar **todos** os uvicorn e subir um limpo, confirmando o PID e o código:
+
+- Ferramenta `bash`: {'command': '"=== TODOS processos uvicorn ==="; Get-CimInstance Win32_Process | Where-Object { $_.Name -match "python" -and $_.CommandLine -match "uvicorn" } | Select-Object ProcessId, @{n=\'Porta\';e
+
+## Assistente
+Há um uvicorn na **8000** (PID 6640) — o servidor principal voltou! E o 8001 (17680). O processo 17680 deveria ter o código novo... mas será que ele foi iniciado antes do meu último edit? A sequência foi: editei `blocked_actions`, depois subi o servidor (PID 17680). Vou verificar se o código carregado tem o commit final e testar via API com observação do WAL:
+
+- Ferramenta `bash`: {'command': '"=== hora do processo 17680 vs hora do edit ==="; (Get-Process -Id 17680 -ErrorAction SilentlyContinue).StartTime; "=== hora atual ==="; Get-Date; "=== mtime do engine.py ==="; (Get-Item 
+
+## Assistente
+O processo 17680 iniciou às **00:12:20**, mas o engine.py foi editado às **00:12:51** — o servidor carregou código **antes** do meu fix do `blocked_actions`! Por isso persistia localmente (script) mas não via API. Vou matar o 17680 definitivamente, garantir a porta livre, subir limpo e validar:
+
+- Ferramenta `bash`: {'command': '"=== matando 17680 ==="; Stop-Process -Id 17680 -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 3; "=== porta 8001 ainda ocupada? ==="; $c = Get-NetTCPConnection -LocalPort 800
+
+## Assistente
+- Ferramenta `bash`: {'command': '$python = "C:\\Users\\frota\\AppData\\Local\\r-miniconda\\python.exe"; $p = Start-Process -FilePath $python -ArgumentList "-m","uvicorn","app.main:app","--host","0.0.0.0","--port","8001" 
