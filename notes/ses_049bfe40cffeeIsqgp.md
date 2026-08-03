@@ -4,7 +4,7 @@ titulo: Inspiração estética do Ariadne em smokincola
 origem: opencode
 status: Em andamento
 projeto_id: f3a58dfa-270a-4cf7-b50f-9731e812897a
-atualizado: 2026-08-03T08:18:09.889636+00:00
+atualizado: 2026-08-03T08:19:18.731252+00:00
 ---
 
 # Inspiração estética do Ariadne em smokincola
@@ -3783,3 +3783,39 @@ O fix do `process()` está implementado (linha 406-411: `db.commit()` com rollba
 Vou verificar se a proposta de "tarefas por sessão" (aceita pelo usuário) tem tarefa registrada, e confirmar se o atalho Ctrl+Shift+X está completo:
 
 - Ferramenta `bash`: {'command': '$env:PYTHONIOENCODING="utf-8"; try { $r = Invoke-RestMethod -Uri "http://localhost:8001/api/tarefas/" -Method Get -TimeoutSec 10; "Total tarefas: $($r.Count)"; "`n=== tarefas com \'sessao
+
+## Assistente
+Verificação completa. Aqui está o diagnóstico do que ficou pendente nesta sessão:
+
+## ✅ Implementado nesta sessão (tudo OK, já commitado/pusheado)
+
+| Item | Estado |
+|---|---|
+| Aba "Live Doc" no noteblock (tabs + `mostrarAbaNb` + `carregarLiveDocNb`) | ✅ Commitado no `3b0c632` |
+| Botão 📃 no dashboard (bloco Sessões) | ✅ Commitado no `3b0c632` |
+| Coluna "Live Doc" na tabela do Sys Panel | ✅ Commitado no `3b0c632` |
+| Fix do bug de sintaxe JS (`abrirNoteblockDeNota`) | ✅ Commitado no `3b0c632` |
+| Commit separado: `.gitignore` (backend/data/) + `setup_aljabr_mastery.py` | ✅ `a11d390` pusheado |
+
+## ⚠️ Tarefas implementadas MAS com status errado no banco
+
+| Tarefa | Status atual | Realidade |
+|---|---|---|
+| `542e1457` — Fix: orquestrador `process()` não commitava artefatos | "A fazer" | ✅ **Fix já implementado** (commit `454deee`, código tem `db.commit()` na linha 408 do engine.py) |
+| `4f3d3224` — Atalho Ctrl+Shift+X (mover texto da conversa para anotações) | "Em andamento" | ✅ **Atalho já implementado** no JS (handler de teclado existe no index.html) |
+
+## ⏳ Próximos passos planejados que ficaram pendentes
+
+Estes você disse explicitamente para fazer **depois**, então não são "faltando" — mas estão pendentes:
+
+1. **`07dbe7df`** — Gatilho de artefatos de build via git hook post-commit ("A fazer") — era para a `branch_finalizer`
+2. **`9b17b1f5`** — Gatilho de artefatos de planejamento (merge `plan/*` ou comando plan) ("A fazer") — era para a `branch_finalizer`
+3. **Visualização de tarefas por sessão no dashboard** — proposta que você **aceitou** ("Gostei da sua proposta... podemos implementar depois"), mas que **não foi implementada e não tem tarefa registrada**
+
+## Ações que proponho
+
+1. **Marcar como "Concluído"**: tarefas `542e1457` e `4f3d3224` (estão implementadas)
+2. **Criar tarefa registrada** para a "visualização de tarefas por sessão no dashboard" (proposta aceita)
+3. **Aviso**: a outra sessão está **ativa agora** neste worktree trabalhando nas notificações (lixeira, modal de detalhe) — implementar os gatilhos ou tarefas-por-sessão **agora** pode conflitar com ela
+
+Quer que eu execute as ações 1 e 2 agora, ou prefere deixar tudo para depois que a sessão em paralelo terminar?
